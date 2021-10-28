@@ -5,17 +5,21 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "ts-node-dev --respawn server.ts",
+    "start:dev": "ts-node-dev --respawn server.ts",
+    "start:build": "tsc && node ./build/server.js",
     "lint": "eslint . "
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "apollo-server": "^3.4.0",
+    "class-validator": "^0.13.1",
     "graphql": "^15.7.1",
-    "typescript": "^4.4.4"
+    "reflect-metadata": "^0.1.13",
+    "type-graphql": "^1.1.1"
   },
   "devDependencies": {
-    "ts-node-dev": "^1.1.8"
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.4.4"
   }
 }
