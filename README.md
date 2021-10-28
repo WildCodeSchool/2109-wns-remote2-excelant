@@ -4,14 +4,15 @@
 
 ### Installation
 
--   Clone this repo
+1.  Clone this repo
 
     ```
     git clone https://github.com/WildCodeSchool/2109-wns-remote2-excelant.git
     cd <app-name>
     ```
 
--   #### Start
+2.  #### Start
+
     -   Back-end
         ```
         cd server
