@@ -9,11 +9,12 @@ const TEST = gql`
   }
 `;
 
-function App() {
+function App(): JSX.Element {
   const { loading, data } = useQuery(TEST);
-  if (loading) return <p>Loading...</p>;
 
-  return (
+  return loading ? (
+    <p>Loading...</p> ) : 
+    data && (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
