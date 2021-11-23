@@ -1,7 +1,8 @@
 import React from "react";
 import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
-import "./App.css";
 import BaseRoutes from "./routes/BaseRoutes";
+import "./App.scss";
+import "./Variables/_variables.scss";
 
 function App(): ReactJSXElement {
   return <BaseRoutes />;
