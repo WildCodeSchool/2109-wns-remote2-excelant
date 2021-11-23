@@ -1,12 +1,12 @@
 import React from 'react';
 import './App.css';
-import Task from './component/Task';
+import TaskTable from './components/tasks/TaskTable';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Task />
+        <TaskTable/>
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
