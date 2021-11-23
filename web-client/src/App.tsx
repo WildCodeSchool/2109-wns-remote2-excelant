@@ -20,7 +20,6 @@ function App(): ReactJSXElement {
         >
           Learn React
         </a>
-        <p className="test">My text</p>
       </header>
     </div>
   );
