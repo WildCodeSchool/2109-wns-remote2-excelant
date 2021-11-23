@@ -1,4 +1,5 @@
 import React from 'react';
+import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -54,8 +55,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-function TaskTable() {
-    return taskList && (
+function TaskTable(): ReactJSXElement {
+    return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
@@ -68,7 +69,8 @@ function TaskTable() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {taskList.map(({ id, subject, project, status, assignee, due_date }) => (
+                    {taskList &&
+                        taskList.map(({ id, subject, project, status, assignee, due_date }) => (
                         <StyledTableRow
                             key={id}
                         >

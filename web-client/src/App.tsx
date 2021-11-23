@@ -1,26 +1,11 @@
-import React from 'react';
-import './App.css';
-import TaskTable from './components/tasks/TaskTable';
+import React from "react";
+import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
+import BaseRoutes from "./routes/BaseRoutes";
+import "./App.scss";
+import "./Variables/_variables.scss";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <TaskTable/>
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+function App(): ReactJSXElement {
+  return <BaseRoutes />;
 }
 
 export default App;
