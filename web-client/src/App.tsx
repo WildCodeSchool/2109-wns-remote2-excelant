@@ -1,7 +1,8 @@
 import React from "react";
 import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
 import logo from "./logo.svg";
-import "./App.css";
+import "./App.scss";
+import "./Variables/_variables.scss";
 
 function App(): ReactJSXElement {
   return (
