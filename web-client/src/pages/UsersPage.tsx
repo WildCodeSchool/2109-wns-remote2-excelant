@@ -1,12 +1,5 @@
 import React from "react";
-import {Container} from "@mui/material";
 
-const UsersPage: React.FC = () =>
-    <Container maxWidth="lg">
-        <h1  style={{ backgroundColor: '#cfe8fc'}}>
-            UsersPage
-        </h1>
-    </Container>
-;
+const UsersPage: React.FC = () => <div>Users</div>;
 
 export default UsersPage;
