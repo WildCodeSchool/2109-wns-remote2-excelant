@@ -1,7 +1,9 @@
 import React from 'react';
+import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
 import { gql, useQuery } from '@apollo/client';
 import logo from './logo.svg';
-import './App.css';
+import "./App.scss";
+import "./Variables/_variables.scss";
 
 const TEST = gql`
   query Query {
@@ -9,7 +11,7 @@ const TEST = gql`
   }
 `;
 
-function App(): JSX.Element {
+function App(): ReactJSXElement {
   const { loading, data } = useQuery(TEST);
 
   return loading ? (
