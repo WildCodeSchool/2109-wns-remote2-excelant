@@ -1,8 +1,10 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
+import logo from "./logo.svg";
+import "./App.scss";
+import "./Variables/_variables.scss";
 
-function App() {
+function App(): ReactJSXElement {
   return (
     <div className="App">
       <header className="App-header">
