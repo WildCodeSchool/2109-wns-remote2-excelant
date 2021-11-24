@@ -4,7 +4,7 @@ import HomePage from "../pages/HomePage";
 import TasksPage from "../pages/TasksPage";
 import ProjectsPage from "../pages/ProjectsPage";
 import UsersPage from "../pages/UsersPage";
-import NavBar from "../components/NavBar";
+import NavBar from "../components/navbar/NavBar";
 
 const BaseRoutes: React.FC = () => (
   <Router>
