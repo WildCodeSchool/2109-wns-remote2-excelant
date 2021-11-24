@@ -7,16 +7,18 @@ import UsersPage from "../pages/UsersPage";
 import NavBar from "../components/navbar/NavBar";
 
 const BaseRoutes: React.FC = () => (
-  <Router>
-    <Routes>
-      <Route path="/" element={<NavBar />}>
-        <Route index element={<HomePage />} />
-        <Route path="tasks" element={<TasksPage />} />
-        <Route path="projects" element={<ProjectsPage />} />
-        <Route path="users" element={<UsersPage />} />
-      </Route>
-    </Routes>
-  </Router>
+  <>
+    <Router>
+      <Routes>
+        <Route path="/" element={<NavBar />}>
+          <Route index element={<HomePage />} />
+          <Route path="/tasks" element={<TasksPage />} />
+          <Route path="/projects" element={<ProjectsPage />} />
+          <Route path="/users" element={<UsersPage />} />
+        </Route>
+      </Routes>
+    </Router>
+  </>
 );
 
 export default BaseRoutes;
