@@ -1,6 +1,5 @@
 import React from "react";
 import { gql, useQuery } from "@apollo/client";
-import logo from "../logo.svg";
 
 const HomePage: React.FC = () => {
   const TEST = gql`
