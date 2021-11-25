@@ -1,5 +1,7 @@
 import React from "react";
 
-const ProjectsPage: React.FC = () => <div>Projects</div>;
+import "../App.scss";
+
+const ProjectsPage: React.FC = () => <div className="projects">Projects</div>;
 
 export default ProjectsPage;

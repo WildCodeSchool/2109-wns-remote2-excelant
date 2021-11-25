@@ -21,38 +21,39 @@ import "../../variables/_variables.scss";
 const useStyles = makeStyles((theme: any) =>
   createStyles({
     sidebar: {
-      color: "#F3F4F6",
       width: "250px",
       height: "100vh",
       backgroundColor: "rgba(125, 128, 218, .75)",
     },
+    text: {
+      color: "#F3F4F6"
+    }
   })
 );
 
-function NavBar(props: any): ReactJSXElement {
-  const { history } = props;
+function NavBar(): ReactJSXElement {
   const classes = useStyles();
 
   const itemList = [
     {
       text: "Home",
-      icon: <HomeIcon />,
+      icon: <HomeIcon style={{color: "#F3F4F6", opacity: "0.8"}} />,
       path: "/"
     },
     {
       text: "Tasks",
-      icon: <TaskIcon />,
-      path: "tasks"
+      icon: <TaskIcon style={{color: "#F3F4F6", opacity: "0.8"}} />,
+      path: "/tasks"
     },
     {
       text: "Projects",
-      icon: <AssignmentIcon />,
-      path: "projects"
+      icon: <AssignmentIcon style={{color: "#F3F4F6", opacity: "0.8"}} />,
+      path: "/projects"
     },
     {
       text: "Users",
-      icon: <PersonIcon />,
-      path: "users"
+      icon: <PersonIcon style={{color: "#F3F4F6", opacity: "0.8"}} />,
+      path: "/users"
     },
   ];
 
@@ -66,12 +67,13 @@ function NavBar(props: any): ReactJSXElement {
             return (
               <ListItem button key={text} component={Link} to={path}>
                 {icon && <ListItemIcon>{icon}</ListItemIcon>}
-                <ListItemText primary={text} />
+                <ListItemText className={classes.text} primary={text} />
               </ListItem>
             );
           })}
         </List>
       </MUIDrawer>
+      <Outlet />
     </>
   );
 }
