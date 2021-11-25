@@ -65,7 +65,7 @@ function NavBar(): ReactJSXElement {
           {itemList.map((item) => {
             const { text, icon, path } = item;
             return (
-              <ListItem button key={text} component={Link} to={path}>
+              <ListItem data-testid={text} button key={text} component={Link} to={path}>
                 {icon && <ListItemIcon>{icon}</ListItemIcon>}
                 <ListItemText className={classes.text} primary={text} />
               </ListItem>

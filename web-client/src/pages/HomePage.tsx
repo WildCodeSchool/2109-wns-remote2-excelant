@@ -14,8 +14,7 @@ const HomePage: React.FC = () => {
     <p>Loading...</p>
   ) : (
     <div className="App">
-       <>
-       </>
+        HomePage
     </div>
   );
 };
