@@ -18,7 +18,7 @@ import PersonIcon from "@mui/icons-material/Person";
 
 import "../../variables/_variables.scss";
 
-const useStyles = makeStyles((theme: any) =>
+const useStyles = makeStyles(() =>
   createStyles({
     sidebar: {
       width: "250px",
@@ -62,7 +62,7 @@ function NavBar(): ReactJSXElement {
       <h1>ExcelAnt</h1>
       <MUIDrawer variant="permanent">
         <List className={classes.sidebar}>
-          {itemList.map((item, index) => {
+          {itemList.map((item) => {
             const { text, icon, path } = item;
             return (
               <ListItem button key={text} component={Link} to={path}>

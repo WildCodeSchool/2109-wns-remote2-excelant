@@ -1,6 +1,6 @@
 import React from "react";
 
-import "../App.scss";
+import "./ProjectsPage.scss";
 
 const ProjectsPage: React.FC = () => <div className="projects">Projects</div>;
 
