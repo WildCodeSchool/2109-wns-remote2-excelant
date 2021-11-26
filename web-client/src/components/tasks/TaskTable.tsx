@@ -1,13 +1,17 @@
 import React from "react";
 import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
 import { styled } from "@mui/material/styles";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+import {
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
+import { tableCellClasses } from "@mui/material/TableCell";
 import { gql, useQuery } from "@apollo/client";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -47,9 +51,11 @@ function TaskTable(): ReactJSXElement {
   const { loading, data } = useQuery(TASKS_QUERY);
   console.log(data);
 
-  return (
-    <TableContainer component={Paper}>
-      {/* <Table sx={{ minWidth: 650 }} aria-label="simple table">
+  return loading ? (
+    <Box>Loading ... </Box>
+  ) : (
+    <TableContainer component={Paper} sx={{ pl: "250px", width: "100%" }}>
+      <Table aria-label="simple table">
         <TableHead>
           <TableRow>
             <StyledTableCell>Subject</StyledTableCell>
@@ -60,22 +66,22 @@ function TaskTable(): ReactJSXElement {
           </TableRow>
         </TableHead>
         <TableBody>
-          {taskList &&
-            taskList.map(
-              ({ id, subject, project, status, assignee, due_date }) => (
-                <StyledTableRow key={id}>
+          {data &&
+            data.findAllTasks.map(
+              ({ _id, name, project, status, assigne, dueDate }: any) => (
+                <StyledTableRow key={_id}>
                   <TableCell component="th" scope="row">
-                    {subject}
+                    {name}
                   </TableCell>
                   <TableCell align="right">{project}</TableCell>
                   <TableCell align="right">{status}</TableCell>
-                  <TableCell align="right">{assignee}</TableCell>
-                  <TableCell align="right">{due_date}</TableCell>
+                  <TableCell align="right">{assigne}</TableCell>
+                  <TableCell align="right">{dueDate}</TableCell>
                 </StyledTableRow>
               )
             )}
         </TableBody>
-      </Table> */}
+      </Table>
     </TableContainer>
   );
 }
