@@ -2,6 +2,11 @@
 
 ## Contributing
 
+- Emmanuelle Wild
+- Amanel Gauriat
+- Pierre Muller
+- Lionel Delamare
+
 ### Installation
 
 1.  Clone this repo
@@ -25,6 +30,12 @@
         npm i
         npm start
         ```
+
+## Docker
+
+```
+docker-composer -f docker-compose.dev.yml up
+```
 
 ## Project structure
 
