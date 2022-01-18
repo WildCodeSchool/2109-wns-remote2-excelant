@@ -1,5 +1,4 @@
-import React from "react";
-import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
+import React, { useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import {
   Box,
@@ -34,7 +33,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function TaskTable(): ReactJSXElement {
+const TaskTable: React.FC<{ reload: number }> = ({ reload }) => {
   const TASKS_QUERY = gql`
     query {
       findAllTasks {
@@ -48,8 +47,14 @@ function TaskTable(): ReactJSXElement {
     }
   `;
 
-  const { loading, data } = useQuery(TASKS_QUERY);
+  const { loading, data, refetch } = useQuery(TASKS_QUERY);
   console.log(data);
+
+  useEffect(() => {
+    if (reload > 0) {
+      refetch();
+    }
+  }, [reload]);
 
   return loading ? (
     <Box>Loading ... </Box>
@@ -84,6 +89,6 @@ function TaskTable(): ReactJSXElement {
       </Table>
     </TableContainer>
   );
-}
+};
 
 export default TaskTable;
