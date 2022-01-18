@@ -1,4 +1,4 @@
-import { Typography, Box, Button } from "@mui/material";
+import { Typography, Button, Container } from "@mui/material";
 import React, { useState } from "react";
 import CreateTaskModal from "../components/tasks/CreateTaskModal";
 import TaskTable from "../components/tasks/TaskTable";
@@ -12,7 +12,7 @@ const TasksPage: React.FC = () => {
   };
 
   return (
-    <Box>
+   <Container maxWidth="lg">
       <Typography variant="h4" sx={{ textAlign: "center", mb: "16px" }}>
         TasksPage
       </Typography>
@@ -21,7 +21,7 @@ const TasksPage: React.FC = () => {
         Create a new task
       </Button>
       <CreateTaskModal open={open} handleClose={handleClose} />
-    </Box>
+   </Container>
   );
 };
 
