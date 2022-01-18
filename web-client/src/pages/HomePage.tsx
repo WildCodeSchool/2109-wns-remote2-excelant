@@ -1,5 +1,6 @@
 import React from "react";
 import { gql, useQuery } from "@apollo/client";
+import {Container} from "@mui/material";
 
 const HomePage: React.FC = () => {
   const TEST = gql`
@@ -13,9 +14,11 @@ const HomePage: React.FC = () => {
   return loading ? (
     <p>Loading...</p>
   ) : (
-    <div className="App">
-        HomePage
-    </div>
+      <Container maxWidth="lg">
+      <h1  style={{ backgroundColor: '#cfe8fc'}}>
+          HomePage
+        </h1>
+      </Container>
   );
 };
 
