@@ -47,3 +47,4 @@ async function bootstrap() {
 }
 
 bootstrap();
+console.log('Test');
