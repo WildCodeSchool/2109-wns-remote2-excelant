@@ -1,4 +1,14 @@
 services:
+  server:
+    build: ./server
+    ports:
+      - 4080:4000
+    volumes:
+      - ./server/src/:/server/src/
+  mongodb:
+    image: mongo
+    volumes:
+      - ./data:/data/db
   web-client:
     build: ./web-client
     ports:

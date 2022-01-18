@@ -1,0 +1,7 @@
+services:
+  server:
+    image: excelant-server
+    ports:
+      - 4080:4000
+    mongodb:
+      image: mongo
