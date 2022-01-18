@@ -8,7 +8,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Paper
+  Paper,
 } from "@mui/material";
 import { tableCellClasses } from "@mui/material/TableCell";
 import { gql, useQuery } from "@apollo/client";
@@ -16,21 +16,21 @@ import { gql, useQuery } from "@apollo/client";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white
+    color: theme.palette.common.white,
   },
   [`&.${tableCellClasses.body}`]: {
-    fontSize: 14
-  }
+    fontSize: 14,
+  },
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover
+    backgroundColor: theme.palette.action.hover,
   },
   // hide last border
   "&:last-child td, &:last-child th": {
-    border: 0
-  }
+    border: 0,
+  },
 }));
 
 const TaskTable: React.FC<{ reload: number }> = ({ reload }) => {
@@ -48,6 +48,7 @@ const TaskTable: React.FC<{ reload: number }> = ({ reload }) => {
   `;
 
   const { loading, data, refetch } = useQuery(TASKS_QUERY);
+  console.log(data);
 
   useEffect(() => {
     if (reload > 0) {
