@@ -1,0 +1,8 @@
+services:
+  web-client:
+    build: ./web-client
+    ports:
+      - 8080:3000
+    command: npm start
+    volumes:
+      - ./web-client/src/:/web-client/src/
