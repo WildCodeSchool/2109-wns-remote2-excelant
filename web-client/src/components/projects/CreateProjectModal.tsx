@@ -101,7 +101,6 @@ import {
                     <Button disabled={loading} onClick={handleClose}>
                       Cancel
                     </Button>
-                    <pre>{JSON.stringify(values, null, 2)}</pre>
                   </Form>
                 )}
               </Formik>
