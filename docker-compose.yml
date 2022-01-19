@@ -1,7 +1,18 @@
 services:
   server:
-    image: excelant-server
+    build: ./server
     ports:
-      - 4080:4000
-    mongodb:
-      image: mongo
+      - 4040:4000
+    volumes:
+      - ./server/src/:/server/src/
+  mongodb:
+    image: mongo
+    volumes:
+      - ./data:/data/db
+  web-client:
+    build: ./web-client
+    ports:
+      - 8080:3000
+    command: npm start
+    volumes:
+      - ./web-client/src/:/web-client/src/
