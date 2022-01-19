@@ -37,6 +37,22 @@
 docker-compose -f docker-compose.dev.yml up --build
 ```
 
+## Launch with `make`
+
+**Requirements**
+
+- `make` package
+
+**Start development environment**
+```
+$ make start-dev
+```
+
+**Start production environment**
+```
+$ make start
+```
+
 ## Project structure
 
 ```
