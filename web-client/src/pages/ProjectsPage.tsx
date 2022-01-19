@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import CreateProjectModal from "../components/projects/CreateProjectModal";
 import ProjectTable from "../components/projects/ProjectsTable";
 
-const ProjectsTable: React.FC = () => {
+const ProjectsPage: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [reload, setReload] = useState<number>(0);
   const handleClose = () => {
@@ -25,4 +25,4 @@ const ProjectsTable: React.FC = () => {
   );
 };
 
-export default ProjectsTable;
+export default ProjectsPage;
