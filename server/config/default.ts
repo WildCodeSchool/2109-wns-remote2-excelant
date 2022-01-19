@@ -1,3 +1,3 @@
 export default {
-  dbUri: 'mongodb://localhost:27017/excelant',
+  dbUri: 'mongodb://mongodb:27017/excelant',
 };
