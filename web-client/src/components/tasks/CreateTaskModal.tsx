@@ -6,7 +6,7 @@ import {
   CardActions,
   Button,
   CircularProgress,
-  TextField,
+  TextField
 } from "@mui/material";
 import React, { useState, useRef } from "react";
 import { FormProvider, useForm, NestedValue } from "react-hook-form";
@@ -26,12 +26,12 @@ const defaultValues: CreateTaskInput = {
   project: "",
   status: "",
   assigne: "",
-  dueDate: "",
+  dueDate: ""
 };
 
 const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
   open,
-  handleClose,
+  handleClose
 }) => {
   const [loading, setLoading] = useState(false);
   const CREATE_TASK = gql`
@@ -111,7 +111,6 @@ const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
                   <Button disabled={loading} onClick={handleClose}>
                     Annuler
                   </Button>
-                  <pre>{JSON.stringify(values, null, 2)}</pre>
                 </Form>
               )}
             </Formik>
