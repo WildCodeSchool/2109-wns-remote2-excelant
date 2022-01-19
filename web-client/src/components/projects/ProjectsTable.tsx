@@ -61,8 +61,7 @@ const ProjectTable: React.FC<{ reload: number }> = ({ reload }) => {
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
-            <StyledTableCell>Subject</StyledTableCell>
-            <StyledTableCell align="right">Project</StyledTableCell>
+            <StyledTableCell>Project</StyledTableCell>
             <StyledTableCell align="right">Status</StyledTableCell>
             <StyledTableCell align="right">Project Manager</StyledTableCell>
             <StyledTableCell align="right">Due date</StyledTableCell>
@@ -70,13 +69,12 @@ const ProjectTable: React.FC<{ reload: number }> = ({ reload }) => {
         </TableHead>
         <TableBody>
           {data &&
-            data.findAllTasks.map(
+            data.findAllProjects.map(
               ({ _id, name, status, projectManager, dueDate }: any) => (
                 <StyledTableRow key={_id}>
                   <TableCell component="th" scope="row">
                     {name}
                   </TableCell>
-                  <TableCell align="right">{name}</TableCell>
                   <TableCell align="right">{status}</TableCell>
                   <TableCell align="right">{projectManager}</TableCell>
                   <TableCell align="right">{dueDate}</TableCell>
