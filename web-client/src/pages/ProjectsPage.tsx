@@ -1,10 +1,15 @@
 import React from "react";
 
+import {Container} from "@mui/material";
+
 import "./ProjectsPage.scss";
 
 const ProjectsPage: React.FC = () =>
-    <div className="projects">
-    ProjectsPage
-</div>;
+    <Container maxWidth="lg">
+        <h1  style={{ backgroundColor: '#cfe8fc'}}>
+            ProjectsPage
+        </h1>
+    </Container>
+;
 
 export default ProjectsPage;
