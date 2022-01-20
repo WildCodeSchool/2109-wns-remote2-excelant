@@ -1,27 +1,11 @@
 import React from "react";
 import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
-import logo from "./logo.svg";
-import "./App.css";
+import BaseRoutes from "./routes/BaseRoutes";
+import "./App.scss";
+import "./variables/_variables.scss";
 
 function App(): ReactJSXElement {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  return <BaseRoutes />;
 }
 
 export default App;
