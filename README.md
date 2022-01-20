@@ -19,14 +19,20 @@
 2.  #### Start
 
     -   Back-end
-        ```
+        ```shell
         cd server
+
+        # switch to the projects nodejs version
+        nvm use
         npm ci
         npm run start:dev
         ```
     -   Front-end
-        ```
+        ```shell
         cd web-client
+
+        # switch to the projects nodejs version
+        nvm use
         npm ci
         npm start
         ```
