@@ -1,0 +1,33 @@
+name: test-ci
+
+on:
+  pull_request
+
+jobs:
+  test-client:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: change nodes version
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14.17'
+      - name: Goto client and install dependencies
+        run: cd web-client && npm ci
+      # - name: Run ESLint
+      #   run: eslint . --ext .js,.jsx,.ts,.tsx
+      - name: Run Tests
+        run: cd server && npm test
+  test-server:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Goto server and install dependencies
+        run: cd server && npm ci 
+      # - name: Run ESLint
+      #   run: eslint . --ext .js,.jsx,.ts,.tsx
+
+      - name: Run Tests
+        run: cd server && npm test
