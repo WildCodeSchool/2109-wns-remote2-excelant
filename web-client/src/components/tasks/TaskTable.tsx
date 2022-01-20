@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import {
   Box,
@@ -8,10 +8,12 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Paper
+  Paper, Modal, Button
 } from "@mui/material";
+import ArticleIcon from '@mui/icons-material/Article';
 import { tableCellClasses } from "@mui/material/TableCell";
 import { gql, useQuery } from "@apollo/client";
+import TaskModal from "../modal/TaskModal";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -34,6 +36,12 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const TaskTable: React.FC<{ reload: number }> = ({ reload }) => {
+  const [open, setOpen] = useState(false);
+  const handleClose = () => setOpen(false);
+  const handleOpen = (id: string) => {
+    setOpen(true);
+  }
+
   const TASKS_QUERY = gql`
     query {
       findAllTasks {
@@ -67,20 +75,36 @@ const TaskTable: React.FC<{ reload: number }> = ({ reload }) => {
             <StyledTableCell align="right">Status</StyledTableCell>
             <StyledTableCell align="right">Assignee</StyledTableCell>
             <StyledTableCell align="right">Due date</StyledTableCell>
+            <StyledTableCell align="right">Actions</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {data &&
             data.findAllTasks.map(
-              ({ _id, name, project, status, assigne, dueDate }: any) => (
-                <StyledTableRow key={_id}>
+              ( task : any) => (
+                <StyledTableRow key={task._id}>
                   <TableCell component="th" scope="row">
-                    {name}
+                    {task.name}
                   </TableCell>
-                  <TableCell align="right">{project}</TableCell>
-                  <TableCell align="right">{status}</TableCell>
-                  <TableCell align="right">{assigne}</TableCell>
-                  <TableCell align="right">{dueDate}</TableCell>
+                  <TableCell align="right">{task.project}</TableCell>
+                  <TableCell align="right">{task.status}</TableCell>
+                  <TableCell align="right">{task.assigne}</TableCell>
+                  <TableCell align="right">{task.dueDate}</TableCell>
+                  <TableCell align="right">
+                    <Button onClick={() => handleOpen(task._id)}>
+                      <ArticleIcon style={{fill: "black"}} />
+                    </Button>
+                    <TaskModal
+                        // id={task._id}
+                        open={open}
+                        name={task.name}
+                        project={task.project}
+                        status={task.status}
+                        assigne={task.assigne}
+                        dueDate={task.dueDate}
+                        handleClose={handleClose}
+                    />
+                  </TableCell>
                 </StyledTableRow>
               )
             )}
