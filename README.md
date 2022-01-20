@@ -21,13 +21,13 @@
     -   Back-end
         ```
         cd server
-        npm i
+        npm ci
         npm run start:dev
         ```
     -   Front-end
         ```
         cd web-client
-        npm i
+        npm ci
         npm start
         ```
 
