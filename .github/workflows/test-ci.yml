@@ -10,7 +10,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
       - name: Goto client and install dependencies
-        run: cd web-client && npm ci
+        run: cd web-client && npm i
       # - name: Run ESLint
       #   run: eslint . --ext .js,.jsx,.ts,.tsx
       - name: Run Tests
@@ -20,8 +20,8 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
-      - name: Goto client and install dependencies
-        run: cd server && npm ci 
+      - name: Goto server and install dependencies
+        run: cd server && npm i 
       # - name: Run ESLint
       #   run: eslint . --ext .js,.jsx,.ts,.tsx
       - name: Run Tests
