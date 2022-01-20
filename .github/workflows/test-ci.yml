@@ -24,6 +24,8 @@ jobs:
         run: cd server && npm i 
       # - name: Run ESLint
       #   run: eslint . --ext .js,.jsx,.ts,.tsx
+      - name: Goto server
+        run: cd server
       - name: Debug
         run: ls
       - name: Run Tests
