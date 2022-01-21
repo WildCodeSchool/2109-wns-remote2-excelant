@@ -14,7 +14,7 @@ const ProjectsPage: React.FC = () => {
   return (
    <Container maxWidth="lg">
       <Typography variant="h4" sx={{ textAlign: "center", mb: "16px" }}>
-        Project Page
+        ProjectsPage
       </Typography>
       <ProjectTable reload={reload} />
       <Button onClick={() => setOpen(true)} sx={{ ml: "300px" }}>
