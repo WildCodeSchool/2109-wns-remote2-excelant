@@ -3,6 +3,7 @@ import BaseRoutes from "../routes/BaseRoutes";
 import { MockedProvider } from "@apollo/client/testing";
 import {render, screen} from "@testing-library/react";
 import {fireEvent} from "@testing-library/react";
+
 describe("<BaseRoutes />", () => {
     describe("When user click on 'home' link...", () => {
         it("It redirects user on 'Home' page", () => {
