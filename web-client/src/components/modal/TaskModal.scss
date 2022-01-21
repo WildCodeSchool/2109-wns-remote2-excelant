@@ -1,0 +1,44 @@
+@import "../../variables/variables";
+
+/* Modal: task header */
+.modal__task_first-title {
+  font-family: $title-font-family;
+  font-size: $h1-size;
+  font-weight: 500;
+  color: $color-dark-purple;
+  text-align: center;
+  margin-top: 30px;
+}
+
+.modal__task_second-title {
+  font-family: $title-font-family;
+  font-size: $h2-size;
+  font-weight: 400;
+  color: $color-dark-purple;
+  text-align: center;
+  margin-top: 70px;
+}
+
+.modal__task_description {
+  font-family: $paragraph-font-family;
+  font-size: $paragraph-size-1;
+  text-align: start;
+  margin-top: 45px;
+  margin-left: 10px;
+}
+
+/* Modal: task informations */
+.modal__task_informations {
+  margin-top: 50px;
+  margin-left: 25px;
+  line-height: 35px;
+
+  &-assigne, &-project, &-date {
+    display: inline;
+    font-family: $paragraph-font-family;
+    font-size: $subtitle-size;
+    font-weight: bold;
+    color: $color-dark-purple;
+  }
+
+}
