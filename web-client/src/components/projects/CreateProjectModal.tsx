@@ -6,16 +6,22 @@ import {
   Button,
   CircularProgress,
   TextField,
-  Box
+  Box,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl
 } from "@mui/material";
 import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import { gql, useMutation } from "@apollo/client";
 import { modalStyle } from "../../_utils/modalStyle";
 
+type Status = string
+
 interface CreateProjectInput {
   name: string;
-  status: string;
+  status: Status;
   projectManager: string;
   dueDate: string;
 }
@@ -79,17 +85,22 @@ const CreateProjectModal: React.FC<{
                         value={values.name}
                         onChange={handleChange}
                         label="Project name"
-                        size="small"
                         sx={{ flexGrow: 1 }}
                       />
-                      <TextField
-                        name="status"
-                        value={values.status}
-                        onChange={handleChange}
-                        label="Status"
-                        size="small"
-                        sx={{ flexGrow: 1 }}
-                      />
+                      <FormControl sx={{ flexGrow: 1 }}>
+                        <InputLabel id="status-label">Project status</InputLabel>
+                        <Select
+                          name="status" 
+                          labelId="status-label"
+                          label="Project status"
+                          onChange={handleChange}
+                          value={values.status}
+                        >
+                          <MenuItem value={"ongoing"}>En cours</MenuItem>
+                          <MenuItem value={"done"}>Terminé</MenuItem>
+                          <MenuItem value={"archived"}>Archivé</MenuItem>
+                        </Select>
+                      </FormControl>
                     </Box>
                     <Box
                       display="flex"
@@ -101,7 +112,6 @@ const CreateProjectModal: React.FC<{
                         value={values.projectManager}
                         onChange={handleChange}
                         label="Project Manager"
-                        size="small"
                         sx={{ flexGrow: 1 }}
                       />
                       <TextField
@@ -109,7 +119,6 @@ const CreateProjectModal: React.FC<{
                         value={values.dueDate}
                         onChange={handleChange}
                         label="Due date"
-                        size="small"
                         sx={{ flexGrow: 1 }}
                       />
                     </Box>
@@ -118,7 +127,6 @@ const CreateProjectModal: React.FC<{
                       value={""}
                       onChange={handleChange}
                       label="Description"
-                      size="small"
                       multiline={true}
                       minRows={5}
                       disabled
