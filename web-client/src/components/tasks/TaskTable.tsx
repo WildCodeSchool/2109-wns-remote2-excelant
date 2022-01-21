@@ -12,8 +12,9 @@ import {
 } from "@mui/material";
 import ArticleIcon from '@mui/icons-material/Article';
 import { tableCellClasses } from "@mui/material/TableCell";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import TaskModal from "../modal/TaskModal";
+import TASKS_QUERY from './queries';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -49,19 +50,6 @@ const TaskTable: React.FC<{ reload: number }> = ({ reload }) => {
     setOpen(true);
   }
 
-  const TASKS_QUERY = gql`
-    query {
-      findAllTasks {
-        _id
-        name
-        project
-        status
-        assigne
-        dueDate
-      }
-    }
-  `;
-
   const { loading, data, refetch } = useQuery(TASKS_QUERY);
 
   useEffect(() => {
@@ -71,7 +59,7 @@ const TaskTable: React.FC<{ reload: number }> = ({ reload }) => {
   }, [reload]);
 
   return loading ? (
-    <Box>Loading ... </Box>
+    <Box data-testid="loading" >Loading... </Box>
   ) : (
     <TableContainer component={Paper} sx={{ pl: "250px", width: "100%" }}>
       <Table aria-label="simple table">
