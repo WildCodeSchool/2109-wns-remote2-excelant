@@ -36,9 +36,16 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const TaskTable: React.FC<{ reload: number }> = ({ reload }) => {
+  // Define display modal to false
   const [open, setOpen] = useState(false);
+  // Select specific ticket
+  const [openedTask, setOpenedTask] = useState(null);
+
+  // Close modal
   const handleClose = () => setOpen(false);
-  const handleOpen = (id: string) => {
+  // Open modal associated with the corresponding ticket
+  const handleOpen = (task: any) => {
+    setOpenedTask(task);
     setOpen(true);
   }
 
@@ -91,19 +98,10 @@ const TaskTable: React.FC<{ reload: number }> = ({ reload }) => {
                   <TableCell align="right">{task.assigne}</TableCell>
                   <TableCell align="right">{task.dueDate}</TableCell>
                   <TableCell align="right">
-                    <Button onClick={() => handleOpen(task._id)}>
+                    <Button onClick={() => handleOpen(task)}>
                       <ArticleIcon style={{fill: "black"}} />
                     </Button>
-                    <TaskModal
-                        // id={task._id}
-                        open={open}
-                        name={task.name}
-                        project={task.project}
-                        status={task.status}
-                        assigne={task.assigne}
-                        dueDate={task.dueDate}
-                        handleClose={handleClose}
-                    />
+                    <TaskModal open={open} task={openedTask} handleClose={handleClose} />
                   </TableCell>
                 </StyledTableRow>
               )
