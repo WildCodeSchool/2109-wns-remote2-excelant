@@ -18,7 +18,7 @@ jobs:
       # - name: Run ESLint
       #   run: eslint . --ext .js,.jsx,.ts,.tsx
       - name: Run Tests
-        run: cd server && npm test
+        run: cd web-client && npm test
   test-server:
     runs-on: ubuntu-latest
     steps:
