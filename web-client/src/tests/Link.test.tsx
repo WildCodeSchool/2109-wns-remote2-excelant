@@ -6,13 +6,13 @@ import {fireEvent} from "@testing-library/react";
 
 describe("<BaseRoutes />", () => {
     describe("When user click on 'home' link...", () => {
-        it("It redirects user on 'Home' page", () => {
+        it("It redirects user on 'HomePage' page", () => {
             render(
                 <MockedProvider mocks={[]} addTypename={false}>
                     <BaseRoutes />
                 </MockedProvider>
             );
-            fireEvent.click(screen.getByTestId("Home"));
+            fireEvent.click(screen.getByTestId("HomePage"));
             expect(screen.getByText(/HomePage/i)).toBeInTheDocument();
         });
     });

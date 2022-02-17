@@ -36,7 +36,7 @@ function NavBar(): ReactJSXElement {
 
   const itemList = [
     {
-      text: "Home",
+      text: "HomePage",
       icon: <HomeIcon style={{color: "#F3F4F6", opacity: "0.8"}} />,
       path: "/"
     },
