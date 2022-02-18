@@ -1,3 +1,4 @@
+import { API_URL } from "@env";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { StyleSheet, Text, View, AppRegistry } from "react-native";
@@ -5,7 +6,7 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import TaskPage from "./screens/task/TaskPage";
 
 const client = new ApolloClient({
-  uri: "http://192.168.1.86:4040/graphql",
+  uri: API_URL,
   cache: new InMemoryCache(),
 });
 
