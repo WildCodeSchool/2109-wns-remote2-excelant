@@ -18,24 +18,27 @@
 
 2.  #### Start
 
-    -   Back-end
-        ```shell
-        cd server
+    - Back-end
 
-        # switch to the projects nodejs version
-        nvm use
-        npm ci
-        npm run start:dev
-        ```
-    -   Front-end
-        ```shell
-        cd web-client
+      ```shell
+      cd server
 
-        # switch to the projects nodejs version
-        nvm use
-        npm ci
-        npm start
-        ```
+      # switch to the projects nodejs version
+      nvm use
+      npm ci
+      npm run start:dev
+      ```
+
+    - Front-end
+
+      ```shell
+      cd web-client
+
+      # switch to the projects nodejs version
+      nvm use
+      npm ci
+      npm start
+      ```
 
 ## Docker
 
@@ -50,11 +53,13 @@ docker-compose -f docker-compose.dev.yml up --build
 - `make` package
 
 **Start development environment**
+
 ```
 $ make start-dev
 ```
 
 **Start production environment**
+
 ```
 $ make start
 ```
@@ -69,4 +74,11 @@ $ make start
 |
 |_ web-client
   |_ src
+```
+
+## Mobile app
+
+```
+1. Copy ".env" file and rename it as ".env.local"
+2. Change the API_URL value in your ".env.local" into your ip adress
 ```
