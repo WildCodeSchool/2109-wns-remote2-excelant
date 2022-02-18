@@ -1,5 +1,5 @@
 import {StatusBar} from 'expo-status-bar';
-import {StyleSheet, Text, View, Button} from 'react-native';
+import {StyleSheet} from 'react-native';
 
 import Header from "./components/header/Header";
 
@@ -8,10 +8,6 @@ export default function App() {
         <>
             <Header />
         </>
-        // <View style={styles.container}>
-        //   <Text>Open up App.tsx to start working on your app!</Text>
-        //   <StatusBar style="auto" />
-        // </View>
     );
 }
 
