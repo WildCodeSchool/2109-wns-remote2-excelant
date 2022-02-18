@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Text, Button, View, StyleSheet, Modal, FlatList } from "react-native";
+import { Button, View, StyleSheet, FlatList } from "react-native";
 import { gql, useQuery } from "@apollo/client";
+import Task from "./Task";
 
 const styles = StyleSheet.create({
   container: {
@@ -26,6 +27,7 @@ const styles = StyleSheet.create({
 });
 
 const TasksScreen = () => {
+
   const TASKS_QUERY = gql`
     query {
       findAllTasks {
@@ -39,7 +41,17 @@ const TasksScreen = () => {
     }
   `;
 
-  const { loading, data } = useQuery(TASKS_QUERY);
+  const [allTasks, setAllTasks] = useState([]);
+  const { loading, error, data } = useQuery(TASKS_QUERY, {
+    pollInterval: 500,
+  });
+  
+  useEffect(() => {
+      setAllTasks(data.findAllTasks);
+  }, [data]);
+
+  // if (loading) return <Loader />
+  // if (error) return <Error />
 
   return (
     <View style={styles.container}>
@@ -47,36 +59,7 @@ const TasksScreen = () => {
         <FlatList
           style={styles.list}
           data={data.findAllTasks}
-          renderItem={(task) => (
-            <>
-              {console.log(task)}
-              <View style={styles.row}>
-                <Text style={styles.label}>Name</Text>
-                <Text style={styles.field}>{task.item.name}</Text>
-              </View>
-              <View style={{ ...styles.row, backgroundColor: "lightgrey" }}>
-                <Text style={styles.label}>Project</Text>
-                <Text style={styles.field}>{task.item.project}</Text>
-              </View>
-              <View style={styles.row}>
-                <Text style={styles.label}>Assignee</Text>
-                <Text style={styles.field}>{task.item.assigne}</Text>
-              </View>
-              <View style={{ ...styles.row, backgroundColor: "lightgrey" }}>
-                <Text style={styles.label}>Status</Text>
-                <Text style={styles.field}>{task.item.status}</Text>
-              </View>
-              <View style={styles.row}>
-                <Text style={styles.label}>Due Date</Text>
-                <Text style={styles.field}>{task.item.dueDate}</Text>
-              </View>
-              {task.index !== data.findAllTasks.length - 1 && (
-                <Text style={{ ...styles.row, backgroundColor: "lightgrey" }}>
-                  ~
-                </Text>
-              )}
-            </>
-          )}
+          renderItem={(task) => ( <Task task={task} /> )}
           keyExtractor={(task) => task["_id"]}
         />
       )}
