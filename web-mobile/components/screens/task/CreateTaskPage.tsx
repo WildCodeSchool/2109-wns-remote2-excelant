@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const TasksPage = () => {
+const CreateTaskScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Create a task</Text>
@@ -21,4 +21,4 @@ const TasksPage = () => {
   );
 };
 
-export default TasksPage;
+export default CreateTaskScreen;

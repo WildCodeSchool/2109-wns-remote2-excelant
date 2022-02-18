@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const TasksPage = () => {
+const TasksScreen = () => {
   const TASKS_QUERY = gql`
     query {
       findAllTasks {
@@ -43,7 +43,6 @@ const TasksPage = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>TaskPage</Text>
       {!loading && data && (
         <FlatList
           style={styles.list}
@@ -86,4 +85,4 @@ const TasksPage = () => {
   );
 };
 
-export default TasksPage;
+export default TasksScreen;

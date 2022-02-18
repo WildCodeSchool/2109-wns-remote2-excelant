@@ -3,7 +3,16 @@ import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { StyleSheet, Text, View, AppRegistry } from "react-native";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
-import TaskPage from "./screens/task/TaskPage";
+import Header from "./components/header/Header";
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
 
 const client = new ApolloClient({
   uri: API_URL,
@@ -13,7 +22,7 @@ const client = new ApolloClient({
 export default function App() {
   return (
     <ApolloProvider client={client}>
-      <TaskPage />
+      <Header />
     </ApolloProvider>
   );
 }
