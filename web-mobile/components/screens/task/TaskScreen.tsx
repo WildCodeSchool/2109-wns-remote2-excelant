@@ -49,7 +49,6 @@ const TasksScreen = () => {
           data={data.findAllTasks}
           renderItem={(task) => (
             <>
-              {console.log(task)}
               <View style={styles.row}>
                 <Text style={styles.label}>Name</Text>
                 <Text style={styles.field}>{task.item.name}</Text>
