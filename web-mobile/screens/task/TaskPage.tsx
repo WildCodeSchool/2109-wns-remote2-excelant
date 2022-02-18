@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   row: {
     flex: 1,
     flexDirection: "row",
-    margin: 2,
+    padding: 2,
   },
   label: {
     width: 70,
@@ -50,11 +50,12 @@ const TasksPage = () => {
           data={data.findAllTasks}
           renderItem={(task) => (
             <>
+              {console.log(task)}
               <View style={styles.row}>
                 <Text style={styles.label}>Name</Text>
                 <Text style={styles.field}>{task.item.name}</Text>
               </View>
-              <View style={styles.row}>
+              <View style={{ ...styles.row, backgroundColor: "lightgrey" }}>
                 <Text style={styles.label}>Project</Text>
                 <Text style={styles.field}>{task.item.project}</Text>
               </View>
@@ -62,7 +63,7 @@ const TasksPage = () => {
                 <Text style={styles.label}>Assignee</Text>
                 <Text style={styles.field}>{task.item.assigne}</Text>
               </View>
-              <View style={styles.row}>
+              <View style={{ ...styles.row, backgroundColor: "lightgrey" }}>
                 <Text style={styles.label}>Status</Text>
                 <Text style={styles.field}>{task.item.status}</Text>
               </View>
@@ -70,7 +71,11 @@ const TasksPage = () => {
                 <Text style={styles.label}>Due Date</Text>
                 <Text style={styles.field}>{task.item.dueDate}</Text>
               </View>
-              <Text style={styles.row}>~</Text>
+              {task.index !== data.findAllTasks.length - 1 && (
+                <Text style={{ ...styles.row, backgroundColor: "lightgrey" }}>
+                  ~
+                </Text>
+              )}
             </>
           )}
           keyExtractor={(task) => task["_id"]}
