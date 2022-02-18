@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
 });
 
 const client = new ApolloClient({
-  uri: API_URL,
+  uri: `http://${API_URL}:4040/graphql`,
   cache: new InMemoryCache(),
 });
 
