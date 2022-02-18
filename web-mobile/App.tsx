@@ -1,9 +1,9 @@
-import { API_URL } from "@env";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { StyleSheet, Text, View, AppRegistry } from "react-native";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import Header from "./components/header/Header";
+import { API_URL } from "@env";
 
 const styles = StyleSheet.create({
   container: {

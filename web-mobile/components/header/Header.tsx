@@ -5,7 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 import HomeScreen from "../screens/HomeScreen";
-import TaskScreen from "../screens/task/TaskScreen";
+import TaskNavigation from "./TaskNavigation";
 
 const Drawer = createDrawerNavigator();
 
@@ -30,7 +30,7 @@ export default function Header() {
           />
           <Drawer.Screen
             name="Tasks"
-            component={TaskScreen}
+            component={TaskNavigation}
             options={{
               title: "Tasks",
               drawerIcon: ({ focused, size }) => (
