@@ -1,6 +1,6 @@
-import React from "react";
-import { StyleSheet, View, FlatList, Text } from "react-native";
-import { gql, useQuery } from "@apollo/client";
+import React, { useState, useEffect } from "react";
+import {StyleSheet, View, FlatList, Text} from "react-native";
+import {gql, useQuery} from "@apollo/client";
 
 const styles = StyleSheet.create({
     container: {
@@ -25,46 +25,51 @@ const styles = StyleSheet.create({
     }
 });
 
-const ProjectScreen = () => {
-    const PROJECTS_QUERY = gql`
+const {container, title, field, list, row, label} = styles;
+
+const PROJECTS_QUERY = gql`
     query {
       findAllProjects {
         _id
         name
         status
         projectManager
-        dueDate
+        dueDatefze
       }
     }
   `;
 
-    const { loading, data } = useQuery(PROJECTS_QUERY);
+const ProjectScreen = () => {
+
+    const {loading, data, error} = useQuery(PROJECTS_QUERY);
+
+    if (error) return <Text>{error.message}</Text>;
 
     return (
-        <View style={styles.container}>
+        <View style={container}>
             {!loading && data && (
                 <FlatList
-                    style={styles.list}
+                    style={list}
                     data={data.findAllProjects}
                     renderItem={(project) => (
                         <>
-                            <View style={styles.row}>
-                                <Text style={styles.label}>Name</Text>
-                                <Text style={styles.field}>{project.item.name}</Text>
+                            <View style={row}>
+                                <Text style={label}>Name</Text>
+                                <Text style={field}>{project.item.name}</Text>
                             </View>
-                            <View style={{ ...styles.row, backgroundColor: "lightgrey" }}>
-                                <Text style={styles.label}>Status</Text>
-                                <Text style={styles.field}>{project.item.status}</Text>
+                            <View style={{...row, backgroundColor: "lightgrey"}}>
+                                <Text style={label}>Status</Text>
+                                <Text style={field}>{project.item.status}</Text>
                             </View>
-                            <View style={styles.row}>
-                                <Text style={styles.label}>Project Manager</Text>
-                                <Text style={styles.field}>{project.item.projectManager}</Text>
+                            <View style={row}>
+                                <Text style={label}>Project Manager</Text>
+                                <Text style={field}>{project.item.projectManager}</Text>
                             </View>
-                            <View style={{ ...styles.row, backgroundColor: "lightgrey" }}>
-                                <Text style={styles.label}>Due Date</Text>
-                                <Text style={styles.field}>{project.item.dueDate}</Text>
+                            <View style={{...row, backgroundColor: "lightgrey"}}>
+                                <Text style={label}>Due Date</Text>
+                                <Text style={field}>{project.item.dueDate}</Text>
                             </View>
-                            {project.index !== data.findAllProjects.length -1 && (
+                            {project.index !== data.findAllProjects.length - 1 && (
                                 <View
                                     style={{
                                         borderBottomColor: 'black',
