@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button, View, StyleSheet, FlatList } from "react-native";
-import { gql, useQuery } from "@apollo/client";
+import { View, StyleSheet, FlatList, ActivityIndicator, Text } from "react-native";
+import { gql, useQuery, NetworkStatus } from "@apollo/client";
 import Task from "./Task";
 
 const styles = StyleSheet.create({
@@ -10,8 +10,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "bold",
+    textAlign: 'center',
+    marginVertical: 4,
+    width: "100%",
+    borderBottomWidth: 2,
   },
-  field: {},
   list: {
     margin: 16,
     borderWidth: 2,
@@ -21,9 +24,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     padding: 2,
   },
-  label: {
-    width: 70,
+  loader: {
+    flex: 1,
+    padding: 10,
+    justifyContent: "center",
   },
+  separator: {
+    height: 20,
+    width: "100%",
+    backgroundColor: "#000",
+  }
 });
 
 const TasksScreen = () => {
@@ -42,30 +52,34 @@ const TasksScreen = () => {
   `;
 
   const [allTasks, setAllTasks] = useState([]);
-  const { loading, error, data } = useQuery(TASKS_QUERY, {
-    pollInterval: 500,
-  });
+  const { loading, data, error, refetch, networkStatus } = useQuery(TASKS_QUERY,
+      {
+        notifyOnNetworkStatusChange: true,
+      },
+    );
   
   useEffect(() => {
-      setAllTasks(data.findAllTasks);
-  }, [data]);
+    if (data) setAllTasks(data['findAllTasks']);
+  });
 
-  // if (loading) return <Loader />
-  // if (error) return <Error />
+  if (loading) return <ActivityIndicator style={styles.loader} size="large" color="lavender"/>;
+  if (error) return <Text>Error! {error.message}</Text>;
 
   return (
     <View style={styles.container}>
-      {!loading && data && (
-        <FlatList
-          style={styles.list}
-          data={data.findAllTasks}
-          renderItem={(task) => ( <Task task={task} /> )}
-          keyExtractor={(task) => task["_id"]}
-        />
-      )}
-      {/* <Button onPress={() => null} title="Create a new task" /> */}
+      <FlatList
+        refreshing={(networkStatus === NetworkStatus.refetch)}
+        onRefresh={() => refetch()}
+        style={styles.list}
+        data={allTasks}
+        renderItem={(task) => <Task item={task.item}/>}
+        keyExtractor={(task) => task["_id"]}
+        ListEmptyComponent={<Text style={styles.row}>Il n'y a pas de tâches a afficher !</Text>}
+        ItemSeparatorComponent={ () => <View style={styles.separator} /> }
+        ListHeaderComponent={<Text style={styles.title}>Task list</Text>}
+      />
     </View>
   );
-};
+};            
 
 export default TasksScreen;

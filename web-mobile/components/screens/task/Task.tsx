@@ -19,37 +19,44 @@ const styles = StyleSheet.create({
     padding: 2,
   },
   label: {
-    width: 70,
+    flex: 1,
+    textTransform: 'uppercase',
+    fontWeight: "bold",
   },
 });
 
-const Task: React.FC<{ task: any }> = ({ task }) => { 
+interface Task {
+  name: string;
+  project: string;
+  assigne: string;
+  status: string;
+  dueDate: string;
+}
+
+const Task: React.FC<{ item: Task }> = ({item}) => { 
     return (
-        <>
-            <View style={styles.row}>
-                <Text style={styles.label}>Name</Text>
-                <Text>{task.item.name}</Text>
-            </View>
-            <View style={{ ...styles.row, backgroundColor: "lightgrey" }}>
-                <Text style={styles.label}>Project</Text>
-                <Text>{task.item.project}</Text>
-            </View>
-            <View style={styles.row}>
-                <Text style={styles.label}>Assignee</Text>
-                <Text>{task.item.assigne}</Text>
-            </View>
-            <View style={{ ...styles.row, backgroundColor: "lightgrey" }}>
-                <Text style={styles.label}>Status</Text>
-                <Text>{task.item.status}</Text>
-            </View>
-            <View style={styles.row}>
-                <Text style={styles.label}>Due Date</Text>
-                <Text>{task.item.dueDate}</Text>
-            </View>
-            <Text style={{ ...styles.row, backgroundColor: "lightgrey" }}>
-                ~
-            </Text>
-        </>
+      <>
+        <View style={styles.row}>
+            <Text style={styles.label}>Name</Text>
+            <Text style={{ flex: 3}}>{item.name}</Text>
+        </View>
+        <View style={{ ...styles.row, backgroundColor: "lightgrey" }}>
+            <Text style={styles.label}>Project</Text>
+            <Text style={{ flex: 3}}>{item.project}</Text>
+        </View>
+        <View style={styles.row}>
+            <Text style={styles.label}>Assignee</Text>
+            <Text style={{ flex: 3}}>{item.assigne}</Text>
+        </View>
+        <View style={{ ...styles.row, backgroundColor: "lightgrey" }}>
+            <Text style={styles.label}>Status</Text>
+            <Text style={{ flex: 3}}>{item.status}</Text>
+        </View>
+        <View style={styles.row}>
+            <Text style={styles.label}>Due Date</Text>
+            <Text style={{ flex: 3}}>{item.dueDate}</Text>
+        </View>
+      </>
     );
 };
 
