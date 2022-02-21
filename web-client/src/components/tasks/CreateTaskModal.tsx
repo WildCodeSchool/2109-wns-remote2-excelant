@@ -5,7 +5,11 @@ import {
   CardContent,
   Button,
   CircularProgress,
+  FormControl,
   TextField,
+  InputLabel,
+  Select,
+  MenuItem,
   Box
 } from "@mui/material";
 import React, { useState } from "react";
@@ -92,14 +96,20 @@ const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
                         size="small"
                         sx={{ flexGrow: 1 }}
                       />
-                      <TextField
-                        name="status"
-                        value={values.status}
-                        onChange={handleChange}
-                        label="Status"
-                        size="small"
-                        sx={{ flexGrow: 1 }}
-                      />
+                      <FormControl sx={{ flexGrow: 1 }} size="small">
+                        <InputLabel id="task-status-label">Task status</InputLabel>
+                        <Select
+                          name="status"
+                          labelId="task-status-label"
+                          label="Task status"
+                          onChange={handleChange}
+                          value={values.status}
+                        >
+                          <MenuItem value={"ongoing"}>En cours</MenuItem>
+                          <MenuItem value={"done"}>Terminé</MenuItem>
+                          <MenuItem value={"archived"}>Archivé</MenuItem>
+                        </Select>
+                      </FormControl>
                     </Box>
                     <Box
                       display="flex"
