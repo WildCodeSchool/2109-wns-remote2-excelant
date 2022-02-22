@@ -10,7 +10,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Box
+  Box,
 } from "@mui/material";
 import React, { useState } from "react";
 import { Formik, Form } from "formik";
@@ -30,12 +30,12 @@ const defaultValues: CreateTaskInput = {
   project: "",
   status: "",
   assigne: "",
-  dueDate: ""
+  dueDate: "",
 };
 
 const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
   open,
-  handleClose
+  handleClose,
 }) => {
   const [loading, setLoading] = useState(false);
   const CREATE_TASK = gql`
@@ -49,13 +49,14 @@ const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
       }
     }
   `;
-  const [createTask, { data, error }] = useMutation(CREATE_TASK);
+  const [createTask] = useMutation(CREATE_TASK);
 
   const onSubmit = (values: CreateTaskInput) => {
     setLoading(true);
     try {
       createTask({ variables: { input: values } });
     } catch (err) {
+      // eslint-disable-next-line
       console.log("Error", err);
     } finally {
       setLoading(false);
@@ -97,7 +98,9 @@ const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
                         sx={{ flexGrow: 1 }}
                       />
                       <FormControl sx={{ flexGrow: 1 }} size="small">
-                        <InputLabel id="task-status-label">Task status</InputLabel>
+                        <InputLabel id="task-status-label">
+                          Task status
+                        </InputLabel>
                         <Select
                           name="status"
                           labelId="task-status-label"
@@ -105,9 +108,9 @@ const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
                           onChange={handleChange}
                           value={values.status}
                         >
-                          <MenuItem value={"ongoing"}>En cours</MenuItem>
-                          <MenuItem value={"done"}>Terminé</MenuItem>
-                          <MenuItem value={"archived"}>Archivé</MenuItem>
+                          <MenuItem value="ongoing">En cours</MenuItem>
+                          <MenuItem value="done">Terminé</MenuItem>
+                          <MenuItem value="archived">Archivé</MenuItem>
                         </Select>
                       </FormControl>
                     </Box>
@@ -139,11 +142,11 @@ const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
                      */}
                     <TextField
                       name="description"
-                      value={""}
+                      value=""
                       onChange={handleChange}
                       label="Description"
                       size="small"
-                      multiline={true}
+                      multiline
                       minRows={5}
                       disabled
                     />
@@ -160,7 +163,7 @@ const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
                             style={{
                               width: 20,
                               height: 20,
-                              marginLeft: "10px"
+                              marginLeft: "10px",
                             }}
                           />
                         )}
