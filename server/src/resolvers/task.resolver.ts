@@ -3,6 +3,7 @@ import CreateTaskInput from '../schema/task.create';
 import { FindOneTaskById } from '../schema/task.find';
 import Task from '../schema/task.schema';
 import TaskService from '../service/task.service';
+import DeleteTaskInput from '../schema/task.delete';
 
 class TaskResolver {
   constructor(private taskService: TaskService) {
@@ -22,6 +23,11 @@ class TaskResolver {
   @Mutation(() => Task)
   createTask(@Arg('input') input: CreateTaskInput) {
     return this.taskService.createTask(input);
+  }
+
+  @Mutation(() => Task)
+  deleteTask(@Arg('input') input: DeleteTaskInput) {
+    return this.taskService.deleteTask(input);
   }
 }
 
