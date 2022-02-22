@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
   }
 });
+const {container, title, list, row, loader, separator} = styles;
 
 const TasksScreen = () => {
 
@@ -62,21 +63,21 @@ const TasksScreen = () => {
     if (data) setAllTasks(data['findAllTasks']);
   });
 
-  if (loading) return <ActivityIndicator style={styles.loader} size="large" color="lavender"/>;
+  if (loading) return <ActivityIndicator style={loader} size="large" color="lavender"/>;
   if (error) return <Text>Error! {error.message}</Text>;
 
   return (
-    <View style={styles.container}>
+    <View style={container}>
       <FlatList
         refreshing={(networkStatus === NetworkStatus.refetch)}
         onRefresh={() => refetch()}
-        style={styles.list}
+        style={list}
         data={allTasks}
         renderItem={(task) => <Task item={task.item}/>}
         keyExtractor={(task) => task["_id"]}
-        ListEmptyComponent={<Text style={styles.row}>Il n'y a pas de tâches a afficher !</Text>}
-        ItemSeparatorComponent={ () => <View style={styles.separator} /> }
-        ListHeaderComponent={<Text style={styles.title}>Task list</Text>}
+        ListEmptyComponent={<Text style={row}>Il n'y a pas de tâches a afficher !</Text>}
+        ItemSeparatorComponent={ () => <View style={separator} /> }
+        ListHeaderComponent={<Text style={title}>Task list</Text>}
       />
     </View>
   );

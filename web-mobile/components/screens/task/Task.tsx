@@ -2,17 +2,6 @@ import React from "react";
 import { Text, View, StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  list: {
-    margin: 16,
-    borderWidth: 2,
-  },
   row: {
     flex: 1,
     flexDirection: "row",
@@ -24,6 +13,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
+const {row, label} = styles;
 
 interface Task {
   name: string;
@@ -36,24 +26,24 @@ interface Task {
 const Task: React.FC<{ item: Task }> = ({item}) => { 
     return (
       <>
-        <View style={styles.row}>
-            <Text style={styles.label}>Name</Text>
+        <View style={row}>
+            <Text style={label}>Name</Text>
             <Text style={{ flex: 3}}>{item.name}</Text>
         </View>
-        <View style={{ ...styles.row, backgroundColor: "lightgrey" }}>
-            <Text style={styles.label}>Project</Text>
+        <View style={{ ...row, backgroundColor: "lightgrey" }}>
+            <Text style={label}>Project</Text>
             <Text style={{ flex: 3}}>{item.project}</Text>
         </View>
-        <View style={styles.row}>
-            <Text style={styles.label}>Assignee</Text>
+        <View style={row}>
+            <Text style={label}>Assignee</Text>
             <Text style={{ flex: 3}}>{item.assigne}</Text>
         </View>
-        <View style={{ ...styles.row, backgroundColor: "lightgrey" }}>
-            <Text style={styles.label}>Status</Text>
+        <View style={{ ...row, backgroundColor: "lightgrey" }}>
+            <Text style={label}>Status</Text>
             <Text style={{ flex: 3}}>{item.status}</Text>
         </View>
-        <View style={styles.row}>
-            <Text style={styles.label}>Due Date</Text>
+        <View style={row}>
+            <Text style={label}>Due Date</Text>
             <Text style={{ flex: 3}}>{item.dueDate}</Text>
         </View>
       </>
