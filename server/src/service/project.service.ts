@@ -1,5 +1,6 @@
 import CreateProjectInput from '../schema/project.create';
 import { ProjectModel } from '../schema/project.schema';
+import DeleteProjectInput from '../schema/project.delete';
 
 class ProjectService {
   // eslint-disable-next-line
@@ -10,6 +11,11 @@ class ProjectService {
   // eslint-disable-next-line
   async createProject(input: CreateProjectInput) {
     return ProjectModel.create(input);
+  }
+
+  // eslint-disable-next-line
+  async deleteProject(input: DeleteProjectInput) {
+    return ProjectModel.findByIdAndDelete(input._id)
   }
 }
 
