@@ -1,4 +1,5 @@
 import { InputType, Field } from 'type-graphql';
+import DateTime from './custom-scalars/DateTime';
 
 @InputType()
 class CreateProjectInput {
@@ -11,7 +12,7 @@ class CreateProjectInput {
   @Field(() => String)
   projectManager: string;
 
-  @Field()
+  @Field(() => DateTime)
   dueDate: Date;
 }
 

@@ -18,6 +18,7 @@ import { Formik, Form } from "formik";
 import { gql, useMutation } from "@apollo/client";
 import { modalStyle } from "../../_utils/modalStyle";
 import moment from 'moment';
+
 interface CreateTaskInput {
   name: string;
   project: string;
@@ -31,7 +32,7 @@ const defaultValues: CreateTaskInput = {
   project: "",
   status: "",
   assigne: "",
-  dueDate: moment(),
+  dueDate: moment()
 };
 
 const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
@@ -72,8 +73,8 @@ const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
         <CardContent>
           {open && (
             <Formik
-            initialValues={defaultValues}
-            onSubmit={(values) => onSubmit(values)}
+              initialValues={defaultValues}
+              onSubmit={(values) => onSubmit(values)}
             >
               {({ values, handleChange, setFieldValue }) => (
                 <Form>
@@ -128,22 +129,21 @@ const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
                         size="small"
                         sx={{ flexGrow: 1 }}
                       />
+                      {/* <TextField
+                        name="dueDate"
+                        value={moment(values.dueDate).format("DD/MM/YYYY")}
+                        onChange={handleChange}
+                        label="Due Date"
+                        size="small"
+                        sx={{ flexGrow: 1 }}
+                      /> */}
                       <DatePicker
                         label="Due Date"
-                        inputFormat="DD/MM/YYYY"
+                        views={['day', 'month', 'year']}
                         minDate={moment()}
                         value={values.dueDate}
-                        onChange={(value): void => {
-                          setFieldValue('dueDate', value)                      
-                        }}
-                        renderInput={(params) => 
-                          <TextField 
-                            {...params} 
-                            name="dueDate" 
-                            size="small" 
-                            sx={{ flexGrow: 1 }}
-                          />
-                        }
+                        onChange={handleChange}
+                        renderInput={(params) => <TextField {...params} name="dueDate" size="small" sx={{ flexGrow: 1 }}/>}
                       />
                     </Box>
                     {/**
