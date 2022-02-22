@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Text, Button, View, StyleSheet, Modal, FlatList } from "react-native";
-import { gql, useQuery } from "@apollo/client";
+import { View, StyleSheet, FlatList, ActivityIndicator, Text } from "react-native";
+import { gql, useQuery, NetworkStatus } from "@apollo/client";
+import Task from "./Task";
 
 const styles = StyleSheet.create({
   container: {
@@ -9,8 +10,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "bold",
+    textAlign: 'center',
+    marginVertical: 4,
+    width: "100%",
+    borderBottomWidth: 2,
   },
-  field: {},
   list: {
     margin: 16,
     borderWidth: 2,
@@ -20,12 +24,21 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     padding: 2,
   },
-  label: {
-    width: 70,
+  loader: {
+    flex: 1,
+    padding: 10,
+    justifyContent: "center",
   },
+  separator: {
+    height: 20,
+    width: "100%",
+    backgroundColor: "#000",
+  }
 });
+const {container, title, list, row, loader, separator} = styles;
 
 const TasksScreen = () => {
+
   const TASKS_QUERY = gql`
     query {
       findAllTasks {
@@ -39,50 +52,35 @@ const TasksScreen = () => {
     }
   `;
 
-  const { loading, data } = useQuery(TASKS_QUERY);
+  const [allTasks, setAllTasks] = useState([]);
+  const { loading, data, error, refetch, networkStatus } = useQuery(TASKS_QUERY,
+      {
+        notifyOnNetworkStatusChange: true,
+      },
+    );
+  
+  useEffect(() => {
+    if (data) setAllTasks(data['findAllTasks']);
+  });
+
+  if (loading) return <ActivityIndicator style={loader} size="large" color="lavender"/>;
+  if (error) return <Text>Error! {error.message}</Text>;
 
   return (
-    <View style={styles.container}>
-      {!loading && data && (
-        <FlatList
-          style={styles.list}
-          data={data.findAllTasks}
-          renderItem={(task) => (
-            <>
-              {console.log(task)}
-              <View style={styles.row}>
-                <Text style={styles.label}>Name</Text>
-                <Text style={styles.field}>{task.item.name}</Text>
-              </View>
-              <View style={{ ...styles.row, backgroundColor: "lightgrey" }}>
-                <Text style={styles.label}>Project</Text>
-                <Text style={styles.field}>{task.item.project}</Text>
-              </View>
-              <View style={styles.row}>
-                <Text style={styles.label}>Assignee</Text>
-                <Text style={styles.field}>{task.item.assigne}</Text>
-              </View>
-              <View style={{ ...styles.row, backgroundColor: "lightgrey" }}>
-                <Text style={styles.label}>Status</Text>
-                <Text style={styles.field}>{task.item.status}</Text>
-              </View>
-              <View style={styles.row}>
-                <Text style={styles.label}>Due Date</Text>
-                <Text style={styles.field}>{task.item.dueDate}</Text>
-              </View>
-              {task.index !== data.findAllTasks.length - 1 && (
-                <Text style={{ ...styles.row, backgroundColor: "lightgrey" }}>
-                  ~
-                </Text>
-              )}
-            </>
-          )}
-          keyExtractor={(task) => task["_id"]}
-        />
-      )}
-      {/* <Button onPress={() => null} title="Create a new task" /> */}
+    <View style={container}>
+      <FlatList
+        refreshing={(networkStatus === NetworkStatus.refetch)}
+        onRefresh={() => refetch()}
+        style={list}
+        data={allTasks}
+        renderItem={(task) => <Task item={task.item}/>}
+        keyExtractor={(task) => task["_id"]}
+        ListEmptyComponent={<Text style={row}>Il n'y a pas de tâches a afficher !</Text>}
+        ItemSeparatorComponent={ () => <View style={separator} /> }
+        ListHeaderComponent={<Text style={title}>Task list</Text>}
+      />
     </View>
   );
-};
+};            
 
 export default TasksScreen;
