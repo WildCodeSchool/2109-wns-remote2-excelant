@@ -3,6 +3,7 @@ import CreateProjectInput from '../schema/project.create';
 import Project from '../schema/project.schema';
 import ProjectService from '../service/project.service';
 import UpdateProjectInput from '../schema/project.update';
+import DeleteProjectInput from '../schema/project.delete';
 
 class ProjectResolver {
   constructor(private projectService: ProjectService) {
@@ -22,6 +23,12 @@ class ProjectResolver {
   @Mutation(() => Project)
   updateProject(@Arg('_id') id: string, @Arg('input') input: UpdateProjectInput) {
     return this.projectService.updateProject(id, input);
+  }
+
+
+  @Mutation(() => Project)
+  deleteProject(@Arg('input') input: DeleteProjectInput) {
+    return this.projectService.deleteProject(input);
   }
 }
 
