@@ -4,6 +4,8 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import "./index.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import DateAdapter from '@mui/lab/AdapterMoment';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
 const client = new ApolloClient({
   uri: "http://localhost:4040/graphql",
@@ -12,9 +14,11 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
+    <LocalizationProvider dateAdapter={DateAdapter}>
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    </LocalizationProvider>
   </ApolloProvider>,
   document.getElementById("root")
 );

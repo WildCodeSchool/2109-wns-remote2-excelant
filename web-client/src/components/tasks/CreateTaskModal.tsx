@@ -12,17 +12,19 @@ import {
   MenuItem,
   Box,
 } from "@mui/material";
+import { DatePicker } from "@mui/lab";
 import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import { gql, useMutation } from "@apollo/client";
 import { modalStyle } from "../../_utils/modalStyle";
+import moment from 'moment';
 
 interface CreateTaskInput {
   name: string;
   project: string;
   status: string;
   assigne: string;
-  dueDate: string;
+  dueDate: moment.Moment;
 }
 
 const defaultValues: CreateTaskInput = {
@@ -30,7 +32,7 @@ const defaultValues: CreateTaskInput = {
   project: "",
   status: "",
   assigne: "",
-  dueDate: "",
+  dueDate: moment()
 };
 
 const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
@@ -63,7 +65,7 @@ const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
       handleClose();
     }
   };
-
+  
   return (
     <Modal open={open} onClose={handleClose}>
       <Card sx={{ ...modalStyle, padding: "8px 24px" }}>
@@ -71,8 +73,8 @@ const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
         <CardContent>
           {open && (
             <Formik
-              initialValues={defaultValues}
-              onSubmit={(values) => onSubmit(values)}
+            initialValues={defaultValues}
+            onSubmit={(values) => onSubmit(values)}
             >
               {({ values, handleChange }) => (
                 <Form>
@@ -127,13 +129,21 @@ const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
                         size="small"
                         sx={{ flexGrow: 1 }}
                       />
-                      <TextField
+                      {/* <TextField
                         name="dueDate"
-                        value={values.dueDate}
+                        value={moment(values.dueDate).format("DD/MM/YYYY")}
                         onChange={handleChange}
                         label="Due Date"
                         size="small"
                         sx={{ flexGrow: 1 }}
+                      /> */}
+                      <DatePicker
+                        label="Due Date"
+                        views={['day', 'month', 'year']}
+                        minDate={moment()}
+                        value={values.dueDate}
+                        onChange={handleChange}
+                        renderInput={(params) => <TextField {...params} name="dueDate" size="small" sx={{ flexGrow: 1 }}/>}
                       />
                     </Box>
                     {/**

@@ -1,4 +1,5 @@
 import { InputType, Field } from 'type-graphql';
+import DateTime from './custom-scalars/DateTime';
 
 @InputType()
 class CreateTaskInput {
@@ -14,8 +15,8 @@ class CreateTaskInput {
   @Field(() => String)
   assigne: string;
 
-  @Field(() => String)
-  dueDate: string;
+  @Field(() => DateTime)
+  dueDate: Date;
 }
 
 export default CreateTaskInput;
