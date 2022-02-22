@@ -1,20 +1,8 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { View, Text } from 'react-native';
+import { stylesData } from '../../../styles/styleComponent';
 
-const styles = StyleSheet.create({
-    row: {
-        flex: 1,
-        flexDirection: "row",
-        padding: 2
-    },
-    label: {
-        flex: 1,
-        textTransform: "uppercase",
-        fontWeight: "bold"
-    }
-});
-
-const { row, label } = styles;
+const { row, label } = stylesData;
 
 interface Project {
     name: string;
@@ -38,16 +26,12 @@ const Project: React.FC<{ item: Project }> = ({item}) => {
                 <Text style={label}>Project Manager</Text>
                 <Text style={{ flex: 3 }}>{item.projectManager}</Text>
             </View>
-            <View style={row}>
-                <Text style={label}>Project Manager</Text>
-                <Text style={{ flex: 3 }}>{item.projectManager}</Text>
-            </View>
-            <View style={row}>
+            <View style={{...row, backgroundColor: "lightgrey"}}>
                 <Text style={label}>Due Date</Text>
                 <Text style={{ flex: 3 }}>{item.dueDate}</Text>
             </View>
         </>
-    )
-}
+    );
+};
 
-
+export default Project;
