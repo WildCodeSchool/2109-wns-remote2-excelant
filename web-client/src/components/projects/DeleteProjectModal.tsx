@@ -26,22 +26,34 @@ const DeleteProjectModal: React.FC<{
       console.log("Error", err);
     } finally {
       refetch();
+      handleClose();
       setLoading(false);
     }
   };
 
   return (
     <Modal open={open} onClose={handleClose}>
-      <Card sx={{ ...modalStyle, padding: "8px 24px" }}>
+      <Card
+        sx={{
+          ...modalStyle,
+          padding: "8px 24px",
+          width: { xs: "95%", sm: "80%", md: "auto" },
+        }}
+      >
         <CardHeader
           title={`Are you sur you want to delete ${project.name}?`}
           sx={{ textAlign: "center" }}
         />
-        <CardActions>
-          <Button onClick={handleDelete} disabled={loading}>
+        <CardActions sx={{ display: "flex", justifyContent: "center", gap: 5 }}>
+          <Button onClick={handleDelete} disabled={loading} variant="contained">
             Delete
           </Button>
-          <Button onClick={handleClose} disabled={loading}>
+          <Button
+            onClick={handleClose}
+            disabled={loading}
+            variant="outlined"
+            color="error"
+          >
             Cancel
           </Button>
         </CardActions>

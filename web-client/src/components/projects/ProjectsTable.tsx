@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import {
   Box,
@@ -9,14 +9,12 @@ import {
   TableHead,
   TableRow,
   Paper,
-  IconButton,
 } from "@mui/material";
 import { tableCellClasses } from "@mui/material/TableCell";
-import { useMutation, useQuery } from "@apollo/client";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { useQuery } from "@apollo/client";
 import GqlRequest from "../../_graphql/GqlRequest";
 import { ProjectType } from "../../_types/_projectTypes";
-import DeleteProjectModal from "./DeleteProjectModal";
+import ProjectTableItem from "./ProjectTableItem";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -28,18 +26,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
-}));
-
 const ProjectTable: React.FC<{ reload: number }> = ({ reload }) => {
-  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const { loading, data, refetch } = useQuery(
     new GqlRequest("Project").get("_id, name, status, projectManager, dueDate")
   );
@@ -68,33 +55,11 @@ const ProjectTable: React.FC<{ reload: number }> = ({ reload }) => {
           <TableBody>
             {data &&
               data.findAllProjects.map((project: ProjectType) => (
-                <>
-                  <StyledTableRow key={project._id}>
-                    <TableCell component="th" scope="row">
-                      {project.name}
-                    </TableCell>
-                    <TableCell align="right">{project.status}</TableCell>
-                    <TableCell align="right">
-                      {project.projectManager}
-                    </TableCell>
-                    <TableCell align="right">{project.dueDate}</TableCell>
-                    <TableCell align="right">
-                      <IconButton
-                        color="error"
-                        onClick={() => setOpenDeleteModal(true)}
-                      >
-                        <DeleteForeverIcon />
-                      </IconButton>
-                    </TableCell>
-                  </StyledTableRow>
-                  <DeleteProjectModal
-                    key={`${project._id}delete`}
-                    project={project}
-                    open={openDeleteModal}
-                    handleClose={() => setOpenDeleteModal(false)}
-                    refetch={refetch}
-                  />
-                </>
+                <ProjectTableItem
+                  project={project}
+                  refetch={refetch}
+                  key={project._id}
+                />
               ))}
           </TableBody>
         </Table>
