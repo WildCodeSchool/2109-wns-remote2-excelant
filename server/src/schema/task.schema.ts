@@ -1,6 +1,5 @@
 import { getModelForClass, prop } from '@typegoose/typegoose';
 import { Field, ObjectType } from 'type-graphql';
-import DateTime from './custom-scalars/DateTime';
 
 @ObjectType()
 class Task {
@@ -23,7 +22,7 @@ class Task {
   @prop({ required: true })
   assigne: string;
 
-  @Field(() => DateTime)
+  @Field()
   @prop({ required: true })
   dueDate: Date;
 }

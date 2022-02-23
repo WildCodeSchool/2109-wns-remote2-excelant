@@ -16,6 +16,7 @@ import { tableCellClasses } from "@mui/material/TableCell";
 import { gql, useQuery } from "@apollo/client";
 import TaskModal from "./TaskModal";
 import { TaskType } from "../../_types/_taskTypes";
+import moment from 'moment';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -98,7 +99,7 @@ const TaskTable: React.FC<{ reload: number }> = ({ reload }) => {
                   <TableCell align="right">{task.project}</TableCell>
                   <TableCell align="right">{task.status}</TableCell>
                   <TableCell align="right">{task.assigne}</TableCell>
-                  <TableCell align="right">{task.dueDate}</TableCell>
+                  <TableCell align="right">{moment(task.dueDate).format('DD/MM/YYYY')}</TableCell>
                   <TableCell align="right">
                     <Button onClick={() => handleOpen(task)}>
                       <ArticleIcon style={{ fill: "black" }} />

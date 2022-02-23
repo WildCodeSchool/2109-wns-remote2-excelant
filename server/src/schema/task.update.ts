@@ -1,5 +1,4 @@
 import { InputType, Field } from 'type-graphql';
-import {prop} from "@typegoose/typegoose";
 
 @InputType()
 class UpdateTaskInput {
@@ -15,8 +14,8 @@ class UpdateTaskInput {
     @Field(() => String)
     assigne: string;
 
-    @Field(() => String)
-    dueDate: string;
+    @Field()
+    dueDate: Date;
 }
 
 export default UpdateTaskInput;
