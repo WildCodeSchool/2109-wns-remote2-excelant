@@ -6,6 +6,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 
 import HomeScreen from "../screens/HomeScreen";
 import TaskScreen from "../screens/task/TaskScreen";
+import ProjectScreen from "../screens/project/ProjectScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -42,6 +43,20 @@ export default function Header() {
               ),
             }}
           />
+            <Drawer.Screen
+                name="Projects"
+                component={ProjectScreen}
+                options={{
+                    title: "Projects",
+                    drawerIcon: ({ focused, size }) => (
+                        <Ionicons
+                            name={"document"}
+                            size={size}
+                            color={focused ? "#0079F8" : "#ccc"}
+                        />
+                    ),
+                }}
+            />
         </Drawer.Navigator>
       </NavigationContainer>
     </>

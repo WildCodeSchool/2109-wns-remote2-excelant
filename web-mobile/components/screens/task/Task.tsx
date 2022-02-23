@@ -1,19 +1,8 @@
 import React from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View } from "react-native";
+import { stylesData } from '../../../styles/styleComponent';
 
-const styles = StyleSheet.create({
-  row: {
-    flex: 1,
-    flexDirection: "row",
-    padding: 2,
-  },
-  label: {
-    flex: 1,
-    textTransform: 'uppercase',
-    fontWeight: "bold",
-  },
-});
-const {row, label} = styles;
+const { row, label } = stylesData;
 
 interface Task {
   name: string;

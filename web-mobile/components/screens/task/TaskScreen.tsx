@@ -1,44 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, FlatList, ActivityIndicator, Text } from "react-native";
+import { View, FlatList, ActivityIndicator, Text } from "react-native";
 import { gql, useQuery, NetworkStatus } from "@apollo/client";
 import Task from "./Task";
+import { stylesScreen } from '../../../styles/styleComponent';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-    textAlign: 'center',
-    marginVertical: 4,
-    width: "100%",
-    borderBottomWidth: 2,
-  },
-  list: {
-    margin: 16,
-    borderWidth: 2,
-  },
-  row: {
-    flex: 1,
-    flexDirection: "row",
-    padding: 2,
-  },
-  loader: {
-    flex: 1,
-    padding: 10,
-    justifyContent: "center",
-  },
-  separator: {
-    height: 20,
-    width: "100%",
-    backgroundColor: "#000",
-  }
-});
-const {container, title, list, row, loader, separator} = styles;
+const { container, title, list, row, loader, separator } = stylesScreen;
 
 const TasksScreen = () => {
-
   const TASKS_QUERY = gql`
     query {
       findAllTasks {
