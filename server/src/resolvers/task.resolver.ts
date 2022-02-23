@@ -1,6 +1,6 @@
 import { Mutation, Query, Arg } from 'type-graphql';
 import CreateTaskInput from '../schema/task.create';
-import { FindOneTaskById } from '../schema/task.find';
+import FindOneTaskById from '../schema/task.find';
 import Task from '../schema/task.schema';
 import TaskService from '../service/task.service';
 import UpdateTaskInput from '../schema/task.update';
