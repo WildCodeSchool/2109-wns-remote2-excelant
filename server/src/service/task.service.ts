@@ -1,6 +1,7 @@
 import CreateTaskInput from '../schema/task.create';
 import { FindOneTaskById } from '../schema/task.find';
 import { TaskModel } from '../schema/task.schema';
+import UpdateTaskInput from '../schema/task.update';
 import DeleteTaskInput from '../schema/task.delete';
 
 class TaskService {
@@ -16,6 +17,11 @@ class TaskService {
   // eslint-disable-next-line
   async createTask(input: CreateTaskInput) {
     return TaskModel.create(input);
+  }
+
+  // eslint-disable-next-line
+  async updateTask(id: string, input: UpdateTaskInput) {
+    return TaskModel.findByIdAndUpdate(id, input);
   }
 
   // eslint-disable-next-line
