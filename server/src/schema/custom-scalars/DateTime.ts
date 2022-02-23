@@ -7,6 +7,10 @@ const DateTime = new GraphQLScalarType({
       return value.getTime(); // Convert outgoing Date to integer for JSON
     },
     parseValue(value: any) {
+      console.log('1', value);
+      new Date(value)
+      console.log('2', new Date(value));
+
       return new Date(value); // Convert incoming integer to Date
     },
     parseLiteral(ast: any) {
