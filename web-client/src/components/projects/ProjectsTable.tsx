@@ -11,7 +11,10 @@ import {
   Paper,
 } from "@mui/material";
 import { tableCellClasses } from "@mui/material/TableCell";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
+import GqlRequest from "../../_graphql/GqlRequest";
+import { ProjectType } from "../../_types/_projectTypes";
+import ProjectTableItem from "./ProjectTableItem";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -23,30 +26,10 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
-}));
-
 const ProjectTable: React.FC<{ reload: number }> = ({ reload }) => {
-  const PROJECTS_QUERY = gql`
-    query {
-      findAllProjects {
-        _id
-        name
-        status
-        projectManager
-        dueDate
-      }
-    }
-  `;
-
-  const { loading, data, refetch } = useQuery(PROJECTS_QUERY);
+  const { loading, data, refetch } = useQuery(
+    new GqlRequest("Project").get("_id, name, status, projectManager, dueDate")
+  );
 
   useEffect(() => {
     if (reload > 0) {
@@ -57,33 +40,31 @@ const ProjectTable: React.FC<{ reload: number }> = ({ reload }) => {
   return loading ? (
     <Box>Loading ... </Box>
   ) : (
-    <TableContainer component={Paper} sx={{ pl: "250px", width: "100%" }}>
-      <Table aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Project</StyledTableCell>
-            <StyledTableCell align="right">Status</StyledTableCell>
-            <StyledTableCell align="right">Project Manager</StyledTableCell>
-            <StyledTableCell align="right">Due date</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data &&
-            data.findAllProjects.map(
-              ({ _id, name, status, projectManager, dueDate }: any) => (
-                <StyledTableRow key={_id}>
-                  <TableCell component="th" scope="row">
-                    {name}
-                  </TableCell>
-                  <TableCell align="right">{status}</TableCell>
-                  <TableCell align="right">{projectManager}</TableCell>
-                  <TableCell align="right">{dueDate}</TableCell>
-                </StyledTableRow>
-              )
-            )}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <>
+      <TableContainer component={Paper} sx={{ pl: "250px", width: "100%" }}>
+        <Table aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>Project</StyledTableCell>
+              <StyledTableCell align="right">Status</StyledTableCell>
+              <StyledTableCell align="right">Project Manager</StyledTableCell>
+              <StyledTableCell align="right">Due date</StyledTableCell>
+              <StyledTableCell align="right">Actions</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data &&
+              data.findAllProjects.map((project: ProjectType) => (
+                <ProjectTableItem
+                  project={project}
+                  refetch={refetch}
+                  key={project._id}
+                />
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   );
 };
 

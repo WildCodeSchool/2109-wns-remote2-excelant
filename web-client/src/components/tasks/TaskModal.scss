@@ -33,12 +33,13 @@
   margin-left: 25px;
   line-height: 35px;
 
-  &-assigne, &-project, &-date {
+  &-assigne,
+  &-project,
+  &-date {
     display: inline;
     font-family: $paragraph-font-family;
     font-size: $subtitle-size;
     font-weight: bold;
     color: $color-dark-purple;
   }
-
 }

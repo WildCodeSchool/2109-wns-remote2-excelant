@@ -10,14 +10,15 @@ import {
   Select,
   MenuItem,
   InputLabel,
-  FormControl
+  FormControl,
 } from "@mui/material";
 import React, { useState } from "react";
 import { Formik, Form } from "formik";
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { modalStyle } from "../../_utils/modalStyle";
+import GqlRequest from "../../_graphql/GqlRequest";
 
-type Status = string
+type Status = string;
 
 interface CreateProjectInput {
   name: string;
@@ -30,7 +31,7 @@ const defaultValues: CreateProjectInput = {
   name: "",
   status: "",
   projectManager: "",
-  dueDate: ""
+  dueDate: "",
 };
 
 const CreateProjectModal: React.FC<{
@@ -38,23 +39,16 @@ const CreateProjectModal: React.FC<{
   handleClose: () => void;
 }> = ({ open, handleClose }) => {
   const [loading, setLoading] = useState(false);
-  const CREATE_PROJECT = gql`
-    mutation createProject($input: CreateProjectInput!) {
-      createProject(input: $input) {
-        name
-        status
-        projectManager
-        dueDate
-      }
-    }
-  `;
-  const [createProject] = useMutation(CREATE_PROJECT);
+  const [createProject] = useMutation(
+    new GqlRequest("Project").create("name, status, projectManager, dueDate")
+  );
 
   const onSubmit = (values: CreateProjectInput) => {
     setLoading(true);
     try {
       createProject({ variables: { input: values } });
     } catch (err) {
+      // eslint-disable-next-line
       console.log("Error", err);
     } finally {
       setLoading(false);
@@ -88,17 +82,19 @@ const CreateProjectModal: React.FC<{
                         sx={{ flexGrow: 1 }}
                       />
                       <FormControl sx={{ flexGrow: 1 }}>
-                        <InputLabel id="status-label">Project status</InputLabel>
+                        <InputLabel id="status-label">
+                          Project status
+                        </InputLabel>
                         <Select
-                          name="status" 
+                          name="status"
                           labelId="status-label"
                           label="Project status"
                           onChange={handleChange}
                           value={values.status}
                         >
-                          <MenuItem value={"ongoing"}>En cours</MenuItem>
-                          <MenuItem value={"done"}>Terminé</MenuItem>
-                          <MenuItem value={"archived"}>Archivé</MenuItem>
+                          <MenuItem value="ongoing">En cours</MenuItem>
+                          <MenuItem value="done">Terminé</MenuItem>
+                          <MenuItem value="archived">Archivé</MenuItem>
                         </Select>
                       </FormControl>
                     </Box>
@@ -124,10 +120,10 @@ const CreateProjectModal: React.FC<{
                     </Box>
                     <TextField
                       name="description"
-                      value={""}
+                      value=""
                       onChange={handleChange}
                       label="Description"
-                      multiline={true}
+                      multiline
                       minRows={5}
                       disabled
                     />
@@ -144,7 +140,7 @@ const CreateProjectModal: React.FC<{
                             style={{
                               width: 20,
                               height: 20,
-                              marginLeft: "10px"
+                              marginLeft: "10px",
                             }}
                           />
                         )}
