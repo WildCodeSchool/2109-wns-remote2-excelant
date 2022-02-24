@@ -3,6 +3,7 @@ import { View, FlatList, ActivityIndicator, Text } from "react-native";
 import { gql, useQuery, NetworkStatus } from "@apollo/client";
 import PressableTask from "../../task/PressableTask";
 import { stylesScreen } from "../../../styles/styleComponent";
+import { TaskType } from "../../task/Task";
 
 const { container, title, list, row, loader, separator } = stylesScreen;
 
@@ -12,15 +13,18 @@ const TasksScreen = () => {
       findAllTasks {
         _id
         name
-        project
         status
         assigne
         dueDate
+        project {
+          _id
+          name
+        }
       }
     }
   `;
 
-  const [allTasks, setAllTasks] = useState([]);
+  const [allTasks, setAllTasks] = useState<TaskType[] | []>([]);
   const { loading, data, error, refetch, networkStatus } = useQuery(
     TASKS_QUERY,
     {
@@ -30,7 +34,7 @@ const TasksScreen = () => {
 
   useEffect(() => {
     if (data) setAllTasks(data["findAllTasks"]);
-  });
+  }, [data]);
 
   if (loading)
     return <ActivityIndicator style={loader} size="large" color="lavender" />;

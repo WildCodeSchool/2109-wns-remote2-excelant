@@ -21,7 +21,10 @@ const SingleTaskScreen = ({ route }: Props) => {
       findOneTask(input: $input) {
         _id
         name
-        project
+        project {
+          _id
+          name
+        }
         status
         assigne
         dueDate
@@ -34,7 +37,10 @@ const SingleTaskScreen = ({ route }: Props) => {
   const emptyTask: TaskType = {
     _id: "",
     name: "",
-    project: "",
+    project: {
+      _id: "",
+      name: "",
+    },
     status: "",
     assigne: "",
     dueDate: "",
@@ -52,7 +58,7 @@ const SingleTaskScreen = ({ route }: Props) => {
 
   useEffect(() => {
     if (data) setTaskData(data.findOneTask);
-  });
+  }, [data]);
 
   if (loading)
     return <ActivityIndicator style={loader} size="large" color="lavender" />;
