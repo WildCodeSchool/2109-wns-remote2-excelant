@@ -1,5 +1,4 @@
 import { InputType, Field } from 'type-graphql';
-// import DateTime from './custom-scalars/DateTime';
 
 @InputType()
 class CreateProjectInput {

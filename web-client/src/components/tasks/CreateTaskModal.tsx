@@ -23,7 +23,7 @@ interface CreateTaskInput {
   project: string;
   status: string;
   assigne: string;
-  dueDate: string;
+  dueDate: moment.Moment;
 }
 
 const defaultValues: CreateTaskInput = {
@@ -31,7 +31,7 @@ const defaultValues: CreateTaskInput = {
   project: "",
   status: "",
   assigne: "",
-  dueDate: "",
+  dueDate: moment(),
 };
 
 const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
@@ -53,7 +53,6 @@ const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
   const [createTask] = useMutation(CREATE_TASK);
 
   const onSubmit = (values: CreateTaskInput) => {
-    values.dueDate = moment(values.dueDate).toString();
     setLoading(true);
     try {
       createTask({ variables: { input: values } });
