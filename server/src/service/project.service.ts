@@ -1,7 +1,7 @@
-import CreateProjectInput from '../schema/project.create';
-import { ProjectModel } from '../schema/project.schema';
-import UpdateProjectInput from "../schema/project.update";
-import DeleteProjectInput from '../schema/project.delete';
+import CreateProjectInput from '../schema/Project/project.create';
+import { ProjectModel } from '../schema/index';
+import UpdateProjectInput from '../schema/Project/project.update';
+import DeleteProjectInput from '../schema/Project/project.delete';
 
 class ProjectService {
   // eslint-disable-next-line
@@ -21,7 +21,7 @@ class ProjectService {
 
   // eslint-disable-next-line
   async deleteProject(input: DeleteProjectInput) {
-    return ProjectModel.findByIdAndDelete(input._id)
+    return ProjectModel.findByIdAndDelete(input._id);
   }
 }
 
