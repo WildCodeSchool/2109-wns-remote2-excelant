@@ -1,5 +1,5 @@
 import CreateProjectInput from '../schema/Project/project.create';
-import { ProjectModel } from '../schema/index';
+import { ProjectModel, TaskModel } from '../schema/index';
 import UpdateProjectInput from '../schema/Project/project.update';
 import DeleteProjectInput from '../schema/Project/project.delete';
 
@@ -21,7 +21,9 @@ class ProjectService {
 
   // eslint-disable-next-line
   async deleteProject(input: DeleteProjectInput) {
-    return ProjectModel.findByIdAndDelete(input._id);
+    const project = await ProjectModel.findByIdAndDelete(input._id);
+    await TaskModel.deleteMany({ project: { _id: input._id } });
+    return project;
   }
 }
 
