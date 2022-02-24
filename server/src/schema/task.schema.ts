@@ -22,9 +22,9 @@ class Task {
   @prop({ required: true })
   assigne: string;
 
-  @Field(() => String)
+  @Field()
   @prop({ required: true })
-  dueDate: string;
+  dueDate: Date;
 }
 
 export const TaskModel = getModelForClass(Task);

@@ -16,6 +16,7 @@ async function bootstrap() {
   // Build the schema
   const schema = await buildSchema({
     resolvers,
+    dateScalarMode: "isoDate",
   });
 
   // Init express

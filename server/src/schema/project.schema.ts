@@ -1,6 +1,5 @@
 import { getModelForClass, prop } from '@typegoose/typegoose';
 import { Field, ObjectType } from 'type-graphql';
-
 @ObjectType()
 class Project {
   @Field(() => String)
@@ -18,9 +17,9 @@ class Project {
   @prop({ required: true })
   projectManager: string;
 
-  @Field(() => String)
+  @Field()
   @prop({ required: true })
-  dueDate: string;
+  dueDate: Date;
 }
 
 export const ProjectModel = getModelForClass(Project);

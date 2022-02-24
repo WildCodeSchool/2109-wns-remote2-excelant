@@ -11,8 +11,8 @@ class UpdateProjectInput {
     @Field(() => String)
     projectManager: string;
 
-    @Field(() => String)
-    dueDate: string;
+    @Field()
+    dueDate: Date;
 }
 
 export default UpdateProjectInput;

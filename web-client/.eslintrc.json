@@ -14,7 +14,7 @@
     {
       "files": ["*.ts", "*.tsx"], // Your TypeScript files extension
       "parserOptions": {
-        "project": ["./web-client/tsconfig.json"] // Specify it only for TypeScript files
+        "project": ["./tsconfig.json"] // Specify it only for TypeScript files
       }
     }
   ],

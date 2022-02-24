@@ -11,8 +11,8 @@ class CreateProjectInput {
   @Field(() => String)
   projectManager: string;
 
-  @Field(() => String)
-  dueDate: string;
+  @Field()
+  dueDate: Date;
 }
 
 export default CreateProjectInput;

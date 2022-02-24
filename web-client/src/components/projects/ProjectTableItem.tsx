@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { ProjectType } from "../../_types/_projectTypes";
 import DeleteProjectModal from "./DeleteProjectModal";
+import moment from 'moment';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
@@ -28,7 +29,7 @@ const ProjectTableItem: React.FC<{
         </TableCell>
         <TableCell align="right">{project.status}</TableCell>
         <TableCell align="right">{project.projectManager}</TableCell>
-        <TableCell align="right">{project.dueDate}</TableCell>
+        <TableCell align="right">{moment(project.dueDate).format('DD/MM/YYYY')}</TableCell>
         <TableCell align="right">
           <IconButton color="error" onClick={() => setOpen(true)}>
             <DeleteForeverIcon />

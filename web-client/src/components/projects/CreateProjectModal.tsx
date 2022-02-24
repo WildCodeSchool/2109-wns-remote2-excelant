@@ -12,11 +12,13 @@ import {
   InputLabel,
   FormControl,
 } from "@mui/material";
+import { DatePicker } from "@mui/lab";
 import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import { useMutation } from "@apollo/client";
 import { modalStyle } from "../../_utils/modalStyle";
 import GqlRequest from "../../_graphql/GqlRequest";
+import moment from 'moment';
 
 type Status = string;
 
@@ -24,14 +26,14 @@ interface CreateProjectInput {
   name: string;
   status: Status;
   projectManager: string;
-  dueDate: string;
+  dueDate: moment.Moment;
 }
 
 const defaultValues: CreateProjectInput = {
   name: "",
   status: "",
   projectManager: "",
-  dueDate: "",
+  dueDate: moment(),
 };
 
 const CreateProjectModal: React.FC<{
@@ -66,7 +68,7 @@ const CreateProjectModal: React.FC<{
               initialValues={defaultValues}
               onSubmit={(values) => onSubmit(values)}
             >
-              {({ values, handleChange }) => (
+              {({ values, handleChange, setFieldValue }) => (
                 <Form>
                   <Box display="flex" flexDirection="column" gap={2}>
                     <Box
@@ -110,12 +112,21 @@ const CreateProjectModal: React.FC<{
                         label="Project Manager"
                         sx={{ flexGrow: 1 }}
                       />
-                      <TextField
-                        name="dueDate"
+                      <DatePicker
+                        label="Due Date"
+                        inputFormat="DD/MM/YYYY"
+                        minDate={moment()}
                         value={values.dueDate}
-                        onChange={handleChange}
-                        label="Due date"
-                        sx={{ flexGrow: 1 }}
+                        onChange={(value): void => {
+                          setFieldValue('dueDate', value)                      
+                        }}
+                        renderInput={(params) => 
+                          <TextField 
+                            {...params} 
+                            name="dueDate" 
+                            sx={{ flexGrow: 1 }}
+                          />
+                        }
                       />
                     </Box>
                     <TextField

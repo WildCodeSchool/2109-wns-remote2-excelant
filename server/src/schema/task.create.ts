@@ -14,8 +14,8 @@ class CreateTaskInput {
   @Field(() => String)
   assigne: string;
 
-  @Field(() => String)
-  dueDate: string;
+  @Field()
+  dueDate: Date;
 }
 
 export default CreateTaskInput;
