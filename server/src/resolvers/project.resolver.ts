@@ -4,6 +4,7 @@ import Project from '../schema/Project/project.schema';
 import ProjectService from '../service/project.service';
 import UpdateProjectInput from '../schema/Project/project.update';
 import DeleteProjectInput from '../schema/Project/project.delete';
+import FindOneProjectInput from '../schema/Project/project.find';
 
 class ProjectResolver {
   constructor(private projectService: ProjectService) {
@@ -13,6 +14,11 @@ class ProjectResolver {
   @Query(() => [Project])
   findAllProjects() {
     return this.projectService.findProjects();
+  }
+
+  @Query(() => Project)
+  findOneProject(@Arg('input') input: FindOneProjectInput) {
+    return this.projectService.findOneProject(input);
   }
 
   @Mutation(() => Project)
