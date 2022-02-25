@@ -35,6 +35,15 @@ export default class GqlRequest {
       }`;
   }
 
+  update(returnType: string) {
+    return gql`
+      mutation update${this.schema}($id: String!, $input: Update${this.schema}Input!) {
+        update${this.schema}(_id: $id, input: $input) {
+          ${returnType}
+        }
+      }`;
+  }
+
   delete(returnType: string) {
     return gql`
     mutation delete${this.schema}($input: Delete${this.schema}Input!) {

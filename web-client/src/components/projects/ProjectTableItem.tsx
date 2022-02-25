@@ -54,6 +54,7 @@ const ProjectTableItem: React.FC<{
         open={open}
         handleClose={() => setOpen(false)}
         project={project}
+        refetch={refetch}
       />
     </>
   );
