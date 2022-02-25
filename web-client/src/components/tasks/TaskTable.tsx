@@ -17,6 +17,8 @@ import { gql, useQuery } from "@apollo/client";
 import moment from "moment";
 import TaskModal from "./TaskModal";
 import { TaskType } from "../../_types/_taskTypes";
+import GqlRequest from "../../_graphql/GqlRequest";
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -52,20 +54,9 @@ const TaskTable: React.FC<{ reload: number }> = ({ reload }) => {
     setOpen(true);
   };
 
-  const TASKS_QUERY = gql`
-    query {
-      findAllTasks {
-        _id
-        name
-        project
-        status
-        assigne
-        dueDate
-      }
-    }
-  `;
-
-  const { loading, data, refetch } = useQuery(TASKS_QUERY);
+  const { data, loading, refetch } = useQuery(
+    new GqlRequest("Task").get("_id, name, status, project { name }, assigne, dueDate")
+  );
 
   useEffect(() => {
     if (reload > 0) {
@@ -96,7 +87,7 @@ const TaskTable: React.FC<{ reload: number }> = ({ reload }) => {
                   <TableCell component="th" scope="row">
                     {task.name}
                   </TableCell>
-                  <TableCell align="right">{task.project}</TableCell>
+                  <TableCell align="right">{task.project.name}</TableCell>
                   <TableCell align="right">{task.status}</TableCell>
                   <TableCell align="right">{task.assigne}</TableCell>
                   <TableCell align="right">

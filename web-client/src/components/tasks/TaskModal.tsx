@@ -29,7 +29,7 @@ const TaskModal: React.FC<{
             <p className="modal__task_informations-assigne">Assigne: </p>{" "}
             <span>{task?.assigne}</span> <br />
             <p className="modal__task_informations-project">Project: </p>{" "}
-            <span>{task?.project}</span> <br />
+            <span>{task?.project.name}</span> <br />
             <p className="modal__task_informations-date">Due Date: </p>{" "}
             <span>{moment(task?.dueDate).format('DD/MM/YYYY')}</span> <br />
           </div>

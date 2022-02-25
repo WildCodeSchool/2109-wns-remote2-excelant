@@ -1,8 +1,10 @@
+import { ProjectType } from "./_projectTypes";
+
 export type TaskType = {
   _id: string;
   name: string;
   status: "InProgress" | "Completed" | "ToDo";
-  project: string;
+  project: Partial<ProjectType>;
   assigne: string;
   dueDate: string;
 };

@@ -13,15 +13,19 @@ import {
   Box,
 } from "@mui/material";
 import { DatePicker } from "@mui/lab";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import moment from 'moment';
 import { Formik, Form } from "formik";
-import { gql, useMutation } from "@apollo/client";
-import moment from "moment";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { modalStyle } from "../../_utils/modalStyle";
+import GqlRequest from "../../_graphql/GqlRequest";
+import { ProjectType } from "../../_types/_projectTypes";
 
 interface CreateTaskInput {
   name: string;
-  project: string;
+  project: {
+    _id: string;
+  }
   status: string;
   assigne: string;
   dueDate: moment.Moment;
@@ -29,7 +33,9 @@ interface CreateTaskInput {
 
 const defaultValues: CreateTaskInput = {
   name: "",
-  project: "",
+  project: {
+    "_id": "",
+  },
   status: "",
   assigne: "",
   dueDate: moment(),
@@ -39,12 +45,24 @@ const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
   open,
   handleClose,
 }) => {
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const [projects, setProjects] = useState([]);
+
+  const { data, loading } = useQuery(
+    new GqlRequest("Project").get("_id, name")
+  );
+  
+  useEffect(() => {
+    if (data) setProjects(data.findAllProjects);
+  }, [data]);
+  
   const CREATE_TASK = gql`
     mutation createTask($input: CreateTaskInput!) {
       createTask(input: $input) {
         name
-        project
+        project {
+          _id
+        }
         status
         assigne
         dueDate
@@ -91,14 +109,22 @@ const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
                       sx={{ flexDirection: { xs: "column", md: "row" } }}
                       gap={1}
                     >
-                      <TextField
-                        name="project"
-                        value={values.project}
-                        onChange={handleChange}
-                        label="Project"
-                        size="small"
-                        sx={{ flexGrow: 1 }}
-                      />
+                      <FormControl sx={{ flexGrow: 1 }} size="small">
+                        <InputLabel id="projects-label">
+                          Select a project
+                        </InputLabel>
+                        <Select
+                          name="project['_id']"
+                          labelId="projects-label"
+                          label="Select a project"
+                          value={values.project._id  ?? " "}
+                          onChange={handleChange}
+                        >
+                          {!(loading) && projects.map((project: Partial<ProjectType>) => (
+                            <MenuItem key={project._id} value={project._id}>{project.name}</MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
                       <FormControl sx={{ flexGrow: 1 }} size="small">
                         <InputLabel id="task-status-label">
                           Task status
@@ -164,13 +190,13 @@ const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
                     />
                     <Box display="flex" justifyContent="space-evenly">
                       <Button
-                        disabled={loading}
+                        disabled={isLoading}
                         variant="contained"
                         onClick={() => onSubmit(values)}
                         sx={{ width: "128px" }}
                       >
                         Create
-                        {loading && (
+                        {isLoading && (
                           <CircularProgress
                             style={{
                               width: 20,
@@ -182,7 +208,7 @@ const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
                       </Button>
                       <Button
                         variant="outlined"
-                        disabled={loading}
+                        disabled={isLoading}
                         onClick={handleClose}
                         color="error"
                         sx={{ width: "128px" }}
