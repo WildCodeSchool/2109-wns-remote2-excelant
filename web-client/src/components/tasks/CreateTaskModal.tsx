@@ -16,8 +16,9 @@ import { DatePicker } from "@mui/lab";
 import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import { gql, useMutation } from "@apollo/client";
+import moment from "moment";
 import { modalStyle } from "../../_utils/modalStyle";
-import moment from 'moment';
+
 interface CreateTaskInput {
   name: string;
   project: string;
@@ -64,7 +65,7 @@ const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
       handleClose();
     }
   };
-  
+
   return (
     <Modal open={open} onClose={handleClose}>
       <Card sx={{ ...modalStyle, padding: "8px 24px" }}>
@@ -134,16 +135,17 @@ const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
                         minDate={moment()}
                         value={values.dueDate}
                         onChange={(value): void => {
-                          setFieldValue('dueDate', value)                      
+                          setFieldValue("dueDate", value);
                         }}
-                        renderInput={(params) => 
-                          <TextField 
-                            {...params} 
-                            name="dueDate" 
-                            size="small" 
+                        renderInput={(params) => (
+                          <TextField
+                            // eslint-disable-next-line
+                            {...params}
+                            name="dueDate"
+                            size="small"
                             sx={{ flexGrow: 1 }}
                           />
-                        }
+                        )}
                       />
                     </Box>
                     {/**

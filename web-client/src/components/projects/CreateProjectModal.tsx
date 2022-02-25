@@ -16,9 +16,9 @@ import { DatePicker } from "@mui/lab";
 import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import { useMutation } from "@apollo/client";
+import moment from "moment";
 import { modalStyle } from "../../_utils/modalStyle";
 import GqlRequest from "../../_graphql/GqlRequest";
-import moment from 'moment';
 
 type Status = string;
 
@@ -118,15 +118,15 @@ const CreateProjectModal: React.FC<{
                         minDate={moment()}
                         value={values.dueDate}
                         onChange={(value): void => {
-                          setFieldValue('dueDate', value)                      
+                          setFieldValue("dueDate", value);
                         }}
-                        renderInput={(params) => 
-                          <TextField 
-                            {...params} 
-                            name="dueDate" 
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            name="dueDate"
                             sx={{ flexGrow: 1 }}
                           />
-                        }
+                        )}
                       />
                     </Box>
                     <TextField
