@@ -16,9 +16,8 @@ import { DatePicker } from "@mui/lab";
 import React, { useState, useEffect } from "react";
 import moment from 'moment';
 import { Formik, Form } from "formik";
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import { modalStyle } from "../../_utils/modalStyle";
-import GqlRequest from "../../_graphql/GqlRequest";
 import { ProjectType } from "../../_types/_projectTypes";
 
 interface CreateTaskInput {
@@ -41,20 +40,11 @@ const defaultValues: CreateTaskInput = {
   dueDate: moment(),
 };
 
-const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
+const CreateTaskModal: React.FC<{ projects: Object[], open: boolean; handleClose: () => void }> = ({
+  projects,
   open,
   handleClose,
 }) => {
-  const [isLoading, setLoading] = useState(false);
-  const [projects, setProjects] = useState([]);
-
-  const { data, loading } = useQuery(
-    new GqlRequest("Project").get("_id, name")
-  );
-  
-  useEffect(() => {
-    if (data) setProjects(data.findAllProjects);
-  }, [data]);
   
   const CREATE_TASK = gql`
     mutation createTask($input: CreateTaskInput!) {
@@ -69,17 +59,16 @@ const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
       }
     }
   `;
-  const [createTask] = useMutation(CREATE_TASK);
+  const [createTask, { loading } ] = useMutation(CREATE_TASK);
+
 
   const onSubmit = (values: CreateTaskInput) => {
-    setLoading(true);
     try {
       createTask({ variables: { input: values } });
     } catch (err) {
       // eslint-disable-next-line
       console.log("Error", err);
     } finally {
-      setLoading(false);
       handleClose();
     }
   };
@@ -120,7 +109,7 @@ const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
                           value={values.project._id  ?? " "}
                           onChange={handleChange}
                         >
-                          {!(loading) && projects.map((project: Partial<ProjectType>) => (
+                          {projects && projects.map((project: Partial<ProjectType>) => (
                             <MenuItem key={project._id} value={project._id}>{project.name}</MenuItem>
                           ))}
                         </Select>
@@ -190,13 +179,13 @@ const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
                     />
                     <Box display="flex" justifyContent="space-evenly">
                       <Button
-                        disabled={isLoading}
+                        disabled={loading}
                         variant="contained"
                         onClick={() => onSubmit(values)}
                         sx={{ width: "128px" }}
                       >
                         Create
-                        {isLoading && (
+                        {loading && (
                           <CircularProgress
                             style={{
                               width: 20,
@@ -208,7 +197,7 @@ const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
                       </Button>
                       <Button
                         variant="outlined"
-                        disabled={isLoading}
+                        disabled={loading}
                         onClick={handleClose}
                         color="error"
                         sx={{ width: "128px" }}

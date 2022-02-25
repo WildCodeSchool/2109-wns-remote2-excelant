@@ -28,7 +28,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const ProjectTable: React.FC<{ reload: number }> = ({ reload }) => {
   const { loading, data, refetch } = useQuery(
-    new GqlRequest("Project").get("name, status, projectManager, dueDate")
+    new GqlRequest("Project").get("_id, name, status, projectManager, dueDate")
   );
 
   useEffect(() => {
