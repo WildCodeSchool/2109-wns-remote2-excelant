@@ -1,11 +1,12 @@
 import { InputType, Field } from 'type-graphql';
+import ProjectInput from '../Project/project.input';
 
 @InputType()
 class UpdateTaskInput {
   @Field(() => String)
   name: string;
 
-  @Field(() => String)
+  @Field(() => ProjectInput, { nullable: true })
   project: string;
 
   @Field(() => String)
