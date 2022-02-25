@@ -1,18 +1,19 @@
-import { getModelForClass, prop } from '@typegoose/typegoose';
-import { Field, ObjectType } from 'type-graphql';
+import { mongoose, prop, Ref } from '@typegoose/typegoose';
+import { Field, ID, ObjectType } from 'type-graphql';
+import Project from '../Project/project.schema';
 
 @ObjectType()
 class Task {
-  @Field(() => String)
-  _id: string;
+  @Field(() => ID)
+  readonly _id: mongoose.Schema.Types.ObjectId;
 
   @Field(() => String)
   @prop({ required: true })
   name: string;
 
-  @Field(() => String)
-  @prop({ required: true })
-  project: string;
+  @Field(() => Project)
+  @prop({ ref: () => Project })
+  project: Ref<Project>;
 
   @Field(() => String)
   @prop({ required: true })
@@ -26,7 +27,5 @@ class Task {
   @prop({ required: true })
   dueDate: Date;
 }
-
-export const TaskModel = getModelForClass(Task);
 
 export default Task;
