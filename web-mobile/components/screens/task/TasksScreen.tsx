@@ -1,34 +1,39 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, View, Text, FlatList } from "react-native";
+import { View, FlatList, ActivityIndicator, Text } from "react-native";
 import { gql, useQuery, NetworkStatus } from "@apollo/client";
+import PressableTask from "../../task/PressableTask";
 import { stylesScreen } from "../../../styles/styleComponent";
-import Project from "../project/Project";
+import { TaskType } from "../../task/Task";
 
 const { container, title, list, row, loader, separator } = stylesScreen;
 
-const ProjectScreen = () => {
-  const PROJECT_QUERY = gql`
+const TasksScreen = () => {
+  const TASKS_QUERY = gql`
     query {
-      findAllProjects {
+      findAllTasks {
         _id
         name
         status
-        projectManager
+        assigne
         dueDate
+        project {
+          _id
+          name
+        }
       }
     }
   `;
 
-  const [allProjects, setAllProjects] = useState([]);
+  const [allTasks, setAllTasks] = useState<TaskType[] | []>([]);
   const { loading, data, error, refetch, networkStatus } = useQuery(
-    PROJECT_QUERY,
+    TASKS_QUERY,
     {
       notifyOnNetworkStatusChange: true,
     }
   );
 
   useEffect(() => {
-    if (data) setAllProjects(data["findAllProjects"]);
+    if (data) setAllTasks(data["findAllTasks"]);
   }, [data]);
 
   if (loading)
@@ -41,15 +46,17 @@ const ProjectScreen = () => {
         refreshing={networkStatus === NetworkStatus.refetch}
         onRefresh={() => refetch()}
         style={list}
-        data={allProjects}
-        renderItem={(project) => <Project item={project.item} />}
-        keyExtractor={(project) => project["_id"]}
-        ListEmptyComponent={<Text style={row}>No project to display!</Text>}
+        data={allTasks}
+        renderItem={(task) => <PressableTask item={task.item} />}
+        keyExtractor={(task) => task["_id"]}
+        ListEmptyComponent={
+          <Text style={row}>Il n'y a pas de tâches a afficher !</Text>
+        }
         ItemSeparatorComponent={() => <View style={separator} />}
-        ListHeaderComponent={<Text style={title}>Project list</Text>}
+        ListHeaderComponent={<Text style={title}>Task list</Text>}
       />
     </View>
   );
 };
 
-export default ProjectScreen;
+export default TasksScreen;
