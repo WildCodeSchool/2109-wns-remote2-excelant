@@ -5,8 +5,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 import HomeScreen from "../screens/HomeScreen";
-import ProjectScreen from "../screens/project/ProjectScreen";
 import TaskNavigation from "./TaskNavigation";
+import ProjectNavigation from "./ProjectNavigation";
 
 const Drawer = createDrawerNavigator();
 
@@ -43,20 +43,20 @@ export default function Header() {
               ),
             }}
           />
-            <Drawer.Screen
-                name="Projects"
-                component={ProjectScreen}
-                options={{
-                    title: "Projects",
-                    drawerIcon: ({ focused, size }) => (
-                        <Ionicons
-                            name={"document"}
-                            size={size}
-                            color={focused ? "#0079F8" : "#ccc"}
-                        />
-                    ),
-                }}
-            />
+          <Drawer.Screen
+            name="Projects"
+            component={ProjectNavigation}
+            options={{
+              title: "Projects",
+              drawerIcon: ({ focused, size }) => (
+                <Ionicons
+                  name={"document"}
+                  size={size}
+                  color={focused ? "#0079F8" : "#ccc"}
+                />
+              ),
+            }}
+          />
         </Drawer.Navigator>
       </NavigationContainer>
     </>

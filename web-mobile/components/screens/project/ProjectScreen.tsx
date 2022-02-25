@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View, Text, FlatList } from "react-native";
 import { gql, useQuery, NetworkStatus } from "@apollo/client";
 import { stylesScreen } from "../../../styles/styleComponent";
-import Project from "../project/Project";
+import PressableProject from "../../project/PressableTask";
 
 const { container, title, list, row, loader, separator } = stylesScreen;
 
@@ -42,7 +42,7 @@ const ProjectScreen = () => {
         onRefresh={() => refetch()}
         style={list}
         data={allProjects}
-        renderItem={(project) => <Project item={project.item} />}
+        renderItem={(project) => <PressableProject item={project.item} />}
         keyExtractor={(project) => project["_id"]}
         ListEmptyComponent={<Text style={row}>No project to display!</Text>}
         ItemSeparatorComponent={() => <View style={separator} />}
