@@ -7,10 +7,13 @@ const { row, label } = stylesData;
 export interface TaskType {
   _id: string;
   name: string;
-  project: string;
   assigne: string;
   status: string;
   dueDate: string;
+  project: {
+    _id: string;
+    name: string;
+  };
 }
 
 const Task: React.FC<{ item: TaskType }> = ({ item }) => {
@@ -22,7 +25,7 @@ const Task: React.FC<{ item: TaskType }> = ({ item }) => {
       </View>
       <View style={{ ...row, backgroundColor: "lightgrey" }}>
         <Text style={label}>Project</Text>
-        <Text style={{ flex: 3 }}>{item.project}</Text>
+        <Text style={{ flex: 3 }}>{item.project.name}</Text>
       </View>
       <View style={row}>
         <Text style={label}>Assignee</Text>
