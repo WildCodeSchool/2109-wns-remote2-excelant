@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import ArticleIcon from "@mui/icons-material/Article";
 import { tableCellClasses } from "@mui/material/TableCell";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import moment from "moment";
 import TaskModal from "./TaskModal";
 import { TaskType } from "../../_types/_taskTypes";
