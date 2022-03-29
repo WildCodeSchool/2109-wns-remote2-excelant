@@ -13,15 +13,18 @@ import {
   Box,
 } from "@mui/material";
 import { DatePicker } from "@mui/lab";
-import React, { useState } from "react";
+import React from "react";
+import moment from 'moment';
 import { Formik, Form } from "formik";
 import { gql, useMutation } from "@apollo/client";
-import moment from "moment";
 import { modalStyle } from "../../_utils/modalStyle";
+import { ProjectType } from "../../_types/_projectTypes";
 
 interface CreateTaskInput {
   name: string;
-  project: string;
+  project: {
+    _id: string;
+  }
   status: string;
   assigne: string;
   dueDate: moment.Moment;
@@ -29,39 +32,43 @@ interface CreateTaskInput {
 
 const defaultValues: CreateTaskInput = {
   name: "",
-  project: "",
+  project: {
+    "_id": "",
+  },
   status: "",
   assigne: "",
   dueDate: moment(),
 };
 
-const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
+const CreateTaskModal: React.FC<{ projects: Object[], open: boolean; handleClose: () => void }> = ({
+  projects,
   open,
   handleClose,
 }) => {
-  const [loading, setLoading] = useState(false);
+  
   const CREATE_TASK = gql`
     mutation createTask($input: CreateTaskInput!) {
       createTask(input: $input) {
         name
-        project
+        project {
+          _id
+        }
         status
         assigne
         dueDate
       }
     }
   `;
-  const [createTask] = useMutation(CREATE_TASK);
+  const [createTask, { loading } ] = useMutation(CREATE_TASK);
+
 
   const onSubmit = (values: CreateTaskInput) => {
-    setLoading(true);
     try {
       createTask({ variables: { input: values } });
     } catch (err) {
       // eslint-disable-next-line
       console.log("Error", err);
     } finally {
-      setLoading(false);
       handleClose();
     }
   };
@@ -91,14 +98,22 @@ const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
                       sx={{ flexDirection: { xs: "column", md: "row" } }}
                       gap={1}
                     >
-                      <TextField
-                        name="project"
-                        value={values.project}
-                        onChange={handleChange}
-                        label="Project"
-                        size="small"
-                        sx={{ flexGrow: 1 }}
-                      />
+                      <FormControl sx={{ flexGrow: 1 }} size="small">
+                        <InputLabel id="projects-label">
+                          Select a project
+                        </InputLabel>
+                        <Select
+                          name="project['_id']"
+                          labelId="projects-label"
+                          label="Select a project"
+                          value={values.project._id  ?? " "}
+                          onChange={handleChange}
+                        >
+                          {projects && projects.map((project: Partial<ProjectType>) => (
+                            <MenuItem key={project._id} value={project._id}>{project.name}</MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
                       <FormControl sx={{ flexGrow: 1 }} size="small">
                         <InputLabel id="task-status-label">
                           Task status
