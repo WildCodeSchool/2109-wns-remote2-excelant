@@ -1,6 +1,6 @@
 import { Arg, Mutation, Query } from "type-graphql";
 import bcrypt from "bcrypt"
-import CreateUserInput from "../schema/User/use.create";
+import CreateUserInput from "../schema/User/user.create";
 import User from "../schema/User/user.schema";
 import UserService from "../service/user.service";
 
@@ -16,11 +16,11 @@ class UserResolver {
 
   @Mutation(() => User)
   createUser(@Arg('input') input: CreateUserInput) {
-    const sercureInput = {
+    const secureInput = {
       email: input.email,
       password: bcrypt.hashSync(input.password, 6)
     }
-    return this.userService.createUser(sercureInput)
+    return this.userService.createUser(secureInput)
   }
 }
 

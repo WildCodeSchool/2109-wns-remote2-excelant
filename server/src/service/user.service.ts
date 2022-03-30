@@ -1,5 +1,5 @@
 import { UserModel } from '../schema';
-import CreateUserInput from '../schema/User/use.create';
+import CreateUserInput from '../schema/User/user.create';
 
 class UserService {
   // eslint-disable-next-line class-methods-use-this
