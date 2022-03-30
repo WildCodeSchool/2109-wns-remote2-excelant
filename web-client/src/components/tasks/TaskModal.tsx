@@ -10,8 +10,9 @@ import { TaskType } from "../../_types/_taskTypes";
 const TaskModal: React.FC<{
   open: boolean;
   task: TaskType;
+  refetch: () => void;
   handleClose: () => void;
-}> = ({ open, task, handleClose }) => (
+}> = ({ open, task, handleClose, refetch }) => (
   <Modal open={open} onClose={handleClose}>
     <Card sx={{ ...taskModalStyle, padding: "8px 24px" }}>
       <Grid container>

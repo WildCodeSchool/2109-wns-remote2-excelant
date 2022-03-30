@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import {
   Box,
@@ -9,15 +9,13 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Button,
 } from "@mui/material";
-import ArticleIcon from "@mui/icons-material/Article";
 import { tableCellClasses } from "@mui/material/TableCell";
 import { useQuery } from "@apollo/client";
-import moment from "moment";
-import TaskModal from "./TaskModal";
 import { TaskType } from "../../_types/_taskTypes";
 import GqlRequest from "../../_graphql/GqlRequest";
+import TaskTableItem from "./TaskTableItem";
+
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -30,30 +28,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
-}));
-
 const TaskTable: React.FC<{ reload: number }> = ({ reload }) => {
-  // Define display modal to false
-  const [open, setOpen] = useState(false);
-  // Select specific ticket
-  const [openedTask, setOpenedTask] = useState<TaskType | null>(null);
-
-  // Close modal
-  const handleClose = () => setOpen(false);
-  // Open modal associated with the corresponding ticket
-  const handleOpen = (task: TaskType) => {
-    setOpenedTask(task);
-    setOpen(true);
-  };
-
   const { data, loading, refetch } = useQuery(
     new GqlRequest("Task").get("_id, name, status, project { name }, assigne, dueDate")
   );
@@ -83,29 +58,15 @@ const TaskTable: React.FC<{ reload: number }> = ({ reload }) => {
           <TableBody>
             {data &&
               data.findAllTasks.map((task: TaskType) => (
-                <StyledTableRow key={task._id}>
-                  <TableCell component="th" scope="row">
-                    {task.name}
-                  </TableCell>
-                  <TableCell align="right">{task.project.name}</TableCell>
-                  <TableCell align="right">{task.status}</TableCell>
-                  <TableCell align="right">{task.assigne}</TableCell>
-                  <TableCell align="right">
-                    {moment(task.dueDate).format("DD/MM/YYYY")}
-                  </TableCell>
-                  <TableCell align="right">
-                    <Button onClick={() => handleOpen(task)}>
-                      <ArticleIcon style={{ fill: "black" }} />
-                    </Button>
-                  </TableCell>
-                </StyledTableRow>
+                <TaskTableItem
+                  task={task}
+                  refetch={refetch}
+                  key={task._id}
+                />
               ))}
           </TableBody>
         </Table>
       </TableContainer>
-      {openedTask && (
-        <TaskModal open={open} task={openedTask} handleClose={handleClose} />
-      )}
     </>
   );
 };
