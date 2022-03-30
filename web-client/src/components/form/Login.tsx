@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import Avatar from '@mui/material/Avatar';
-import Link from '@mui/material/Link';
+import { Link } from "react-router-dom";
+import ExcelantLogo from '../../images/logo_excelant.jpg';
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -30,11 +29,9 @@ const Login = () => {
                         alignItems: "center",
                     }}
                 >
-                    <Avatar sx={{ m: 1, bgColor: "secondary"}}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Sign in
+                    <img src={ExcelantLogo} alt="Excelant logo" />
+                    <Typography component="h2" variant="h5" sx={{ mt: 2, mb: 1 }}>
+                        Sign In
                     </Typography>
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                         <TextField
@@ -65,18 +62,18 @@ const Login = () => {
                             variant="contained"
                             sx={{ mt: 3, mb: 2, bgcolor: "#B6B8EB", "&.MuiButtonBase-root:hover": { bgcolor: "#adafe0", boxShadow: 4 } }}
                         >
-                            Sign Up
+                            Sign In
                         </Button>
                         <Grid container flexDirection="column" alignItems="center">
                             <Grid item mt={1} mb={2}>
-                                <Link href="#" variant="body2">
+                                <Link to="/register" style={{ fontSize: "0.875rem" }}>
                                     No account? Sign Up
                                 </Link>
                             </Grid>
                             <Grid item>
-                                <Link href="#" variant="body2">
-                                    Forgot password?
-                                </Link>
+                                {/*<Link href="#" variant="body2">*/}
+                                {/*    Forgot password?*/}
+                                {/*</Link>*/}
                             </Grid>
                         </Grid>
                     </Box>

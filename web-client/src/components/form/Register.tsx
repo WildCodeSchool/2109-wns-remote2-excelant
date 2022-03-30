@@ -1,22 +1,46 @@
 import React, { useState } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
+import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import Avatar from '@mui/material/Avatar';
-import Link from '@mui/material/Link';
+import ExcelantLogo from '../../images/logo_excelant.jpg';
+import { Link } from "react-router-dom";
+import {FormControl} from "@mui/material";
 
 const Register = () => {
-    const [email, setEmail] = useState("");
+    const [enteredEmail, setEnteredEmail] = useState("");
+    const [enteredEmailIsValid, setEnteredEmailIsValid] = useState(true);
+
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [isError, setIsError] = useState("");
 
-    const handleSubmit = (e: any) => {
+    // const checkPasswordValidation = (e: any) => {
+    //     setConfirmPassword(e.target.value);
+    //     if (password !== confirmPassword) {
+    //         setIsError("Confirm password should be match with password");
+    //     }
+    // }
+
+    const formSubmissionHandler = (e: any) => {
         e.preventDefault();
+        console.log('test');
+
+        if (enteredEmail.trim() === '') {
+            return setEnteredEmailIsValid(false);
+        }
+
+        setEnteredEmailIsValid(true);
+
+        setConfirmPassword(e.target.value);
+        if (password !== confirmPassword) {
+            setIsError("Confirm password should be match with password");
+        } else {
+            console.log("success");
+        }
     }
 
     return (
@@ -31,13 +55,16 @@ const Register = () => {
                         alignItems: "center",
                     }}
                 >
-                <Avatar sx={{ m: 1, bgColor: "secondary"}}>
-                    <LockOutlinedIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    Sign up
+                <img src={ExcelantLogo} alt="Excelant logo"  />
+                <Typography component="h2" variant="h5" sx={{ mt: 2, mb: 1 }}>
+                    Sign Up
                 </Typography>
-                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                    <Box sx={{ position: "absolute" }}>
+                        {isError}
+                    </Box>
+                <FormControl onSubmit={formSubmissionHandler}>
+                {/*<form onSubmit={formSubmissionHandler}>*/}
+                {/*<Box sx={{ mt: 1 }}>*/}
                         <TextField
                             margin="normal"
                             required
@@ -45,11 +72,14 @@ const Register = () => {
                             id="email"
                             label="Email Address"
                             name="email"
+                            type="email"
                             autoComplete="email"
                             autoFocus
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            value={enteredEmail}
+                            sx={{ width: "100%" }}
+                            onChange={(e) => setEnteredEmail(e.target.value)}
                         />
+                    {!enteredEmailIsValid && <Typography color="warning">Email must not be empty.</Typography>}
                         <TextField
                             margin="normal"
                             required
@@ -58,7 +88,7 @@ const Register = () => {
                             label="Password"
                             name="password"
                             type="password"
-                            autoComplete="current-password"
+                            // autoComplete="current-password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
@@ -70,7 +100,7 @@ const Register = () => {
                             label="Confirm Password"
                             name="confirmpassword"
                             type="password"
-                            autoComplete="current-password"
+                            // autoComplete="current-password"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                         />
@@ -80,22 +110,24 @@ const Register = () => {
                             variant="contained"
                             sx={{ mt: 3, mb: 2, bgcolor: "#B6B8EB", "&.MuiButtonBase-root:hover": { bgcolor: "#adafe0", boxShadow: 4 } }}
                         >
-                            Sign In
+                            Sign Up
                         </Button>
-                        <Grid container justifyContent="center">
+                    {/*</form>*/}
+                    </FormControl>
+                    <Grid container justifyContent="center">
                             <Grid item mt={1} mb={2}>
-                                <Link href="#" variant="body2">
+                                <Link to="/login" style={{ fontSize: "0.875rem" }}>
                                     Already have an account? Sign Up
                                 </Link>
                             </Grid>
                             <Grid item>
-                                <Link href="#" variant="body2">
-                                    Forgot password?
-                                </Link>
+                                {/*<Link  variant="body2">*/}
+                                {/*    Forgot password?*/}
+                                {/*</Link>*/}
                             </Grid>
                         </Grid>
                     </Box>
-                </Box>
+                {/*</Box>*/}
             </Container>
         </>
     );
