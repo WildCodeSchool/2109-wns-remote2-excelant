@@ -41,7 +41,7 @@ const ProjectTable: React.FC<{ reload: number }> = ({ reload }) => {
     <Box>Loading ... </Box>
   ) : (
     <>
-      <TableContainer component={Paper} sx={{ pl: "250px", width: "100%" }}>
+      <TableContainer component={Paper} sx={{ width: "100%" }}>
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>

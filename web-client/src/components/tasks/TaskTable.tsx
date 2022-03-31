@@ -16,8 +16,6 @@ import { TaskType } from "../../_types/_taskTypes";
 import GqlRequest from "../../_graphql/GqlRequest";
 import TaskTableItem from "./TaskTableItem";
 
-
-
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -30,7 +28,9 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const TaskTable: React.FC<{ reload: number }> = ({ reload }) => {
   const { data, loading, refetch } = useQuery(
-    new GqlRequest("Task").get("_id, name, status, project { name }, assigne, dueDate")
+    new GqlRequest("Task").get(
+      "_id, name, status, project { name }, assigne, dueDate"
+    )
   );
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const TaskTable: React.FC<{ reload: number }> = ({ reload }) => {
     <Box>Loading ... </Box>
   ) : (
     <>
-      <TableContainer component={Paper} sx={{ pl: "250px", width: "100%" }}>
+      <TableContainer component={Paper} sx={{ width: "100%" }}>
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
@@ -58,11 +58,7 @@ const TaskTable: React.FC<{ reload: number }> = ({ reload }) => {
           <TableBody>
             {data &&
               data.findAllTasks.map((task: TaskType) => (
-                <TaskTableItem
-                  task={task}
-                  refetch={refetch}
-                  key={task._id}
-                />
+                <TaskTableItem task={task} refetch={refetch} key={task._id} />
               ))}
           </TableBody>
         </Table>

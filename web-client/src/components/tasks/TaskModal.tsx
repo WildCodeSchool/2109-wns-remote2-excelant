@@ -2,8 +2,8 @@ import React from "react";
 
 import Modal from "@mui/material/Modal";
 import { Card, Grid } from "@mui/material";
+import moment from "moment";
 import { taskModalStyle } from "../../_utils/modalStyle";
-import moment from 'moment';
 import "./TaskModal.scss";
 import { TaskType } from "../../_types/_taskTypes";
 
@@ -32,7 +32,7 @@ const TaskModal: React.FC<{
             <p className="modal__task_informations-project">Project: </p>{" "}
             <span>{task?.project.name}</span> <br />
             <p className="modal__task_informations-date">Due Date: </p>{" "}
-            <span>{moment(task?.dueDate).format('DD/MM/YYYY')}</span> <br />
+            <span>{moment(task?.dueDate).format("DD/MM/YYYY")}</span> <br />
           </div>
         </Grid>
         <Grid item xs={6}>

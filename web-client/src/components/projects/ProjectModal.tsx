@@ -86,7 +86,7 @@ const ProjectModal: React.FC<{
                 variant="h3"
                 sx={{
                   textAlign: "center",
-                  color: "rgba(125, 128, 218)",
+                  color: "primary.main",
                   mb: 2,
                 }}
               >
@@ -113,7 +113,7 @@ const ProjectModal: React.FC<{
                 sx={{
                   display: "inline",
                   fontWeight: "bold",
-                  color: "rgba(125, 128, 218)",
+                  color: "primary.main",
                   textAlign: "right",
                   width: "150px",
                 }}
@@ -156,7 +156,7 @@ const ProjectModal: React.FC<{
                 sx={{
                   display: "inline",
                   fontWeight: "bold",
-                  color: "rgba(125, 128, 218)",
+                  color: "primary.main",
                   textAlign: "right",
                   width: "150px",
                 }}
@@ -193,7 +193,7 @@ const ProjectModal: React.FC<{
                 sx={{
                   display: "inline",
                   fontWeight: "bold",
-                  color: "rgba(125, 128, 218)",
+                  color: "primary.main",
                   textAlign: "right",
                   width: "150px",
                 }}
@@ -263,7 +263,7 @@ const ProjectModal: React.FC<{
           <Grid item xs={6}>
             <Typography
               variant="h3"
-              sx={{ textAlign: "center", color: "rgba(125, 128, 218)" }}
+              sx={{ textAlign: "center", color: "primary.main" }}
             >
               Comments
             </Typography>

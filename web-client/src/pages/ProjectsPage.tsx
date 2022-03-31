@@ -12,16 +12,16 @@ const ProjectsPage: React.FC = () => {
   };
 
   return (
-   <Container maxWidth="lg">
+    <Container maxWidth="lg">
       <Typography variant="h4" sx={{ textAlign: "center", mb: "16px" }}>
         ProjectsPage
       </Typography>
       <ProjectTable reload={reload} />
-      <Button onClick={() => setOpen(true)} sx={{ ml: "300px" }}>
+      <Button onClick={() => setOpen(true)} sx={{ ml: "50px" }}>
         Create a new project
       </Button>
       <CreateProjectModal open={open} handleClose={handleClose} />
-   </Container>
+    </Container>
   );
 };
 
