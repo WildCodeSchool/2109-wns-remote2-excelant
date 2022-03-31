@@ -30,9 +30,9 @@ const ProjectTableItem: React.FC<{
           <TableCell component="th" scope="row">
             {task.name}
           </TableCell>
-          <TableCell align="right">{task.project.name}</TableCell>
-          <TableCell align="right">{task.status}</TableCell>
-          <TableCell align="right">{task.assigne}</TableCell>
+          <TableCell id="name" align="right">{task.project.name}</TableCell>
+          <TableCell id="status" align="right">{task.status}</TableCell>
+          <TableCell id="assigne" align="right">{task.assigne}</TableCell>
           <TableCell align="right">
             {moment(task.dueDate).format("DD/MM/YYYY")}
           </TableCell>
