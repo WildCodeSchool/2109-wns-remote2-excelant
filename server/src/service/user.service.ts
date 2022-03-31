@@ -1,8 +1,12 @@
+import { ApolloError } from 'apollo-server-errors';
+import bcrypt from 'bcrypt';
 import { UserModel } from '../schema';
 import CreateUserInput from '../schema/User/user.create';
 import FindOneUserInput from '../schema/User/user.find';
+import LoginInput from '../schema/User/user.login';
 import UpdateUserEmailInput from '../schema/User/user.updateEmail';
 import UpdateUserPasswordInput from '../schema/User/user.updatePassword';
+import Context from '../types/context';
 
 class UserService {
   // eslint-disable-next-line class-methods-use-this
@@ -20,6 +24,18 @@ class UserService {
   // eslint-disable-next-line class-methods-use-this
   async createUser(input: CreateUserInput) {
     return UserModel.create(input);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async login(input: LoginInput, context: Context) {
+    const user = await UserModel.find().findByEmail(input.email).lean();
+
+    const e = 'Invalid email or password';
+
+    if (!user) throw new ApolloError(e);
+
+    const passwordIsValid = await bcrypt.compare(input.password, user.password);
+    if (!passwordIsValid) throw new ApolloError(e);
   }
 
   // eslint-disable-next-line class-methods-use-this

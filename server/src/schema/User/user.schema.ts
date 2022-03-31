@@ -1,6 +1,25 @@
-import { mongoose, prop, pre } from '@typegoose/typegoose';
+import {
+  mongoose,
+  prop,
+  pre,
+  ReturnModelType,
+  queryMethod,
+  index,
+} from '@typegoose/typegoose';
+import { AsQueryMethod } from '@typegoose/typegoose/lib/types';
 import bcrypt from 'bcrypt';
 import { Field, ID, ObjectType } from 'type-graphql';
+
+function findByEmail(
+  this: ReturnModelType<typeof User, QueryHelpers>,
+  email: User['email']
+) {
+  return this.findOne({ email });
+}
+
+export interface QueryHelpers {
+  findByEmail: AsQueryMethod<typeof findByEmail>;
+}
 
 @pre<User>('save', async function () {
   if (!this.isModified('password')) {
@@ -12,6 +31,8 @@ import { Field, ID, ObjectType } from 'type-graphql';
 
   this.password = hash;
 })
+@index({ email: 1 })
+@queryMethod(findByEmail)
 @ObjectType()
 class User {
   @Field(() => ID)
