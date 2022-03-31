@@ -1,46 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
+import FormHelperText from '@mui/material/FormHelperText';
+import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import ExcelantLogo from '../../images/logo_excelant.jpg';
 import { Link } from "react-router-dom";
-import {FormControl} from "@mui/material";
 
 const Register = () => {
     const [enteredEmail, setEnteredEmail] = useState("");
-    const [enteredEmailIsValid, setEnteredEmailIsValid] = useState(true);
+    // const [enteredEmailIsValid, setEnteredEmailIsValid] = useState(true);
 
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [isError, setIsError] = useState("");
 
-    // const checkPasswordValidation = (e: any) => {
-    //     setConfirmPassword(e.target.value);
-    //     if (password !== confirmPassword) {
-    //         setIsError("Confirm password should be match with password");
-    //     }
-    // }
+    const [isErrorLengthPassword, setIsErrorLengthPassword] = useState("");
+    const [isErrorContainsNumberPassword, setIsErrorContainsNumberPassword] = useState("");
+    const [isErrorConfirmPassword, setIsErrorConfirmPassword] = useState("");
 
     const formSubmissionHandler = (e: any) => {
         e.preventDefault();
-        console.log('test');
 
-        if (enteredEmail.trim() === '') {
-            return setEnteredEmailIsValid(false);
-        }
+        // if (enteredEmail.trim() === '') {
+        //     return setEnteredEmailIsValid(false);
+        // }
+        // setEnteredEmailIsValid(true);
 
-        setEnteredEmailIsValid(true);
+        // TODO: check password conditions
+        setIsErrorConfirmPassword(e.target.value);
+        if (password !== confirmPassword) return setIsErrorConfirmPassword("Confirm password should be match with password!");
+        if (password.length < 6) return setIsErrorLengthPassword("Your password must contain at least 6 characters!");
 
-        setConfirmPassword(e.target.value);
-        if (password !== confirmPassword) {
-            setIsError("Confirm password should be match with password");
-        } else {
-            console.log("success");
-        }
+        console.log("Success form submission");
     }
 
     return (
@@ -59,12 +54,7 @@ const Register = () => {
                 <Typography component="h2" variant="h5" sx={{ mt: 2, mb: 1 }}>
                     Sign Up
                 </Typography>
-                    <Box sx={{ position: "absolute" }}>
-                        {isError}
-                    </Box>
-                <FormControl onSubmit={formSubmissionHandler}>
-                {/*<form onSubmit={formSubmissionHandler}>*/}
-                {/*<Box sx={{ mt: 1 }}>*/}
+                <Box component="form" onSubmit={formSubmissionHandler} sx={{ mt: 1 }}>
                         <TextField
                             margin="normal"
                             required
@@ -79,7 +69,7 @@ const Register = () => {
                             sx={{ width: "100%" }}
                             onChange={(e) => setEnteredEmail(e.target.value)}
                         />
-                    {!enteredEmailIsValid && <Typography color="warning">Email must not be empty.</Typography>}
+                    {/*{!enteredEmailIsValid && <Alert severity="warning">Empty input</Alert>}*/}
                         <TextField
                             margin="normal"
                             required
@@ -88,11 +78,15 @@ const Register = () => {
                             label="Password"
                             name="password"
                             type="password"
-                            // autoComplete="current-password"
+                            autoComplete="current-password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
-                        <TextField
+                        <FormHelperText>
+                            Your password must contain at least six characters, including a number, an upper case letter and a specific character
+                        </FormHelperText>
+                    {isErrorLengthPassword ? <Alert severity="warning">{isErrorLengthPassword}</Alert> : null}
+                    <TextField
                             margin="normal"
                             required
                             fullWidth
@@ -100,10 +94,11 @@ const Register = () => {
                             label="Confirm Password"
                             name="confirmpassword"
                             type="password"
-                            // autoComplete="current-password"
+                            autoComplete="current-password"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                         />
+                    {isErrorConfirmPassword && <Alert severity="warning">{isErrorConfirmPassword}</Alert>}
                         <Button
                             type="submit"
                             fullWidth
@@ -112,8 +107,7 @@ const Register = () => {
                         >
                             Sign Up
                         </Button>
-                    {/*</form>*/}
-                    </FormControl>
+                </Box>
                     <Grid container justifyContent="center">
                             <Grid item mt={1} mb={2}>
                                 <Link to="/login" style={{ fontSize: "0.875rem" }}>
@@ -127,7 +121,6 @@ const Register = () => {
                             </Grid>
                         </Grid>
                     </Box>
-                {/*</Box>*/}
             </Container>
         </>
     );
