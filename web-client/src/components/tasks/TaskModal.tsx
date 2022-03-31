@@ -31,10 +31,13 @@ const TaskModal: React.FC<{
   handleClose, 
   refetch 
 }) => {
-
-  const [getProjects, { data: projects }] = useLazyQuery(
-    new GqlRequest("Project").get("_id, name")
-  );
+  const [allProjects, setAllProjects] = useState([]);
+  const [getAllProjects, { loading: areProjectsLoading }] = useLazyQuery(
+    new GqlRequest("Project").get("_id, name"), {
+      onCompleted: (data) => {
+        setAllProjects(data.findAllProjects);
+      }
+    });
 
   const [modify, setModify] = useState<boolean>(false);
   const [modifiedTask, setModifiedTask] = useState({
@@ -42,24 +45,16 @@ const TaskModal: React.FC<{
     status: task.status,
     assigne: task.assigne,
     dueDate: task.dueDate,
-    project: task.project
+    project: task.project._id || ''
   });
 
   const [updateTask] = useMutation(new GqlRequest("Task").update("name"));  
   
   const handleModification = () => {
-    getProjects();
-    setModifiedTask({
-      name: task.name,
-      status: task.status,
-      assigne: task.assigne,
-      dueDate: task.dueDate,
-      project: task.project
-    });
+    getAllProjects();
     setModify(true);
   };
-
-
+  
   const handleSubmit = () => {
     try {
       updateTask({
@@ -75,7 +70,7 @@ const TaskModal: React.FC<{
   };
 
   const setFieldValue = (
-    key: "name" | "dueDate" | "status" | "assigne" | "project['id']",
+    key: "name" | "dueDate" | "status" | "assigne" | "project",
     value: any
   ) => {
     setModifiedTask({ 
@@ -138,21 +133,21 @@ const TaskModal: React.FC<{
                 >
                   Project :
                 </Typography>
-                {modify ? (
+                {modify && !areProjectsLoading ? (
                   <FormControl sx={{ flexGrow: 1 }}>
                     <Select
-                          name="project"
-                          labelId="projects-label"
-                          label="Project status"
-                          value={modifiedTask.project._id}
-                          onChange={(event) =>
-                            setFieldValue("project['id']", event.target.value)
-                          }
-                        >
-                          {projects && projects.map((project: Partial<ProjectType>) => (
-                            <MenuItem key={project._id} value={project._id}>{project.name}</MenuItem>
-                          ))}
-                        </Select>
+                      name="project"
+                      labelId="allProjects-label"
+                      label="Project status"
+                      value={modifiedTask.project || " "}
+                      onChange={(event) =>
+                        setFieldValue("project", event.target.value)
+                      }
+                    >
+                      {allProjects.map((project: Partial<ProjectType>) => (
+                        <MenuItem key={project._id} value={project._id}>{project.name}</MenuItem>
+                      ))}
+                    </Select>
                   </FormControl>
                 ) : (
                   <Typography variant="body1" sx={{ display: "inline" }}>
