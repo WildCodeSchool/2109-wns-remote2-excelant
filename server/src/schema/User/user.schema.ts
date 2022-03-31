@@ -13,6 +13,10 @@ class User {
   @Field(() => String)
   @prop({ required: true })
   password: string;
+
+  @Field(() => String)
+  @prop( { required: true })
+  confirmPassword: string;
 }
 
 export default User;

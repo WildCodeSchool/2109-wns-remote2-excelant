@@ -7,6 +7,9 @@ class CreateUserInput {
 
   @Field(() => String)
   password: string
+
+  @Field(() => String)
+  confirmPassword: string
 }
 
 export default CreateUserInput
