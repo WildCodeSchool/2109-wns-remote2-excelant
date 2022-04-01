@@ -5,6 +5,8 @@ import ProjectService from '../service/project.service';
 import UpdateProjectInput from '../schema/Project/project.update';
 import DeleteProjectInput from '../schema/Project/project.delete';
 import FindOneProjectInput from '../schema/Project/project.find';
+import FindProjectByLimitAndPageInput from '../schema/Project/project.findpage';
+import ProjectPage from '../schema/Project/project.page';
 
 class ProjectResolver {
   constructor(private projectService: ProjectService) {
@@ -14,6 +16,13 @@ class ProjectResolver {
   @Query(() => [Project])
   findAllProjects() {
     return this.projectService.findProjects();
+  }
+
+  @Query(() => ProjectPage)
+  findProjectByLimitAndPage(
+    @Arg('input') input: FindProjectByLimitAndPageInput
+  ) {
+    return this.projectService.findProjectByLimitAndPage(input);
   }
 
   @Query(() => Project)
