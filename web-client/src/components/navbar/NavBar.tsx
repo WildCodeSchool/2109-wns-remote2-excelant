@@ -38,7 +38,7 @@ function NavBar(): ReactJSXElement {
     {
       text: "Home",
       icon: <HomeIcon style={{color: "#F3F4F6", opacity: "0.8"}} />,
-      path: "/homepage"
+      path: "/"
     },
     {
       text: "Tasks",

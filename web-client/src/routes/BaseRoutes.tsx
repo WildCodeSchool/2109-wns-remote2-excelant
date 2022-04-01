@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Location } from "react-router-dom";
 import HomePage from "../pages/HomePage";
 import TasksPage from "../pages/TasksPage";
 import ProjectsPage from "../pages/ProjectsPage";
@@ -12,10 +12,10 @@ const BaseRoutes: React.FC = () => (
   <>
     <Router>
       <Routes>
-        <Route path="/" element={<Register />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route element={<NavBar />}>
-          <Route path="/homepage" element={<HomePage />} />
+        <Route path="/" element={<NavBar />}>
+          <Route index element={<HomePage />} />
           <Route path="/tasks" element={<TasksPage />} />
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/users" element={<UsersPage />} />

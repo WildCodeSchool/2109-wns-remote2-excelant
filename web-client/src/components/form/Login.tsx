@@ -89,7 +89,7 @@ const Login: React.FC = () => {
                     </form>
                         <Grid container flexDirection="column" alignItems="center">
                             <Grid item mt={1} mb={2}>
-                                <Link to="/" style={{ fontSize: "0.875rem" }}>
+                                <Link data-testid="Register" to="/register" style={{ fontSize: "0.875rem" }}>
                                     No account? Sign Up
                                 </Link>
                             </Grid>

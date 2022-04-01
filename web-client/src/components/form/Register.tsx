@@ -120,7 +120,7 @@ const Register: React.FC = () => {
                         </form>
                     <Grid container justifyContent="center">
                         <Grid item mt={1} mb={2}>
-                            <Link to="/login" style={{ fontSize: "0.875rem" }}>
+                            <Link data-testid="Login" to="/login" style={{ fontSize: "0.875rem" }}>
                                 Already have an account? Sign Up
                             </Link>
                         </Grid>
