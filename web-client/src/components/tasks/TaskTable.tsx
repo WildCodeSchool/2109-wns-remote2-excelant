@@ -29,7 +29,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 const TaskTable: React.FC<{ reload: number }> = ({ reload }) => {
   const { data, loading, refetch } = useQuery(
     new GqlRequest("Task").get(
-      "_id, name, status, project { name }, assigne, dueDate"
+      "_id, name, status, project { _id, name }, assigne, dueDate"
     )
   );
 
