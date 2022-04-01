@@ -39,6 +39,10 @@ class User {
   readonly _id: mongoose.Schema.Types.ObjectId;
 
   @Field(() => String)
+  @prop({ required: true })
+  name: string;
+
+  @Field(() => String)
   @prop({ required: true, unique: true })
   email: string;
 

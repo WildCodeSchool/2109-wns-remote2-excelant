@@ -31,7 +31,7 @@ class UserResolver {
 
   @Mutation(() => String) // Returns the JWT
   login(@Arg('input') input: LoginInput, @Ctx() context: Context) {
-    return this.userService.login(input);
+    return this.userService.login(input, context);
   }
 
   @Mutation(() => User)

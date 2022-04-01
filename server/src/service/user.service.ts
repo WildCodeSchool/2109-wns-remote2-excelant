@@ -7,6 +7,7 @@ import LoginInput from '../schema/User/user.login';
 import UpdateUserEmailInput from '../schema/User/user.updateEmail';
 import UpdateUserPasswordInput from '../schema/User/user.updatePassword';
 import Context from '../types/context';
+import { signJwt } from '../utils/jwt';
 
 class UserService {
   // eslint-disable-next-line class-methods-use-this
@@ -36,6 +37,20 @@ class UserService {
 
     const passwordIsValid = await bcrypt.compare(input.password, user.password);
     if (!passwordIsValid) throw new ApolloError(e);
+
+    const token = signJwt(user);
+
+    context.res.cookie('accessToken', token, {
+      maxAge: 3.154e10,
+      httpOnly: true,
+      // TODO: add domain environment variable
+      domain: process.env.NODE_ENV === 'production' ? '' : 'localhost',
+      path: '/',
+      sameSite: 'strict',
+      secure: process.env.NODE_ENV === 'production',
+    });
+
+    return token;
   }
 
   // eslint-disable-next-line class-methods-use-this
