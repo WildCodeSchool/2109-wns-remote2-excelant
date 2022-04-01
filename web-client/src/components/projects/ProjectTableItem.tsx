@@ -27,12 +27,12 @@ const ProjectTableItem: React.FC<{
   return (
     <>
       <StyledTableRow>
-        <TableCell component="th" scope="row">
+        <TableCell data-testid="name" component="th" scope="row">
           {project.name}
         </TableCell>
-        <TableCell align="right">{project.status}</TableCell>
-        <TableCell align="right">{project.projectManager}</TableCell>
-        <TableCell align="right">
+        <TableCell data-testid="status" align="right">{project.status}</TableCell>
+        <TableCell data-testid="projectManager" align="right">{project.projectManager}</TableCell>
+        <TableCell data-testid="dueDate" align="right">
           {moment(project.dueDate).format("DD/MM/YYYY")}
         </TableCell>
         <TableCell align="right">
