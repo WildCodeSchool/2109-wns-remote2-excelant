@@ -17,7 +17,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const ProjectTableItem: React.FC<{
+const TaskTableItem: React.FC<{
   task: TaskType;
   refetch: () => void;
 }> = ({ task, refetch }) => {
@@ -62,4 +62,4 @@ const ProjectTableItem: React.FC<{
   );
 };
 
-export default ProjectTableItem;
+export default TaskTableItem;
