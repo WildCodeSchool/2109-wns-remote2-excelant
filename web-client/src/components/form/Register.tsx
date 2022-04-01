@@ -14,7 +14,7 @@ import Grid from "@mui/material/Grid";
 
 import { registerSchema } from "../../yupSchema/Register";
 import GqlRequest from "../../_graphql/GqlRequest";
-import ExcelantLogo from "../../images/logo_excelant.jpg";
+import ExcelantLogo from "../../images/logo_excelant.png";
 
 const Register: React.FC = () => {
   const [toHome, setToHome] = useState(false);
