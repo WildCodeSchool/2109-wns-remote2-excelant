@@ -27,6 +27,7 @@ class UserResolver {
     const secureInput = {
       email: input.email,
       password: bcrypt.hashSync(input.password, 6),
+      confirmPassword: bcrypt.hashSync(input.confirmPassword, 6),
     };
     return this.userService.createUser(secureInput);
   }

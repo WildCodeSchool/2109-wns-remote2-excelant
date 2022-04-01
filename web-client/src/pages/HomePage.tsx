@@ -1,14 +1,12 @@
 import React from "react";
-import {Container} from "@mui/material";
+import { Container, Typography } from "@mui/material";
 
-const HomePage: React.FC = () => {
-  return (
-    <Container maxWidth="lg">
-    <h1  style={{ backgroundColor: '#cfe8fc'}}>
-        HomePage
-      </h1>
-    </Container>
-  );
-};
+const HomePage: React.FC = () => (
+  <Container maxWidth="lg">
+    <Typography variant="h1" sx={{ backgroundColor: "primary.light" }}>
+      HomePage
+    </Typography>
+  </Container>
+);
 
 export default HomePage;

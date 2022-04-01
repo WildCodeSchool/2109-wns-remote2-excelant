@@ -1,7 +1,10 @@
-import { mongoose, prop } from '@typegoose/typegoose';
+import { mongoose, plugin, prop } from '@typegoose/typegoose';
 import { Field, ID, ObjectType } from 'type-graphql';
+import mongoosePaginate from 'mongoose-paginate-v2';
+import PaginateMethod from '../../utils/PaginateMethodType';
 
 @ObjectType()
+@plugin(mongoosePaginate)
 class Project {
   @Field(() => ID)
   readonly _id: mongoose.Schema.Types.ObjectId;
@@ -21,6 +24,8 @@ class Project {
   @Field()
   @prop({ required: true })
   dueDate: Date;
+
+  static paginate: PaginateMethod<Project>;
 }
 
 export default Project;

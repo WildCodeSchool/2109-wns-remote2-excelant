@@ -17,7 +17,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const ProjectTableItem: React.FC<{
+const TaskTableItem: React.FC<{
   task: TaskType;
   refetch: () => void;
 }> = ({ task, refetch }) => {
@@ -30,10 +30,10 @@ const ProjectTableItem: React.FC<{
           <TableCell component="th" scope="row">
             {task.name}
           </TableCell>
-          <TableCell align="right">{task.project.name}</TableCell>
-          <TableCell align="right">{task.status}</TableCell>
-          <TableCell align="right">{task.assigne}</TableCell>
-          <TableCell align="right">
+          <TableCell data-testid="name" align="right">{task.project.name}</TableCell>
+          <TableCell data-testid="status" align="right">{task.status}</TableCell>
+          <TableCell data-testid="assigne" align="right">{task.assigne}</TableCell>
+          <TableCell data-testid="dueDate" align="right">
             {moment(task.dueDate).format("DD/MM/YYYY")}
           </TableCell>
           <TableCell align="right">
@@ -62,4 +62,4 @@ const ProjectTableItem: React.FC<{
   );
 };
 
-export default ProjectTableItem;
+export default TaskTableItem;

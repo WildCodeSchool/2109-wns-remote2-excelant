@@ -16,6 +16,15 @@ export default class GqlRequest {
       }`;
   }
 
+  getByLimitAndPage(returnType: string) {
+    return gql`
+    query find${this.schema}ByLimitAndPage($input: Find${this.schema}ByLimitAndPageInput!) {
+        find${this.schema}ByLimitAndPage(input: $input) {
+          ${returnType}
+        }
+      }`;
+  }
+
   getOne(returnType: string) {
     return gql`
       query findOne${this.schema}($input: FindOne${this.schema}Input) { 

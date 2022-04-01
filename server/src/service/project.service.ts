@@ -3,11 +3,17 @@ import { ProjectModel, TaskModel } from '../schema/index';
 import UpdateProjectInput from '../schema/Project/project.update';
 import DeleteProjectInput from '../schema/Project/project.delete';
 import FindOneProjectInput from '../schema/Project/project.find';
+import FindProjectByLimitAndPageInput from '../schema/Project/project.findpage';
 
 class ProjectService {
   // eslint-disable-next-line
   async findProjects() {
     return ProjectModel.find().lean();
+  }
+
+  // eslint-disable-next-line
+  async findProjectByLimitAndPage(input: FindProjectByLimitAndPageInput) {
+    return ProjectModel.paginate({}, input);
   }
 
   // eslint-disable-next-line
