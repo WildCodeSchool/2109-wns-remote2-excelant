@@ -1,22 +1,25 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import DateAdapter from "@mui/lab/AdapterMoment";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import "./index.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import DateAdapter from '@mui/lab/AdapterMoment';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import Theme from "./theme/Theme";
 
 const client = new ApolloClient({
   uri: "http://localhost:4040/graphql",
-  cache: new InMemoryCache()
+  cache: new InMemoryCache(),
 });
 
 ReactDOM.render(
   <ApolloProvider client={client}>
     <LocalizationProvider dateAdapter={DateAdapter}>
       <React.StrictMode>
-        <App />
+        <Theme>
+          <App />
+        </Theme>
       </React.StrictMode>
     </LocalizationProvider>
   </ApolloProvider>,

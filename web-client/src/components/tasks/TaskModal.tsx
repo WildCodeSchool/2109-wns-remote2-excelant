@@ -15,29 +15,26 @@ import {
 } from "@mui/material";
 import GqlRequest from "../../_graphql/GqlRequest";
 import { taskModalStyle } from "../../_utils/modalStyle";
-import moment from 'moment';
 import "./TaskModal.scss";
 import { TaskType } from "../../_types/_taskTypes";
 import { ProjectType } from "../../_types/_projectTypes";
+import moment from "moment";
 
 const TaskModal: React.FC<{
   open: boolean;
   task: TaskType;
   refetch: () => void;
   handleClose: () => void;
-}> = ({ 
-  open, 
-  task, 
-  handleClose, 
-  refetch 
-}) => {
+}> = ({ open, task, handleClose, refetch }) => {
   const [allProjects, setAllProjects] = useState([]);
   const [getAllProjects, { loading: areProjectsLoading }] = useLazyQuery(
-    new GqlRequest("Project").get("_id, name"), {
+    new GqlRequest("Project").get("_id, name"),
+    {
       onCompleted: (data) => {
         setAllProjects(data.findAllProjects);
-      }
-    });
+      },
+    }
+  );
 
   const [modify, setModify] = useState<boolean>(false);
   const [modifiedTask, setModifiedTask] = useState({
@@ -45,16 +42,16 @@ const TaskModal: React.FC<{
     status: task.status,
     assigne: task.assigne,
     dueDate: task.dueDate,
-    project: task.project._id || ''
+    project: task.project._id || "",
   });
 
-  const [updateTask] = useMutation(new GqlRequest("Task").update("name"));  
-  
+  const [updateTask] = useMutation(new GqlRequest("Task").update("name"));
+
   const handleModification = () => {
     getAllProjects();
     setModify(true);
   };
-  
+
   const handleSubmit = () => {
     try {
       updateTask({
@@ -73,9 +70,9 @@ const TaskModal: React.FC<{
     key: "name" | "dueDate" | "status" | "assigne" | "project",
     value: any
   ) => {
-    setModifiedTask({ 
+    setModifiedTask({
       ...modifiedTask,
-      [key]: value
+      [key]: value,
     });
   };
 
@@ -83,239 +80,241 @@ const TaskModal: React.FC<{
     <Modal open={open} onClose={handleClose}>
       <Card sx={{ ...taskModalStyle, padding: "8px 24px" }}>
         <Grid container>
-        <Grid item xs={6} sx={{ display: "flex", flexDirection: "column" }}>
-              {modify ? (
-                <TextField
-                  name="name"
-                  type="text"
-                  value={modifiedTask.name}
-                  onChange={(event) => {
-                    setFieldValue("name", event.target.value);
-                  }}
-                  sx={{ height: "56px", mb: 2 }}
-                />
+          <Grid item xs={6} sx={{ display: "flex", flexDirection: "column" }}>
+            {modify ? (
+              <TextField
+                name="name"
+                type="text"
+                value={modifiedTask.name}
+                onChange={(event) => {
+                  setFieldValue("name", event.target.value);
+                }}
+                sx={{ height: "56px", mb: 2 }}
+              />
+            ) : (
+              <Typography
+                variant="h3"
+                sx={{
+                  textAlign: "center",
+                  color: "rgba(125, 128, 218)",
+                  mb: 2,
+                }}
+              >
+                {task.name}
+              </Typography>
+            )}
+            <Typography variant="body1" sx={{ mb: 4 }}>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab alias
+              architecto atque commodi corporis debitis deleniti deserunt
+              dolorem doloremque eaque impedit, inventore laudantium libero
+              magnam maxime nisi quo tempore voluptatibus.
+            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 1,
+                alignItems: "center",
+                height: "56px",
+                m: 1,
+              }}
+            >
+              <Typography
+                variant="body1"
+                sx={{
+                  display: "inline",
+                  fontWeight: "bold",
+                  color: "rgba(125, 128, 218)",
+                  textAlign: "right",
+                  width: "150px",
+                }}
+              >
+                Project :
+              </Typography>
+              {modify && !areProjectsLoading ? (
+                <FormControl sx={{ flexGrow: 1 }}>
+                  <Select
+                    name="project"
+                    labelId="allProjects-label"
+                    label="Project status"
+                    value={modifiedTask.project || " "}
+                    onChange={(event) =>
+                      setFieldValue("project", event.target.value)
+                    }
+                  >
+                    {allProjects.map((project: Partial<ProjectType>) => (
+                      <MenuItem key={project._id} value={project._id}>
+                        {project.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               ) : (
-                <Typography
-                  variant="h3"
-                  sx={{
-                    textAlign: "center",
-                    color: "rgba(125, 128, 218)",
-                    mb: 2,
-                  }}
-                >
-                  {task.name}
+                <Typography variant="body1" sx={{ display: "inline" }}>
+                  {task.project.name}
                 </Typography>
               )}
-              <Typography variant="body1" sx={{ mb: 4 }}>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab alias
-                architecto atque commodi corporis debitis deleniti deserunt
-                dolorem doloremque eaque impedit, inventore laudantium libero
-                magnam maxime nisi quo tempore voluptatibus.
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 1,
+                alignItems: "center",
+                height: "56px",
+                m: 1,
+              }}
+            >
+              <Typography
+                variant="body1"
+                sx={{
+                  display: "inline",
+                  fontWeight: "bold",
+                  color: "rgba(125, 128, 218)",
+                  textAlign: "right",
+                  width: "150px",
+                }}
+              >
+                Status :
               </Typography>
-              <Box
-                sx={{
-                  display: "flex",
-                  gap: 1,
-                  alignItems: "center",
-                  height: "56px",
-                  m: 1,
-                }}
-              >
-                <Typography
-                  variant="body1"
-                  sx={{
-                    display: "inline",
-                    fontWeight: "bold",
-                    color: "rgba(125, 128, 218)",
-                    textAlign: "right",
-                    width: "150px",
-                  }}
-                >
-                  Project :
+              {modify ? (
+                <FormControl sx={{ flexGrow: 1 }}>
+                  <Select
+                    name="status"
+                    labelId="status-label"
+                    label="Task status"
+                    onChange={(event) =>
+                      setFieldValue("status", event.target.value)
+                    }
+                    value={modifiedTask.status}
+                  >
+                    <MenuItem value="ongoing">En cours</MenuItem>
+                    <MenuItem value="done">Terminé</MenuItem>
+                    <MenuItem value="archived">Archivé</MenuItem>
+                  </Select>
+                </FormControl>
+              ) : (
+                <Typography variant="body1" sx={{ display: "inline" }}>
+                  {task.status}
                 </Typography>
-                {modify && !areProjectsLoading ? (
-                  <FormControl sx={{ flexGrow: 1 }}>
-                    <Select
-                      name="project"
-                      labelId="allProjects-label"
-                      label="Project status"
-                      value={modifiedTask.project || " "}
-                      onChange={(event) =>
-                        setFieldValue("project", event.target.value)
-                      }
-                    >
-                      {allProjects.map((project: Partial<ProjectType>) => (
-                        <MenuItem key={project._id} value={project._id}>{project.name}</MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                ) : (
-                  <Typography variant="body1" sx={{ display: "inline" }}>
-                    {task.project.name}
-                  </Typography>
-                )}
-              </Box>
-              <Box
+              )}
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 1,
+                alignItems: "center",
+                height: "56px",
+                m: 1,
+              }}
+            >
+              <Typography
+                variant="body1"
                 sx={{
-                  display: "flex",
-                  gap: 1,
-                  alignItems: "center",
-                  height: "56px",
-                  m: 1,
+                  display: "inline",
+                  fontWeight: "bold",
+                  color: "rgba(125, 128, 218)",
+                  textAlign: "right",
+                  width: "150px",
                 }}
               >
-                <Typography
-                  variant="body1"
-                  sx={{
-                    display: "inline",
-                    fontWeight: "bold",
-                    color: "rgba(125, 128, 218)",
-                    textAlign: "right",
-                    width: "150px",
+                Assigne:
+              </Typography>
+              {modify ? (
+                <TextField
+                  type="text"
+                  variant="outlined"
+                  value={modifiedTask.assigne}
+                  onChange={(event) => {
+                    setFieldValue("assigne", event.target.value);
                   }}
-                >
-                  Status :
+                  sx={{ flexGrow: 1 }}
+                />
+              ) : (
+                <Typography variant="body1" sx={{ display: "inline" }}>
+                  {task.assigne}
                 </Typography>
-                {modify ? (
-                  <FormControl sx={{ flexGrow: 1 }}>
-                    <Select
-                      name="status"
-                      labelId="status-label"
-                      label="Task status"
-                      onChange={(event) =>
-                        setFieldValue("status", event.target.value)
-                      }
-                      value={modifiedTask.status}
-                    >
-                      <MenuItem value="ongoing">En cours</MenuItem>
-                      <MenuItem value="done">Terminé</MenuItem>
-                      <MenuItem value="archived">Archivé</MenuItem>
-                    </Select>
-                  </FormControl>
-                ) : (
-                  <Typography variant="body1" sx={{ display: "inline" }}>
-                    {task.status}
-                  </Typography>
-                )}
-              </Box>
-              <Box
+              )}
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 1,
+                alignItems: "center",
+                height: "56px",
+                m: 1,
+              }}
+            >
+              <Typography
+                variant="body1"
                 sx={{
-                  display: "flex",
-                  gap: 1,
-                  alignItems: "center",
-                  height: "56px",
-                  m: 1,
+                  display: "inline",
+                  fontWeight: "bold",
+                  color: "rgba(125, 128, 218)",
+                  textAlign: "right",
+                  width: "150px",
                 }}
               >
-                <Typography
-                  variant="body1"
-                  sx={{
-                    display: "inline",
-                    fontWeight: "bold",
-                    color: "rgba(125, 128, 218)",
-                    textAlign: "right",
-                    width: "150px",
+                Due date :
+              </Typography>
+              {modify ? (
+                <DatePicker
+                  label="Due Date"
+                  inputFormat="DD/MM/YYYY"
+                  minDate={moment()}
+                  value={modifiedTask.dueDate}
+                  onChange={(value) => {
+                    setFieldValue("dueDate", value);
                   }}
-                >
-                  Assigne:
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      name="dueDate"
+                      sx={{ flexGrow: 1 }}
+                    />
+                  )}
+                />
+              ) : (
+                <Typography variant="body1" sx={{ display: "inline" }}>
+                  {moment(task.dueDate).format("DD/MM/YYYY")}
                 </Typography>
-                {modify ? (
-                  <TextField
-                    type="text"
-                    variant="outlined"
-                    value={modifiedTask.assigne}
-                    onChange={(event) => {
-                      setFieldValue("assigne", event.target.value);
-                    }}
-                    sx={{ flexGrow: 1 }}
-                  />
-                ) : (
-                  <Typography variant="body1" sx={{ display: "inline" }}>
-                    {task.assigne}
-                  </Typography>
-                )}
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  gap: 1,
-                  alignItems: "center",
-                  height: "56px",
-                  m: 1,
-                }}
-              >
-                <Typography
-                  variant="body1"
-                  sx={{
-                    display: "inline",
-                    fontWeight: "bold",
-                    color: "rgba(125, 128, 218)",
-                    textAlign: "right",
-                    width: "150px",
-                  }}
-                >
-                  Due date :
-                </Typography>
-                {modify ? (
-                  <DatePicker
-                    label="Due Date"
-                    inputFormat="DD/MM/YYYY"
-                    minDate={moment()}
-                    value={modifiedTask.dueDate}
-                    onChange={(value) => {
-                      setFieldValue("dueDate", value);
-                    }}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        name="dueDate"
-                        sx={{ flexGrow: 1 }}
-                      />
-                    )}
-                  />
-                ) : (
-                  <Typography variant="body1" sx={{ display: "inline" }}>
-                    {moment(task.dueDate).format("DD/MM/YYYY")}
-                  </Typography>
-                )}
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  gap: 5,
-                  justifyContent: "center",
-                  flexGrow: 1,
-                }}
-              >
-                {modify ? (
-                  <>
-                    <Button
-                      variant="contained"
-                      onClick={handleSubmit}
-                      sx={{ mt: "auto", mb: 5 }}
-                    >
-                      Save
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      onClick={() => setModify(false)}
-                      sx={{ mt: "auto", mb: 5 }}
-                      color="error"
-                    >
-                      Cancel
-                    </Button>
-                  </>
-                ) : (
+              )}
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 5,
+                justifyContent: "center",
+                flexGrow: 1,
+              }}
+            >
+              {modify ? (
+                <>
                   <Button
                     variant="contained"
-                    onClick={handleModification}
+                    onClick={handleSubmit}
                     sx={{ mt: "auto", mb: 5 }}
                   >
-                    Modify
+                    Save
                   </Button>
-                )}
-              </Box>
-            </Grid>
+                  <Button
+                    variant="outlined"
+                    onClick={() => setModify(false)}
+                    sx={{ mt: "auto", mb: 5 }}
+                    color="error"
+                  >
+                    Cancel
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  variant="contained"
+                  onClick={handleModification}
+                  sx={{ mt: "auto", mb: 5 }}
+                >
+                  Modify
+                </Button>
+              )}
+            </Box>
+          </Grid>
           <Grid item xs={6}>
             <h2 className="modal__task_second-title">Comments</h2>
           </Grid>
