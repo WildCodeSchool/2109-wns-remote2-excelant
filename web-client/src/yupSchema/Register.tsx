@@ -8,7 +8,7 @@ export const registerSchema = Yup.object().shape({
         .min(6, "Password must contain at least 6 characters")
         .max(25, "Password must not exceed 25 characters")
         .matches(
-            new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})"),
+            new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})"),
             "Password must contain at least one capital letter, one number and a specific character"
         )
         .required("Please enter a password"),

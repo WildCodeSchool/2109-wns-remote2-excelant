@@ -1,4 +1,9 @@
 import React, { useState } from 'react';
+import { loginSchema } from '../../yupSchema/Login';
+import GqlRequest from '../../_graphql/GqlRequest';
+import { useFormik } from 'formik';
+import { Link, Navigate } from 'react-router-dom';
+
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -6,19 +11,31 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import { Link } from "react-router-dom";
 import ExcelantLogo from '../../images/logo_excelant.jpg';
 
-const Login = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+interface LoginFormValues {
+    email: string,
+    password: string
+}
 
-    const handleSubmit = (e: any) => {
-        e.preventDefault();
-    }
+const Login = () => {
+    const [toHome, setToHome] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    const formik = useFormik({
+        initialValues: {
+            email: "",
+            password: ""
+        },
+        validationSchema: loginSchema,
+        onSubmit: () => {
+            return setToHome(true);
+        }
+    })
 
     return (
         <>
+            {toHome ? <Navigate to="/" /> : null}
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <Box
@@ -33,28 +50,30 @@ const Login = () => {
                     <Typography component="h2" variant="h5" sx={{ mt: 2, mb: 1 }}>
                         Sign In
                     </Typography>
-                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                    <form onSubmit={formik.handleSubmit}>
                         <TextField
-                            margin="normal"
-                            required
                             fullWidth
+                            margin="normal"
                             id="email"
                             label="Email Address"
                             name="email"
-                            autoComplete="email"
-                            autoFocus
-                            onChange={(e) => setEmail(e.target.value)}
+                            type="email"
+                            value={formik.values.email}
+                            onChange={formik.handleChange}
+                            error={formik.touched.email && Boolean(formik.errors.email)}
+                            helperText={formik.touched.email && formik.errors.email}
                         />
                         <TextField
-                            margin="normal"
-                            required
                             fullWidth
+                            margin="normal"
                             id="password"
                             label="Password"
                             name="password"
                             type="password"
-                            autoComplete="current-password"
-                            onChange={(e) => setPassword(e.target.value)}
+                            value={formik.values.password}
+                            onChange={formik.handleChange}
+                            error={formik.touched.password && Boolean(formik.errors.password)}
+                            helperText={formik.touched.password && formik.errors.password}
                         />
                         <Button
                             type="submit"
@@ -64,6 +83,7 @@ const Login = () => {
                         >
                             Sign In
                         </Button>
+                    </form>
                         <Grid container flexDirection="column" alignItems="center">
                             <Grid item mt={1} mb={2}>
                                 <Link to="/register" style={{ fontSize: "0.875rem" }}>
@@ -71,13 +91,12 @@ const Login = () => {
                                 </Link>
                             </Grid>
                             <Grid item>
-                                {/*<Link href="#" variant="body2">*/}
-                                {/*    Forgot password?*/}
-                                {/*</Link>*/}
+                                <Link to="#" style={{ fontSize: "0.875rem" }}>
+                                    Forgot password?
+                                </Link>
                             </Grid>
                         </Grid>
                     </Box>
-                </Box>
             </Container>
         </>
     );

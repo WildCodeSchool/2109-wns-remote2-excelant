@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useMutation } from "@apollo/client";
-import GqlRequest from "../../_graphql/GqlRequest";
-import { useFormik } from "formik";
-import { registerSchema } from "../../yup/Register";
+import { useMutation } from '@apollo/client';
+import GqlRequest from '../../_graphql/GqlRequest';
+import { useFormik } from 'formik';
+import { registerSchema } from '../../yupSchema/Register';
 import { Link, Navigate } from 'react-router-dom';
 
 import CssBaseline from '@mui/material/CssBaseline';
@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import FormHelperText from '@mui/material/FormHelperText';
 import Button from '@mui/material/Button';
-import {CircularProgress} from "@mui/material";
+import {CircularProgress} from '@mui/material';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
