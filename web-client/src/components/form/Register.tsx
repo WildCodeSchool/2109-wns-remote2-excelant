@@ -16,7 +16,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import ExcelantLogo from '../../images/logo_excelant.jpg';
 
-const Register = () => {
+const Register: React.FC = () => {
     const [toHome, setToHome] = useState(false);
     const [loading, setLoading] = useState(false);
     const [createUser] = useMutation(

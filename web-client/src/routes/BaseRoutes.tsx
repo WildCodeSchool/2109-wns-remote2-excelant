@@ -12,14 +12,14 @@ const BaseRoutes: React.FC = () => (
   <>
     <Router>
       <Routes>
-        <Route path="/" element={<NavBar />}>
-            <Route index element={<HomePage />} />
-            <Route path="/tasks" element={<TasksPage />} />
-            <Route path="/projects" element={<ProjectsPage />} />
-            <Route path="/users" element={<UsersPage />} />
-        </Route>
-        <Route path="/register" element={<Register />} />
+        <Route path="/" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route element={<NavBar />}>
+          <Route path="/homepage" element={<HomePage />} />
+          <Route path="/tasks" element={<TasksPage />} />
+          <Route path="/projects" element={<ProjectsPage />} />
+          <Route path="/users" element={<UsersPage />} />
+        </Route>
       </Routes>
     </Router>
   </>

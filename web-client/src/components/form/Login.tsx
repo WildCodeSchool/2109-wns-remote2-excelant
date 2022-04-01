@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { loginSchema } from '../../yupSchema/Login';
-import GqlRequest from '../../_graphql/GqlRequest';
 import { useFormik } from 'formik';
 import { Link, Navigate } from 'react-router-dom';
 
@@ -12,15 +11,19 @@ import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import ExcelantLogo from '../../images/logo_excelant.jpg';
+import {useQuery} from "@apollo/client";
+import GqlRequest from "../../_graphql/GqlRequest";
 
 interface LoginFormValues {
     email: string,
     password: string
 }
 
-const Login = () => {
+const Login: React.FC = () => {
     const [toHome, setToHome] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const { loading, data, refetch } = useQuery(
+        new GqlRequest("User").get("_id, email, password")
+    );
 
     const formik = useFormik({
         initialValues: {
@@ -29,7 +32,7 @@ const Login = () => {
         },
         validationSchema: loginSchema,
         onSubmit: () => {
-            return setToHome(true);
+            // TODO: Check if user email exist
         }
     });
 
@@ -86,7 +89,7 @@ const Login = () => {
                     </form>
                         <Grid container flexDirection="column" alignItems="center">
                             <Grid item mt={1} mb={2}>
-                                <Link to="/register" style={{ fontSize: "0.875rem" }}>
+                                <Link to="/" style={{ fontSize: "0.875rem" }}>
                                     No account? Sign Up
                                 </Link>
                             </Grid>
