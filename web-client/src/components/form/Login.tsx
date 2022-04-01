@@ -10,7 +10,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { useQuery } from "@apollo/client";
 
-import ExcelantLogo from "../../images/logo_excelant.jpg";
+import ExcelantLogo from "../../images/logo_excelant.png";
 import { loginSchema } from "../../yupSchema/Login";
 import GqlRequest from "../../_graphql/GqlRequest";
 
