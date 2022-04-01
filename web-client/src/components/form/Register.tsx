@@ -86,7 +86,8 @@ const Register: React.FC = () => {
             />
             <FormHelperText>
               Your password must contain at least six characters, including a
-              number, an upper case letter and a specific character
+              number, a lower case letter, an upper case letter and a specific
+              character
             </FormHelperText>
             <TextField
               fullWidth
