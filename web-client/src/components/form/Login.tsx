@@ -31,7 +31,7 @@ const Login = () => {
         onSubmit: () => {
             return setToHome(true);
         }
-    })
+    });
 
     return (
         <>
