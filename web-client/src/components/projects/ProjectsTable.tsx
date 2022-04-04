@@ -28,7 +28,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const ProjectTable: React.FC<{ reload: number }> = ({ reload }) => {
-  const limit = 12;
+  const limit = 10;
   const [page, setPage] = useState<number>(1);
   const [projects, setProjects] = useState<ProjectType[]>([]);
   const [totalPages, setTotalPages] = useState<number>(0);
