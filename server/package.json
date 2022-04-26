@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start:dev": "ts-node-dev --respawn --transpile-only ./src/server.ts",
-    "start:build": "tsc && node ./build/server.js",
+    "start:build": "tsc && node ./build/src/server.js",
     "lint": "eslint . ",
     "test": ""
   },
