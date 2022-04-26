@@ -1,0 +1,37 @@
+services:
+  server:
+    image: amanelgau/excelant-develop:server-latest
+    command: sh -c "npm run start:build"
+    ports:
+      - 4040:4000
+    volumes:
+      - server-build/:/server/build
+    depends_on:
+      - mongodb
+  mongodb:
+    image: mongo:4.4.13
+    volumes:
+      - data/:/data/db
+  web-client:
+    image: amanelgau/excelant-develop:web-client-latest
+    command: sh -c "npm run build"
+    volumes:
+      - web-client-build/:/web-client/build
+  nginx:
+    image: nginx:1.21.3
+    depends_on:
+      - server
+      - web-client
+    restart: always
+    ports:
+      - ${GATEWAY_PORT}:80
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - data/:/data
+      - web-client-build/:/web-client-build
+      - server-build/:/server-build
+      - ./logs:/var/log/nginx
+volumes:
+  web-client-build:
+  server-build:
+  data:
