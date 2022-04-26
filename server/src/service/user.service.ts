@@ -40,15 +40,18 @@ class UserService {
 
     const token = signJwt(user);
 
-    context.res.cookie('accessToken', token, {
+    const { res } = context;
+    res.cookie('accessToken', token, {
       maxAge: 3.154e10,
       httpOnly: true,
       // TODO: add domain environment variable
-      domain: process.env.NODE_ENV === 'production' ? '' : 'localhost',
+      domain: 'localhost',
       path: '/',
       sameSite: 'strict',
       secure: process.env.NODE_ENV === 'production',
     });
+
+    console.log(res);
 
     return token;
   }

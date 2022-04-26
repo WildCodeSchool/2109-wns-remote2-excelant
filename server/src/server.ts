@@ -10,6 +10,9 @@ import {
 import cookieParser from 'cookie-parser';
 import resolvers from './resolvers';
 import connectToMongo from './utils/mongo';
+import Context from './types/context';
+import { verifyJwt } from './utils/jwt';
+import User from './schema/User/user.schema';
 
 dotenv.config();
 async function bootstrap() {
@@ -27,7 +30,15 @@ async function bootstrap() {
   // Create the apollo server
   const server = new ApolloServer({
     schema,
-    context: (ctx) => ctx,
+    context: (ctx: Context) => {
+      const context = ctx;
+      console.log(context.req.cookies);
+      if (ctx.req.cookies.accessToken) {
+        const user = verifyJwt<User>(ctx.req.cookies.accessToken);
+        context.user = user;
+      }
+      return context;
+    },
     plugins: [
       process.env.NODE_ENV === 'production'
         ? ApolloServerPluginLandingPageProductionDefault()
