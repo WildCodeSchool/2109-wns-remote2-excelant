@@ -1,22 +1,26 @@
 services:
   server:
     image: amanelgau/excelant:server-latest
-    command: sh -c "npm run start:build"
+    command: sh -c  "node ./build/src/server.js"
     ports:
-      - 4040:4000
-    volumes:
-      - server-build/:/server/build
+      - 4000:4000
+    environment:
+      - DB_URI=mongodb://mongodb:27016/excelant
     depends_on:
       - mongodb
   mongodb:
     image: mongo:4.4.13
     volumes:
       - data/:/data/db
+    ports:
+      - 27016:27017
   web-client:
     image: amanelgau/excelant:web-client-latest
     command: sh -c "npm run build"
     volumes:
       - web-client-build/:/web-client/build
+    environment:
+      - REACT_APP_BACK_URI=https://remote3-0921.wns.wilders.dev/graphql
   nginx:
     image: nginx:1.21.3
     depends_on:
@@ -29,9 +33,7 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - data/:/data
       - web-client-build/:/web-client-build
-      - server-build/:/server-build
       - ./logs:/var/log/nginx
 volumes:
   web-client-build:
-  server-build:
   data:
