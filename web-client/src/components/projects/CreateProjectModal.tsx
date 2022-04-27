@@ -11,6 +11,8 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { DatePicker } from "@mui/lab";
 import React, { useState } from "react";
@@ -41,9 +43,14 @@ const CreateProjectModal: React.FC<{
   handleClose: () => void;
 }> = ({ open, handleClose }) => {
   const [loading, setLoading] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const [createProject] = useMutation(
     new GqlRequest("Project").create("name, status, projectManager, dueDate")
   );
+
+  const handleOpenSnackbar = () => {
+    setOpenSnackbar(true);
+  }
 
   const onSubmit = (values: CreateProjectInput) => {
     setLoading(true);
@@ -142,7 +149,10 @@ const CreateProjectModal: React.FC<{
                       <Button
                         disabled={loading}
                         variant="contained"
-                        onClick={() => onSubmit(values)}
+                        onClick={() => {
+                          onSubmit(values);
+                          handleOpenSnackbar();
+                        }}
                         sx={{ width: "128px" }}
                       >
                         Create
@@ -156,6 +166,15 @@ const CreateProjectModal: React.FC<{
                           />
                         )}
                       </Button>
+                      <Snackbar
+                        open={openSnackbar}
+                        autoHideDuration={6000}
+                        // anchorOrigin={{ vertical, horizontal }}
+                      >
+                        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+                          Your new project has been created successfully!
+                        </Alert>
+                      </Snackbar>
                       <Button
                         variant="outlined"
                         disabled={loading}
