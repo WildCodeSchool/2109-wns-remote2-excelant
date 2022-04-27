@@ -12,7 +12,7 @@ import {
   InputLabel,
   FormControl,
   Snackbar,
-  Alert,
+  Alert
 } from "@mui/material";
 import { DatePicker } from "@mui/lab";
 import React, { useState } from "react";
@@ -44,19 +44,25 @@ const CreateProjectModal: React.FC<{
   handleClose: () => void;
 }> = ({ open, handleClose }) => {
   const [loading, setLoading] = useState(false);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState<boolean>(true);
+  const [notify, setNotify] = useState({ isOpen: false, message: "" ,type: "" });
   const [createProject] = useMutation(
     new GqlRequest("Project").create("name, status, projectManager, dueDate")
   );
 
-  const handleOpenSnackbar = () => {
-    setOpenSnackbar(true);
-  }
+  const handleCloseSnackbar = (event: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenSnackbar(false);
+  };
 
   const onSubmit = (values: CreateProjectInput) => {
     setLoading(true);
     try {
       createProject({ variables: { input: values } });
+      setNotify({ isOpen: true, message: "The project has been created successfully", type: "success" });
     } catch (err) {
       // eslint-disable-next-line
       console.log("Error", err);
@@ -67,6 +73,7 @@ const CreateProjectModal: React.FC<{
   };
 
   return (
+      <>
     <Modal open={open} onClose={handleClose}>
       <Card sx={{ ...modalStyle, padding: "8px 24px" }}>
         <CardHeader title="Create a new project" sx={{ textAlign: "center" }} />
@@ -74,10 +81,12 @@ const CreateProjectModal: React.FC<{
           {open && (
             <Formik
               initialValues={defaultValues}
-              onSubmit={(values) => onSubmit(values)}
+              onSubmit={(values) => {
+                onSubmit(values);
+              }}
             >
               {({ values, handleChange, setFieldValue }) => (
-                <Form>
+                <Form onSubmit={() => console.log("Test")}>
                   <Box display="flex" flexDirection="column" gap={2}>
                     <Box
                       display="flex"
@@ -152,7 +161,6 @@ const CreateProjectModal: React.FC<{
                         variant="contained"
                         onClick={() => {
                           onSubmit(values);
-                          handleOpenSnackbar();
                         }}
                         sx={{ width: "128px" }}
                       >
@@ -167,15 +175,6 @@ const CreateProjectModal: React.FC<{
                           />
                         )}
                       </Button>
-                      <Snackbar
-                        open={openSnackbar}
-                        autoHideDuration={6000}
-                        // anchorOrigin={{ vertical, horizontal }}
-                      >
-                        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
-                          Your new project has been created successfully!
-                        </Alert>
-                      </Snackbar>
                       <Button
                         variant="outlined"
                         disabled={loading}
@@ -194,6 +193,13 @@ const CreateProjectModal: React.FC<{
         </CardContent>
       </Card>
     </Modal>
+      <Notification
+          isOpen={notify.isOpen}
+          message={notify.message}
+          type="success"
+          setNotify={setNotify}
+      />
+    </>
   );
 };
 
