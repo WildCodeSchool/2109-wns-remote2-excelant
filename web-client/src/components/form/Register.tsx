@@ -14,7 +14,7 @@ import Grid from "@mui/material/Grid";
 
 import { registerSchema } from "../../yupSchema/Register";
 import GqlRequest from "../../_graphql/GqlRequest";
-import ExcelantLogo from "../../images/logo_excelant.jpg";
+import ExcelantLogo from "../../images/logo_excelant.png";
 
 const Register: React.FC = () => {
   const [toHome, setToHome] = useState(false);
@@ -86,7 +86,8 @@ const Register: React.FC = () => {
             />
             <FormHelperText>
               Your password must contain at least six characters, including a
-              number, an upper case letter and a specific character
+              number, a lower case letter, an upper case letter and a specific
+              character
             </FormHelperText>
             <TextField
               fullWidth
