@@ -1,11 +1,12 @@
 import { InputType, Field } from 'type-graphql';
+import ProjectInput from '../Project/project.input';
 
 @InputType()
-class CreateTaskInput {
+class UpdateTaskInput {
   @Field(() => String)
   name: string;
 
-  @Field(() => String)
+  @Field(() => ProjectInput, { nullable: true })
   project: string;
 
   @Field(() => String)
@@ -14,8 +15,8 @@ class CreateTaskInput {
   @Field(() => String)
   assigne: string;
 
-  @Field(() => String)
-  dueDate: string;
+  @Field()
+  dueDate: Date;
 }
 
-export default CreateTaskInput;
+export default UpdateTaskInput;

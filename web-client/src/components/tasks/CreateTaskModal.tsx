@@ -5,56 +5,70 @@ import {
   CardContent,
   Button,
   CircularProgress,
+  FormControl,
   TextField,
-  Box
+  InputLabel,
+  Select,
+  MenuItem,
+  Box,
 } from "@mui/material";
-import React, { useState } from "react";
+import { DatePicker } from "@mui/lab";
+import React from "react";
+import moment from 'moment';
 import { Formik, Form } from "formik";
 import { gql, useMutation } from "@apollo/client";
 import { modalStyle } from "../../_utils/modalStyle";
+import { ProjectType } from "../../_types/_projectTypes";
 
 interface CreateTaskInput {
   name: string;
-  project: string;
+  project: {
+    _id: string;
+  }
   status: string;
   assigne: string;
-  dueDate: string;
+  dueDate: moment.Moment;
 }
 
 const defaultValues: CreateTaskInput = {
   name: "",
-  project: "",
+  project: {
+    "_id": "",
+  },
   status: "",
   assigne: "",
-  dueDate: ""
+  dueDate: moment(),
 };
 
-const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
+const CreateTaskModal: React.FC<{ projects: Object[], open: boolean; handleClose: () => void }> = ({
+  projects,
   open,
-  handleClose
+  handleClose,
 }) => {
-  const [loading, setLoading] = useState(false);
+  
   const CREATE_TASK = gql`
     mutation createTask($input: CreateTaskInput!) {
       createTask(input: $input) {
         name
-        project
+        project {
+          _id
+        }
         status
         assigne
         dueDate
       }
     }
   `;
-  const [createTask, { data, error }] = useMutation(CREATE_TASK);
+  const [createTask, { loading } ] = useMutation(CREATE_TASK);
+
 
   const onSubmit = (values: CreateTaskInput) => {
-    setLoading(true);
     try {
       createTask({ variables: { input: values } });
     } catch (err) {
+      // eslint-disable-next-line
       console.log("Error", err);
     } finally {
-      setLoading(false);
       handleClose();
     }
   };
@@ -69,7 +83,7 @@ const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
               initialValues={defaultValues}
               onSubmit={(values) => onSubmit(values)}
             >
-              {({ values, handleChange }) => (
+              {({ values, handleChange, setFieldValue }) => (
                 <Form>
                   <Box display="flex" flexDirection="column" gap={2}>
                     <TextField
@@ -84,22 +98,38 @@ const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
                       sx={{ flexDirection: { xs: "column", md: "row" } }}
                       gap={1}
                     >
-                      <TextField
-                        name="project"
-                        value={values.project}
-                        onChange={handleChange}
-                        label="Project"
-                        size="small"
-                        sx={{ flexGrow: 1 }}
-                      />
-                      <TextField
-                        name="status"
-                        value={values.status}
-                        onChange={handleChange}
-                        label="Status"
-                        size="small"
-                        sx={{ flexGrow: 1 }}
-                      />
+                      <FormControl sx={{ flexGrow: 1 }} size="small">
+                        <InputLabel id="projects-label">
+                          Select a project
+                        </InputLabel>
+                        <Select
+                          name="project['_id']"
+                          labelId="projects-label"
+                          label="Select a project"
+                          value={values.project._id  ?? " "}
+                          onChange={handleChange}
+                        >
+                          {projects && projects.map((project: Partial<ProjectType>) => (
+                            <MenuItem key={project._id} value={project._id}>{project.name}</MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                      <FormControl sx={{ flexGrow: 1 }} size="small">
+                        <InputLabel id="task-status-label">
+                          Task status
+                        </InputLabel>
+                        <Select
+                          name="status"
+                          labelId="task-status-label"
+                          label="Task status"
+                          onChange={handleChange}
+                          value={values.status}
+                        >
+                          <MenuItem value="ongoing">En cours</MenuItem>
+                          <MenuItem value="done">Terminé</MenuItem>
+                          <MenuItem value="archived">Archivé</MenuItem>
+                        </Select>
+                      </FormControl>
                     </Box>
                     <Box
                       display="flex"
@@ -114,13 +144,23 @@ const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
                         size="small"
                         sx={{ flexGrow: 1 }}
                       />
-                      <TextField
-                        name="dueDate"
-                        value={values.dueDate}
-                        onChange={handleChange}
+                      <DatePicker
                         label="Due Date"
-                        size="small"
-                        sx={{ flexGrow: 1 }}
+                        inputFormat="DD/MM/YYYY"
+                        minDate={moment()}
+                        value={values.dueDate}
+                        onChange={(value): void => {
+                          setFieldValue("dueDate", value);
+                        }}
+                        renderInput={(params) => (
+                          <TextField
+                            // eslint-disable-next-line
+                            {...params}
+                            name="dueDate"
+                            size="small"
+                            sx={{ flexGrow: 1 }}
+                          />
+                        )}
                       />
                     </Box>
                     {/**
@@ -129,11 +169,11 @@ const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
                      */}
                     <TextField
                       name="description"
-                      value={""}
+                      value=""
                       onChange={handleChange}
                       label="Description"
                       size="small"
-                      multiline={true}
+                      multiline
                       minRows={5}
                       disabled
                     />
@@ -150,7 +190,7 @@ const CreateTaskModal: React.FC<{ open: boolean; handleClose: () => void }> = ({
                             style={{
                               width: 20,
                               height: 20,
-                              marginLeft: "10px"
+                              marginLeft: "10px",
                             }}
                           />
                         )}
