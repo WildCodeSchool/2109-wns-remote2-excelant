@@ -1,12 +1,14 @@
-import { Arg, Mutation, Query } from 'type-graphql';
-import bcrypt from 'bcrypt';
+import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql';
 import CreateUserInput from '../schema/User/user.create';
 import User from '../schema/User/user.schema';
 import UserService from '../service/user.service';
 import FindOneUserInput from '../schema/User/user.find';
 import UpdateUserEmailInput from '../schema/User/user.updateEmail';
 import UpdateUserPasswordInput from '../schema/User/user.updatePassword';
+import Context from '../types/context';
+import LoginInput from '../schema/User/user.login';
 
+@Resolver()
 class UserResolver {
   constructor(private userService: UserService) {
     this.userService = new UserService();
@@ -24,12 +26,12 @@ class UserResolver {
 
   @Mutation(() => User)
   createUser(@Arg('input') input: CreateUserInput) {
-    const secureInput = {
-      email: input.email,
-      password: bcrypt.hashSync(input.password, 6),
-      confirmPassword: bcrypt.hashSync(input.confirmPassword, 6),
-    };
-    return this.userService.createUser(secureInput);
+    return this.userService.createUser(input);
+  }
+
+  @Mutation(() => String) // Returns the JWT
+  login(@Arg('input') input: LoginInput, @Ctx() context: Context) {
+    return this.userService.login(input, context);
   }
 
   @Mutation(() => User)
@@ -45,8 +47,7 @@ class UserResolver {
     @Arg('_id') id: string,
     @Arg('input') input: UpdateUserPasswordInput
   ) {
-    const secureInput = { password: bcrypt.hashSync(input.password, 6) };
-    return this.userService.updateUserPassword(id, secureInput);
+    return this.userService.updateUserPassword(id, input);
   }
 
   @Mutation(() => User)
