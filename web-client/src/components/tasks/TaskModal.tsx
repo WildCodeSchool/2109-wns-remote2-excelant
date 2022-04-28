@@ -42,7 +42,9 @@ const TaskModal: React.FC<{
     status: task.status,
     assigne: task.assigne,
     dueDate: task.dueDate,
-    project: task.project._id || "",
+    project: {
+      "_id": task.project._id || "",
+    },
   });
 
   const [updateTask] = useMutation(new GqlRequest("Task").update("name"));
@@ -136,9 +138,9 @@ const TaskModal: React.FC<{
                     name="project"
                     labelId="allProjects-label"
                     label="Project status"
-                    value={modifiedTask.project || " "}
+                    value={modifiedTask.project._id || " "}
                     onChange={(event) =>
-                      setFieldValue("project", event.target.value)
+                      setFieldValue("project", {"_id": event.target.value})
                     }
                   >
                     {allProjects.map((project: Partial<ProjectType>) => (
