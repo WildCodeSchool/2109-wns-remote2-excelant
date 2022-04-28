@@ -4,6 +4,7 @@ import { useMutation } from "@apollo/client";
 import { modalStyle } from "../../_utils/modalStyle";
 import GqlRequest from "../../_graphql/GqlRequest";
 import { TaskType } from "../../_types/_taskTypes";
+import Notification from "../../_utils/Notification";
 
 const DeleteTaskModal: React.FC<{
   open: boolean;
@@ -12,6 +13,7 @@ const DeleteTaskModal: React.FC<{
   task: TaskType;
 }> = ({ open, handleClose, refetch, task }) => {
   const [loading, setLoading] = useState(false);
+  const [notify, setNotify] = useState({ isOpen: false, message: "", type: "" });
 
   const [deleteTask] = useMutation(new GqlRequest("Task").delete("name"));
 
@@ -21,6 +23,7 @@ const DeleteTaskModal: React.FC<{
       await deleteTask({
         variables: { input: { _id: task._id } },
       });
+      setNotify({ isOpen: true, message: "Your task has been deleted successfully!", type: "info" });
     } catch (err) {
       // eslint-disable-next-line
       console.log("Error", err);
@@ -60,6 +63,12 @@ const DeleteTaskModal: React.FC<{
         </CardActions>
       </Card>
     </Modal>
+      <Notification
+          isOpen={notify.isOpen}
+          message={notify.message}
+          type="info"
+          setNotify={setNotify}
+      />
     </>
   );
 };
