@@ -32,11 +32,12 @@ async function bootstrap() {
     schema,
     context: (ctx: Context) => {
       const context = ctx;
-      console.log(context.req.cookies);
+
       if (ctx.req.cookies.accessToken) {
         const user = verifyJwt<User>(ctx.req.cookies.accessToken);
         context.user = user;
       }
+
       return context;
     },
     plugins: [
