@@ -11,8 +11,6 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
-  Snackbar,
-  Alert
 } from "@mui/material";
 import { DatePicker } from "@mui/lab";
 import React, { useState } from "react";
@@ -44,25 +42,16 @@ const CreateProjectModal: React.FC<{
   handleClose: () => void;
 }> = ({ open, handleClose }) => {
   const [loading, setLoading] = useState(false);
-  const [openSnackbar, setOpenSnackbar] = useState<boolean>(true);
   const [notify, setNotify] = useState({ isOpen: false, message: "" ,type: "" });
   const [createProject] = useMutation(
     new GqlRequest("Project").create("name, status, projectManager, dueDate")
   );
 
-  const handleCloseSnackbar = (event: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setOpenSnackbar(false);
-  };
-
   const onSubmit = (values: CreateProjectInput) => {
     setLoading(true);
     try {
       createProject({ variables: { input: values } });
-      setNotify({ isOpen: true, message: "The project has been created successfully", type: "success" });
+      setNotify({ isOpen: true, message: "Your project has been created successfully!", type: "success" });
     } catch (err) {
       // eslint-disable-next-line
       console.log("Error", err);

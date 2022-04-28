@@ -32,6 +32,7 @@ const DeleteTaskModal: React.FC<{
   };
 
   return (
+    <>
     <Modal open={open} onClose={handleClose}>
       <Card
         sx={{
@@ -59,6 +60,7 @@ const DeleteTaskModal: React.FC<{
         </CardActions>
       </Card>
     </Modal>
+    </>
   );
 };
 
