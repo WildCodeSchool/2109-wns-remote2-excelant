@@ -13,6 +13,10 @@ class CreateUserInput {
   @MinLength(6, { message: 'password must be at least 6 characters long' })
   @Field(() => String)
   password: string;
+
+  @MinLength(6, { message: 'password must be at least 6 characters long' })
+  @Field(() => String)
+  confirmPassword: string;
 }
 
 export default CreateUserInput;
