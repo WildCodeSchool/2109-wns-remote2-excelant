@@ -47,7 +47,7 @@ const CreateTaskModal: React.FC<{ projects: Object[], open: boolean; handleClose
   handleClose,
 }) => {
 
-  // const [notify, setNotify] = useState({ isOpen: false, message: "" ,type: "" });
+  const [notify, setNotify] = useState({ isOpen: false, message: "" ,type: "" });
   const CREATE_TASK = gql`
     mutation createTask($input: CreateTaskInput!) {
       createTask(input: $input) {
@@ -67,7 +67,7 @@ const CreateTaskModal: React.FC<{ projects: Object[], open: boolean; handleClose
   const onSubmit = (values: CreateTaskInput) => {
     try {
       createTask({ variables: { input: values } });
-      // setNotify({ isOpen: true, message: "Your task has been created successfully!", type: "success" });
+      setNotify({ isOpen: true, message: "Your task has been created successfully!", type: "success" });
     } catch (err) {
       // eslint-disable-next-line
       console.log("Error", err);
@@ -217,12 +217,12 @@ const CreateTaskModal: React.FC<{ projects: Object[], open: boolean; handleClose
         </CardContent>
       </Card>
     </Modal>
-      {/*<Notification*/}
-      {/*    isOpen={notify.isOpen}*/}
-      {/*    message={notify.message}*/}
-      {/*    type="success"*/}
-      {/*    setNotify={setNotify}*/}
-      {/*/>*/}
+      <Notification
+          isOpen={notify.isOpen}
+          message={notify.message}
+          type="success"
+          setNotify={setNotify}
+      />
     </>
   );
 };
