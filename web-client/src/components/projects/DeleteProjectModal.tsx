@@ -1,37 +1,52 @@
 import { Modal, Card, CardHeader, CardActions, Button } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useMutation } from "@apollo/client";
 import { modalStyle } from "../../_utils/modalStyle";
 import GqlRequest from "../../_graphql/GqlRequest";
 import { ProjectType } from "../../_types/_projectTypes";
+import Notification from "../../_utils/Notification";
+import ProjectContext from "../../context/ProjectContext";
 
 const DeleteProjectModal: React.FC<{
   open: boolean;
   handleClose: () => void;
   refetch: () => void;
   project: ProjectType;
-}> = ({ open, handleClose, refetch, project }) => {
+}> = ({ open, handleClose, refetch, project}) => {
   const [loading, setLoading] = useState(false);
+  const [notify, setNotify] = useState({ isOpen: false, message: "" ,type: "" });
+  const { projects, setProjects } = useContext(ProjectContext);
+  console.log(projects);
 
   const [deleteProject] = useMutation(new GqlRequest("Project").delete("name"));
+  let result: any;
 
   const handleDelete = async () => {
     setLoading(true);
     try {
-      await deleteProject({
+      result = await deleteProject({
         variables: { input: { _id: project._id } },
       });
+      if (result) {
+        setNotify({isOpen: true, message: "Your project has been deleted successfully!", type: "info"});
+      }
     } catch (err) {
       // eslint-disable-next-line
       console.log("Error", err);
     } finally {
-      refetch();
+      // refetch();
       handleClose();
       setLoading(false);
     }
   };
 
+  useEffect(() => {
+    // TODO: update project state if a project has been deleted
+    if (result) setProjects(result);
+  }, [projects]);
+
   return (
+    <>
     <Modal open={open} onClose={handleClose}>
       <Card
         sx={{
@@ -59,6 +74,13 @@ const DeleteProjectModal: React.FC<{
         </CardActions>
       </Card>
     </Modal>
+      <Notification
+          isOpen={notify.isOpen}
+          message={notify.message}
+          type="info"
+          setNotify={setNotify}
+      />
+    </>
   );
 };
 

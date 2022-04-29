@@ -16,6 +16,7 @@ import { useQuery } from "@apollo/client";
 import GqlRequest from "../../_graphql/GqlRequest";
 import { ProjectType } from "../../_types/_projectTypes";
 import ProjectTableItem from "./ProjectTableItem";
+import ProjectContext from "../../context/ProjectContext";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -60,6 +61,7 @@ const ProjectTable: React.FC<{ reload: number }> = ({ reload }) => {
     <Box>Loading ... </Box>
   ) : (
     <>
+      <ProjectContext.Provider value={{ projects: projects, setProjects: setProjects }}>
       <TableContainer component={Paper} sx={{ width: "100%" }}>
         <Table aria-label="simple table">
           <TableHead>
@@ -88,6 +90,7 @@ const ProjectTable: React.FC<{ reload: number }> = ({ reload }) => {
           <Pagination count={totalPages} page={page} onChange={onPageChange} />
         )}
       </Box>
+      </ProjectContext.Provider>
     </>
   );
 };
