@@ -13,12 +13,13 @@ import {
   Box,
 } from "@mui/material";
 import { DatePicker } from "@mui/lab";
-import React from "react";
+import React, { useState } from "react";
 import moment from "moment";
 import { Formik, Form } from "formik";
 import { gql, useMutation } from "@apollo/client";
 import { modalStyle } from "../../_utils/modalStyle";
 import { ProjectType } from "../../_types/_projectTypes";
+import Notification from "../../_utils/Notification";
 
 interface CreateTaskInput {
   name: string;
@@ -47,6 +48,7 @@ const CreateTaskModal: React.FC<{
   open: boolean;
   handleClose: () => void;
 }> = ({ projects, open, handleClose }) => {
+  const [notify, setNotify] = useState({ isOpen: false, message: "" ,type: "" });
   const CREATE_TASK = gql`
     mutation createTask($input: CreateTaskInput!) {
       createTask(input: $input) {
@@ -66,6 +68,7 @@ const CreateTaskModal: React.FC<{
   const onSubmit = (values: CreateTaskInput) => {
     try {
       createTask({ variables: { input: values } });
+      setNotify({ isOpen: true, message: "Your task has been created successfully!", type: "success" });
     } catch (err) {
       // eslint-disable-next-line
       console.log("Error", err);
@@ -75,6 +78,7 @@ const CreateTaskModal: React.FC<{
   };
 
   return (
+    <>
     <Modal open={open} onClose={handleClose}>
       <Card sx={{ ...modalStyle, padding: "8px 24px" }}>
         <CardHeader title="Create a new task" sx={{ textAlign: "center" }} />
@@ -212,6 +216,13 @@ const CreateTaskModal: React.FC<{
         </CardContent>
       </Card>
     </Modal>
+      <Notification
+          isOpen={notify.isOpen}
+          message={notify.message}
+          type="success"
+          setNotify={setNotify}
+      />
+    </>
   );
 };
 

@@ -5,6 +5,8 @@ import Task from '../schema/Task/task.schema';
 import TaskService from '../service/task.service';
 import UpdateTaskInput from '../schema/Task/task.update';
 import DeleteTaskInput from '../schema/Task/task.delete';
+import FindTaskByLimitAndPageInput from '../schema/Task/task.findpage';
+import TaskPage from '../schema/Task/task.page';
 
 class TaskResolver {
   constructor(private taskService: TaskService) {
@@ -14,6 +16,11 @@ class TaskResolver {
   @Query(() => [Task])
   findAllTasks() {
     return this.taskService.findTasks();
+  }
+
+  @Query(() => TaskPage)
+  findTaskByLimitAndPage(@Arg('input') input: FindTaskByLimitAndPageInput) {
+    return this.taskService.findTaskByLimitAndPage(input);
   }
 
   @Query(() => Task)

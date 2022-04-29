@@ -1,8 +1,11 @@
-import { mongoose, prop, Ref } from '@typegoose/typegoose';
+import { mongoose, plugin, prop, Ref } from '@typegoose/typegoose';
 import { Field, ID, ObjectType } from 'type-graphql';
 import Project from '../Project/project.schema';
+import mongoosePaginate from 'mongoose-paginate-v2';
+import PaginateMethod from '../../utils/PaginateMethodType';
 
 @ObjectType()
+@plugin(mongoosePaginate)
 class Task {
   @Field(() => ID)
   readonly _id: mongoose.Schema.Types.ObjectId;
@@ -30,6 +33,8 @@ class Task {
   @Field({ description: 'the description of the task' })
   @prop({ required: false })
   description: string;
+  
+  static paginate: PaginateMethod<Task>
 }
 
 export default Task;
