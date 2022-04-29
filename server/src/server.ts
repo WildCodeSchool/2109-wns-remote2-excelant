@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { ApolloServer } from 'apollo-server-express';
-import dotenv from 'dotenv';
+import 'dotenv/config';
 import express from 'express';
 import { buildSchema } from 'type-graphql';
 import {
@@ -14,7 +14,6 @@ import Context from './types/context';
 import { verifyJwt } from './utils/jwt';
 import User from './schema/User/user.schema';
 
-dotenv.config();
 async function bootstrap() {
   // Build the schema
   const schema = await buildSchema({
