@@ -5,14 +5,22 @@ services:
       - 4040:4000
     volumes:
       - ./server/src/:/server/src/
+    environment:
+      - PUBLIC_KEY=${PUBLIC_KEY}
+      - PRIVATE_KEY=${PRIVATE_KEY}
+    command: npm run start:dev
   mongodb:
     image: mongo
     volumes:
       - ./data:/data/db
+    ports:
+      - 27017:27017
   web-client:
     build: ./web-client
     ports:
       - 8080:3000
     command: npm start
+    environment:
+      - REACT_APP_BACK_URI=http://localhost:4040/graphql
     volumes:
       - ./web-client/src/:/web-client/src/
