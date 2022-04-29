@@ -1,19 +1,16 @@
-FROM node:14.17-alpine as tsc-builder
+FROM node:14.17-alpine as base
 
 RUN mkdir /server
 WORKDIR /server
+
+COPY package*.json ./
+
+RUN npm i
+
 COPY . .
-RUN npm ci && npm run build
 
-FROM node:14.17-alpine as runtime-container
-RUN mkdir /server
-WORKDIR /server
+FROM base as production
 
-COPY --from=tsc-builder /server/build ./build
-COPY --from=tsc-builder /server/config ./config
-COPY --from=tsc-builder ["/server/package.json", "./"] 
-COPY --from=tsc-builder ["/server/package-lock.json", "./"] 
+ENV NODE_PATH=./build
 
-RUN npm ci
-
-CMD ["node", "./build/src/server.js"]
+RUN ["npm", "run", "build"]
