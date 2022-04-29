@@ -3,12 +3,18 @@ import FindOneTaskById from '../schema/Task/task.find';
 import { TaskModel } from '../schema/index';
 import UpdateTaskInput from '../schema/Task/task.update';
 import DeleteTaskInput from '../schema/Task/task.delete';
+import FindTaskByLimitAndPageInput from '../schema/Task/task.findpage';
 
 class TaskService {
   // eslint-disable-next-line
   async findTasks() {
     const tasks = await TaskModel.find().populate('project').lean();
     return tasks;
+  }
+
+  // eslint-disable-next-line
+  async findTaskByLimitAndPage(input: FindTaskByLimitAndPageInput) {
+    return TaskModel.paginate({}, input);
   }
 
   // eslint-disable-next-line
