@@ -1,8 +1,6 @@
 services:
   server:
     image: amanelgau/excelant-develop:server-latest
-    build:
-      target: production
     command: node ./build/src/server.js
     ports:
       - 4040:4000
