@@ -24,5 +24,3 @@ services:
       - REACT_APP_BACK_URI=http://localhost:4040/graphql
     volumes:
       - ./web-client/src/:/web-client/src/
-    environment:
-      - REACT_APP_BACK_URI=http://localhost:4040/graphql
