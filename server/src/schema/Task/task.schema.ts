@@ -26,6 +26,10 @@ class Task {
   @Field()
   @prop({ required: true })
   dueDate: Date;
+
+  @Field({ description: 'the description of the task' })
+  @prop({ required: false })
+  description: string;
 }
 
 export default Task;

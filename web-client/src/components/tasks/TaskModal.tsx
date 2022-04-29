@@ -43,8 +43,9 @@ const TaskModal: React.FC<{
     assigne: task.assigne,
     dueDate: task.dueDate,
     project: {
-      "_id": task.project._id || "",
+      _id: task.project._id || "",
     },
+    description: task.description,
   });
 
   const [updateTask] = useMutation(new GqlRequest("Task").update("name"));
@@ -69,7 +70,7 @@ const TaskModal: React.FC<{
   };
 
   const setFieldValue = (
-    key: "name" | "dueDate" | "status" | "assigne" | "project",
+    key: "name" | "dueDate" | "status" | "assigne" | "project" | "description",
     value: any
   ) => {
     setModifiedTask({
@@ -105,12 +106,23 @@ const TaskModal: React.FC<{
                 {task.name}
               </Typography>
             )}
-            <Typography variant="body1" sx={{ mb: 4 }}>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab alias
-              architecto atque commodi corporis debitis deleniti deserunt
-              dolorem doloremque eaque impedit, inventore laudantium libero
-              magnam maxime nisi quo tempore voluptatibus.
-            </Typography>
+            {modify ? (
+              <TextField
+                type="text"
+                variant="outlined"
+                value={modifiedTask.description}
+                onChange={(event) => {
+                  setFieldValue("description", event.target.value);
+                }}
+                sx={{ flexGrow: 1 }}
+                multiline
+                minRows={5}
+              />
+            ) : (
+              <Typography variant="body1" sx={{ mb: 4 }}>
+                {task.description}
+              </Typography>
+            )}
             <Box
               sx={{
                 display: "flex",
@@ -140,7 +152,7 @@ const TaskModal: React.FC<{
                     label="Project status"
                     value={modifiedTask.project._id || " "}
                     onChange={(event) =>
-                      setFieldValue("project", {"_id": event.target.value})
+                      setFieldValue("project", { _id: event.target.value })
                     }
                   >
                     {allProjects.map((project: Partial<ProjectType>) => (

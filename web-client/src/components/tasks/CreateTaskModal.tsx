@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { DatePicker } from "@mui/lab";
 import React from "react";
-import moment from 'moment';
+import moment from "moment";
 import { Formik, Form } from "formik";
 import { gql, useMutation } from "@apollo/client";
 import { modalStyle } from "../../_utils/modalStyle";
@@ -24,28 +24,29 @@ interface CreateTaskInput {
   name: string;
   project: {
     _id: string;
-  }
+  };
   status: string;
   assigne: string;
   dueDate: moment.Moment;
+  description: string;
 }
 
 const defaultValues: CreateTaskInput = {
   name: "",
   project: {
-    "_id": "",
+    _id: "",
   },
   status: "",
   assigne: "",
   dueDate: moment(),
+  description: "",
 };
 
-const CreateTaskModal: React.FC<{ projects: Object[], open: boolean; handleClose: () => void }> = ({
-  projects,
-  open,
-  handleClose,
-}) => {
-  
+const CreateTaskModal: React.FC<{
+  projects: Object[];
+  open: boolean;
+  handleClose: () => void;
+}> = ({ projects, open, handleClose }) => {
   const CREATE_TASK = gql`
     mutation createTask($input: CreateTaskInput!) {
       createTask(input: $input) {
@@ -56,11 +57,11 @@ const CreateTaskModal: React.FC<{ projects: Object[], open: boolean; handleClose
         status
         assigne
         dueDate
+        description
       }
     }
   `;
-  const [createTask, { loading } ] = useMutation(CREATE_TASK);
-
+  const [createTask, { loading }] = useMutation(CREATE_TASK);
 
   const onSubmit = (values: CreateTaskInput) => {
     try {
@@ -106,12 +107,15 @@ const CreateTaskModal: React.FC<{ projects: Object[], open: boolean; handleClose
                           name="project['_id']"
                           labelId="projects-label"
                           label="Select a project"
-                          value={values.project._id  ?? " "}
+                          value={values.project._id ?? " "}
                           onChange={handleChange}
                         >
-                          {projects && projects.map((project: Partial<ProjectType>) => (
-                            <MenuItem key={project._id} value={project._id}>{project.name}</MenuItem>
-                          ))}
+                          {projects &&
+                            projects.map((project: Partial<ProjectType>) => (
+                              <MenuItem key={project._id} value={project._id}>
+                                {project.name}
+                              </MenuItem>
+                            ))}
                         </Select>
                       </FormControl>
                       <FormControl sx={{ flexGrow: 1 }} size="small">
@@ -163,19 +167,14 @@ const CreateTaskModal: React.FC<{ projects: Object[], open: boolean; handleClose
                         )}
                       />
                     </Box>
-                    {/**
-                     * The description field
-                     * Disabled because actually not supported
-                     */}
                     <TextField
                       name="description"
-                      value=""
+                      value={values.description}
                       onChange={handleChange}
                       label="Description"
                       size="small"
                       multiline
                       minRows={5}
-                      disabled
                     />
                     <Box display="flex" justifyContent="space-evenly">
                       <Button
