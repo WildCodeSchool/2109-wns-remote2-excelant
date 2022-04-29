@@ -48,7 +48,11 @@ const CreateTaskModal: React.FC<{
   open: boolean;
   handleClose: () => void;
 }> = ({ projects, open, handleClose }) => {
-  const [notify, setNotify] = useState({ isOpen: false, message: "" ,type: "" });
+  const [notify, setNotify] = useState({
+    isOpen: false,
+    message: "",
+    type: "",
+  });
   const CREATE_TASK = gql`
     mutation createTask($input: CreateTaskInput!) {
       createTask(input: $input) {
@@ -68,7 +72,11 @@ const CreateTaskModal: React.FC<{
   const onSubmit = (values: CreateTaskInput) => {
     try {
       createTask({ variables: { input: values } });
-      setNotify({ isOpen: true, message: "Your task has been created successfully!", type: "success" });
+      setNotify({
+        isOpen: true,
+        message: "Your task has been created successfully!",
+        type: "success",
+      });
     } catch (err) {
       // eslint-disable-next-line
       console.log("Error", err);
@@ -79,148 +87,148 @@ const CreateTaskModal: React.FC<{
 
   return (
     <>
-    <Modal open={open} onClose={handleClose}>
-      <Card sx={{ ...modalStyle, padding: "8px 24px" }}>
-        <CardHeader title="Create a new task" sx={{ textAlign: "center" }} />
-        <CardContent>
-          {open && (
-            <Formik
-              initialValues={defaultValues}
-              onSubmit={(values) => onSubmit(values)}
-            >
-              {({ values, handleChange, setFieldValue }) => (
-                <Form>
-                  <Box display="flex" flexDirection="column" gap={2}>
-                    <TextField
-                      name="name"
-                      value={values.name}
-                      onChange={handleChange}
-                      label="Name"
-                      size="small"
-                    />
-                    <Box
-                      display="flex"
-                      sx={{ flexDirection: { xs: "column", md: "row" } }}
-                      gap={1}
-                    >
-                      <FormControl sx={{ flexGrow: 1 }} size="small">
-                        <InputLabel id="projects-label">
-                          Select a project
-                        </InputLabel>
-                        <Select
-                          name="project['_id']"
-                          labelId="projects-label"
-                          label="Select a project"
-                          value={values.project._id ?? " "}
-                          onChange={handleChange}
-                        >
-                          {projects &&
-                            projects.map((project: Partial<ProjectType>) => (
-                              <MenuItem key={project._id} value={project._id}>
-                                {project.name}
-                              </MenuItem>
-                            ))}
-                        </Select>
-                      </FormControl>
-                      <FormControl sx={{ flexGrow: 1 }} size="small">
-                        <InputLabel id="task-status-label">
-                          Task status
-                        </InputLabel>
-                        <Select
-                          name="status"
-                          labelId="task-status-label"
-                          label="Task status"
-                          onChange={handleChange}
-                          value={values.status}
-                        >
-                          <MenuItem value="ongoing">En cours</MenuItem>
-                          <MenuItem value="done">Terminé</MenuItem>
-                          <MenuItem value="archived">Archivé</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Box>
-                    <Box
-                      display="flex"
-                      sx={{ flexDirection: { xs: "column", md: "row" } }}
-                      gap={1}
-                    >
+      <Modal open={open} onClose={handleClose}>
+        <Card sx={{ ...modalStyle, padding: "8px 24px" }}>
+          <CardHeader title="Create a new task" sx={{ textAlign: "center" }} />
+          <CardContent>
+            {open && (
+              <Formik
+                initialValues={defaultValues}
+                onSubmit={(values) => onSubmit(values)}
+              >
+                {({ values, handleChange, setFieldValue }) => (
+                  <Form>
+                    <Box display="flex" flexDirection="column" gap={2}>
                       <TextField
-                        name="assigne"
-                        value={values.assigne}
+                        name="name"
+                        value={values.name}
                         onChange={handleChange}
-                        label="Assigne"
+                        label="Name"
                         size="small"
-                        sx={{ flexGrow: 1 }}
                       />
-                      <DatePicker
-                        label="Due Date"
-                        inputFormat="DD/MM/YYYY"
-                        minDate={moment()}
-                        value={values.dueDate}
-                        onChange={(value): void => {
-                          setFieldValue("dueDate", value);
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            // eslint-disable-next-line
-                            {...params}
-                            name="dueDate"
-                            size="small"
-                            sx={{ flexGrow: 1 }}
-                          />
-                        )}
+                      <Box
+                        display="flex"
+                        sx={{ flexDirection: { xs: "column", md: "row" } }}
+                        gap={1}
+                      >
+                        <FormControl sx={{ flexGrow: 1 }} size="small">
+                          <InputLabel id="projects-label">
+                            Select a project
+                          </InputLabel>
+                          <Select
+                            name="project['_id']"
+                            labelId="projects-label"
+                            label="Select a project"
+                            value={values.project._id ?? " "}
+                            onChange={handleChange}
+                          >
+                            {projects &&
+                              projects.map((project: Partial<ProjectType>) => (
+                                <MenuItem key={project._id} value={project._id}>
+                                  {project.name}
+                                </MenuItem>
+                              ))}
+                          </Select>
+                        </FormControl>
+                        <FormControl sx={{ flexGrow: 1 }} size="small">
+                          <InputLabel id="task-status-label">
+                            Task status
+                          </InputLabel>
+                          <Select
+                            name="status"
+                            labelId="task-status-label"
+                            label="Task status"
+                            onChange={handleChange}
+                            value={values.status}
+                          >
+                            <MenuItem value="ongoing">En cours</MenuItem>
+                            <MenuItem value="done">Terminé</MenuItem>
+                            <MenuItem value="archived">Archivé</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Box>
+                      <Box
+                        display="flex"
+                        sx={{ flexDirection: { xs: "column", md: "row" } }}
+                        gap={1}
+                      >
+                        <TextField
+                          name="assigne"
+                          value={values.assigne}
+                          onChange={handleChange}
+                          label="Assigne"
+                          size="small"
+                          sx={{ flexGrow: 1 }}
+                        />
+                        <DatePicker
+                          label="Due Date"
+                          inputFormat="DD/MM/YYYY"
+                          minDate={moment()}
+                          value={values.dueDate}
+                          onChange={(value): void => {
+                            setFieldValue("dueDate", value);
+                          }}
+                          renderInput={(params) => (
+                            <TextField
+                              // eslint-disable-next-line
+                              {...params}
+                              name="dueDate"
+                              size="small"
+                              sx={{ flexGrow: 1 }}
+                            />
+                          )}
+                        />
+                      </Box>
+                      <TextField
+                        name="description"
+                        value={values.description}
+                        onChange={handleChange}
+                        label="Description"
+                        size="small"
+                        multiline
+                        minRows={5}
                       />
+                      <Box display="flex" justifyContent="space-evenly">
+                        <Button
+                          disabled={loading}
+                          variant="contained"
+                          onClick={() => onSubmit(values)}
+                          sx={{ width: "128px" }}
+                        >
+                          Create
+                          {loading && (
+                            <CircularProgress
+                              style={{
+                                width: 20,
+                                height: 20,
+                                marginLeft: "10px",
+                              }}
+                            />
+                          )}
+                        </Button>
+                        <Button
+                          variant="outlined"
+                          disabled={loading}
+                          onClick={handleClose}
+                          color="error"
+                          sx={{ width: "128px" }}
+                        >
+                          Cancel
+                        </Button>
+                      </Box>
                     </Box>
-                    <TextField
-                      name="description"
-                      value={values.description}
-                      onChange={handleChange}
-                      label="Description"
-                      size="small"
-                      multiline
-                      minRows={5}
-                    />
-                    <Box display="flex" justifyContent="space-evenly">
-                      <Button
-                        disabled={loading}
-                        variant="contained"
-                        onClick={() => onSubmit(values)}
-                        sx={{ width: "128px" }}
-                      >
-                        Create
-                        {loading && (
-                          <CircularProgress
-                            style={{
-                              width: 20,
-                              height: 20,
-                              marginLeft: "10px",
-                            }}
-                          />
-                        )}
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        disabled={loading}
-                        onClick={handleClose}
-                        color="error"
-                        sx={{ width: "128px" }}
-                      >
-                        Cancel
-                      </Button>
-                    </Box>
-                  </Box>
-                </Form>
-              )}
-            </Formik>
-          )}
-        </CardContent>
-      </Card>
-    </Modal>
+                  </Form>
+                )}
+              </Formik>
+            )}
+          </CardContent>
+        </Card>
+      </Modal>
       <Notification
-          isOpen={notify.isOpen}
-          message={notify.message}
-          type="success"
-          setNotify={setNotify}
+        isOpen={notify.isOpen}
+        message={notify.message}
+        type="success"
+        setNotify={setNotify}
       />
     </>
   );

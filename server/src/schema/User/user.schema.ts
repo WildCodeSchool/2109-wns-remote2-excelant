@@ -51,7 +51,7 @@ class User {
   password: string;
 
   @Field(() => String)
-  @prop( { required: true })
+  @prop({ required: true })
   confirmPassword: string;
 }
 
