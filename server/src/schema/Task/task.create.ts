@@ -18,8 +18,8 @@ class CreateTaskInput {
   @Field()
   dueDate: Date;
 
-  @Field({ description: 'the description of the task' })
-  description: string;
+  @Field({ description: 'the description of the task', nullable: true })
+  description?: string;
 }
 
 export default CreateTaskInput;

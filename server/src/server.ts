@@ -55,7 +55,7 @@ async function bootstrap() {
   app.listen({ port }, () => {
     // eslint-disable-next-line no-console
     console.log(
-      `App is listening on http://localhost:${port}/${server.graphqlPath}`
+      `App is listening on http://localhost:${port}${server.graphqlPath}`
     );
   });
 
