@@ -17,6 +17,9 @@ class UpdateTaskInput {
 
   @Field()
   dueDate: Date;
+
+  @Field({ description: 'the description of the task', nullable: true })
+  description?: string;
 }
 
 export default UpdateTaskInput;

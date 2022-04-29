@@ -33,8 +33,9 @@ const TaskTable: React.FC<{ reload: number }> = ({ reload }) => {
   const [tasks, setTasks] = useState<TaskType[]>([]);
   const [totalPages, setTotalPages] = useState<number>(0);
   const { data, loading, refetch } = useQuery(
+
       new GqlRequest("Task").getByLimitAndPage(
-          "docs { _id, name, status, project, { _id, name }, assigne, dueDate }, totalPages"
+          "docs { _id, name, status, project, { _id, name }, assigne, dueDate, description }, totalPages"
       ),
       { variables: { input: { limit, page } } }
   );

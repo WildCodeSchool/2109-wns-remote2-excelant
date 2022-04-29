@@ -7,4 +7,5 @@ export type TaskType = {
   project: Partial<ProjectType>;
   assigne: string;
   dueDate: string;
+  description: string;
 };
