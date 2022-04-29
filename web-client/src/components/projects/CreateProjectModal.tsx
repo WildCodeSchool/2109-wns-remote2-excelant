@@ -19,6 +19,7 @@ import { useMutation } from "@apollo/client";
 import moment from "moment";
 import { modalStyle } from "../../_utils/modalStyle";
 import GqlRequest from "../../_graphql/GqlRequest";
+import Notification from "../../_utils/Notification";
 
 type Status = string;
 
@@ -41,6 +42,7 @@ const CreateProjectModal: React.FC<{
   handleClose: () => void;
 }> = ({ open, handleClose }) => {
   const [loading, setLoading] = useState(false);
+  const [notify, setNotify] = useState({ isOpen: false, message: "" ,type: "" });
   const [createProject] = useMutation(
     new GqlRequest("Project").create("name, status, projectManager, dueDate")
   );
@@ -49,6 +51,7 @@ const CreateProjectModal: React.FC<{
     setLoading(true);
     try {
       createProject({ variables: { input: values } });
+      setNotify({ isOpen: true, message: "Your project has been created successfully!", type: "success" });
     } catch (err) {
       // eslint-disable-next-line
       console.log("Error", err);
@@ -59,6 +62,7 @@ const CreateProjectModal: React.FC<{
   };
 
   return (
+    <>
     <Modal open={open} onClose={handleClose}>
       <Card sx={{ ...modalStyle, padding: "8px 24px" }}>
         <CardHeader title="Create a new project" sx={{ textAlign: "center" }} />
@@ -174,6 +178,13 @@ const CreateProjectModal: React.FC<{
         </CardContent>
       </Card>
     </Modal>
+      <Notification
+          isOpen={notify.isOpen}
+          message={notify.message}
+          type="success"
+          setNotify={setNotify}
+      />
+    </>
   );
 };
 
