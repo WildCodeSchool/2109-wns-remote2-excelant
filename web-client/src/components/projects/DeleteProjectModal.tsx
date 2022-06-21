@@ -34,15 +34,13 @@ const DeleteProjectModal: React.FC<{
       // eslint-disable-next-line
       console.log("Error", err);
     } finally {
-      // refetch();
       handleClose();
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    // TODO: update project state if a project has been deleted
-    if (result) setProjects(result);
+      refetch();
   }, [projects]);
 
   return (
