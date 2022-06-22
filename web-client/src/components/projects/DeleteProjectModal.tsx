@@ -1,11 +1,12 @@
 import { Modal, Card, CardHeader, CardActions, Button } from "@mui/material";
 import React, { useState, useEffect, useContext } from "react";
-import { useMutation } from "@apollo/client";
+import {useQuery, useMutation, gql} from "@apollo/client";
 import { modalStyle } from "../../_utils/modalStyle";
 import GqlRequest from "../../_graphql/GqlRequest";
 import { ProjectType } from "../../_types/_projectTypes";
 import Notification from "../../_utils/Notification";
 import ProjectContext from "../../context/ProjectContext";
+import {findAll} from "styled-components/test-utils";
 
 const DeleteProjectModal: React.FC<{
   open: boolean;
@@ -14,11 +15,30 @@ const DeleteProjectModal: React.FC<{
   project: ProjectType;
 }> = ({ open, handleClose, refetch, project }) => {
   const { projects, setProjects } = useContext(ProjectContext);
-  console.log(projects);
   const [loading, setLoading] = useState(false);
   const [notify, setNotify] = useState({ isOpen: false, message: "" ,type: "" });
 
-  const [deleteProject] = useMutation(new GqlRequest("Project").delete("name"));
+  // const { data } = useQuery(
+  //     new GqlRequest("Project").get(
+  //         "_id, name, status, projectManager, dueDate"
+  //     )
+  // );
+  const FIND_ALL_PROJECTS = gql`
+    query {
+      findAllProjects {
+        name
+        status
+        projectManager
+        dueDate
+      }
+    } 
+  `;
+  const { data } = useQuery(FIND_ALL_PROJECTS);
+  console.log(data);
+
+  const [deleteProject] = useMutation(new GqlRequest("Project").delete("name"), { refetchQueries: [
+      {query: FIND_ALL_PROJECTS},
+  ], awaitRefetchQueries: false});
 
   const handleDelete = async () => {
     setLoading(true);
@@ -26,20 +46,16 @@ const DeleteProjectModal: React.FC<{
       await deleteProject({
         variables: { input: { _id: project._id } },
       });
-      setNotify({isOpen: true, message: `The project ${project.name} has been deleted successfully!`, type: "info"});
+      setNotify({ isOpen: true, message: `The project ${project.name} has been deleted successfully!`, type: "info" });
     } catch (err) {
       // eslint-disable-next-line
       console.log("Error", err);
     } finally {
-      refetch();
+      // refetch();
       handleClose();
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    setProjects(projects);
-  }, [projects]);
 
   return (
     <>
