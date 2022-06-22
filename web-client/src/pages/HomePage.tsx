@@ -1,7 +1,8 @@
 import React from "react";
 import { Container, Typography } from "@mui/material";
 
-const HomePage: React.FC = ({ user }) => (
+const HomePage: React.FC = () => (
+
   <Container maxWidth="lg">
     <Typography variant="h1" sx={{ backgroundColor: "primary.light" }}>
       HomePage
