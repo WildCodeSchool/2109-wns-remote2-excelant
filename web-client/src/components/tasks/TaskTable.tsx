@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import {
   Box,
@@ -15,6 +15,7 @@ import { useQuery } from "@apollo/client";
 import { TaskType } from "../../_types/_taskTypes";
 import GqlRequest from "../../_graphql/GqlRequest";
 import TaskTableItem from "./TaskTableItem";
+import TaskContext from "../../context/TaskContext";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -26,7 +27,9 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
+
 const TaskTable: React.FC<{ reload: number }> = ({ reload }) => {
+  const [tasks, setTasks] = useState<TaskType[]>([]);
   const { data, loading, refetch } = useQuery(
     new GqlRequest("Task").get(
       "_id, name, status, project { _id, name }, assigne, dueDate"
@@ -43,6 +46,7 @@ const TaskTable: React.FC<{ reload: number }> = ({ reload }) => {
     <Box>Loading ... </Box>
   ) : (
     <>
+      <TaskContext.Provider value={{ tasks: data, setTasks: setTasks }}>
       <TableContainer component={Paper} sx={{ width: "100%" }}>
         <Table aria-label="simple table">
           <TableHead>
@@ -63,6 +67,7 @@ const TaskTable: React.FC<{ reload: number }> = ({ reload }) => {
           </TableBody>
         </Table>
       </TableContainer>
+      </TaskContext.Provider>
     </>
   );
 };

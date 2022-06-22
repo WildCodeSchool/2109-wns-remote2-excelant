@@ -16,7 +16,6 @@ const DeleteProjectModal: React.FC<{
   const [loading, setLoading] = useState(false);
   const [notify, setNotify] = useState({ isOpen: false, message: "" ,type: "" });
   const { projects, setProjects } = useContext(ProjectContext);
-  console.log(projects);
 
   const [deleteProject] = useMutation(new GqlRequest("Project").delete("name"));
   let result: any;
@@ -34,14 +33,15 @@ const DeleteProjectModal: React.FC<{
       // eslint-disable-next-line
       console.log("Error", err);
     } finally {
+      refetch();
       handleClose();
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-      refetch();
-  }, [projects]);
+  // useEffect(() => {
+  //     refetch();
+  // }, [projects]);
 
   return (
     <>
