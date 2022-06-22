@@ -15,6 +15,7 @@ const DeleteProjectModal: React.FC<{
 }> = ({ open, handleClose, refetch, project }) => {
   const { projects } = useContext(ProjectContext);
   const [loading, setLoading] = useState(false);
+  const [notify, setNotify] = useState({ isOpen: false, message: "" ,type: "" });
 
   const [deleteProject] = useMutation(new GqlRequest("Project").delete("name"));
 
@@ -24,6 +25,7 @@ const DeleteProjectModal: React.FC<{
       await deleteProject({
         variables: { input: { _id: project._id } },
       });
+      setNotify({isOpen: true, message: "Your project has been deleted successfully!", type: "info"});
     } catch (err) {
       // eslint-disable-next-line
       console.log("Error", err);
@@ -38,33 +40,41 @@ const DeleteProjectModal: React.FC<{
   }, [projects]);
 
   return (
-    <Modal open={open} onClose={handleClose}>
-      <Card
-        sx={{
-          ...modalStyle,
-          padding: "8px 24px",
-          width: { xs: "95%", sm: "80%", md: "auto" },
-        }}
-      >
-        <CardHeader
-          title={`Are you sur you want to delete ${project.name}?`}
-          sx={{ textAlign: "center" }}
-        />
-        <CardActions sx={{ display: "flex", justifyContent: "center", gap: 5 }}>
-          <Button onClick={handleDelete} disabled={loading} variant="contained">
-            Delete
-          </Button>
-          <Button
-            onClick={handleClose}
-            disabled={loading}
-            variant="outlined"
-            color="error"
-          >
-            Cancel
-          </Button>
-        </CardActions>
-      </Card>
-    </Modal>
+    <>
+      <Modal open={open} onClose={handleClose}>
+        <Card
+          sx={{
+            ...modalStyle,
+            padding: "8px 24px",
+            width: { xs: "95%", sm: "80%", md: "auto" },
+          }}
+        >
+          <CardHeader
+            title={`Are you sur you want to delete ${project.name}?`}
+            sx={{ textAlign: "center" }}
+          />
+          <CardActions sx={{ display: "flex", justifyContent: "center", gap: 5 }}>
+            <Button onClick={handleDelete} disabled={loading} variant="contained">
+              Delete
+            </Button>
+            <Button
+              onClick={handleClose}
+              disabled={loading}
+              variant="outlined"
+              color="error"
+            >
+              Cancel
+            </Button>
+          </CardActions>
+        </Card>
+      </Modal>
+      <Notification
+          isOpen={notify.isOpen}
+          message={notify.message}
+          type="info"
+          setNotify={setNotify}
+      />
+    </>
   );
 };
 
