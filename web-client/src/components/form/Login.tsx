@@ -9,6 +9,7 @@ import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { useQuery } from "@apollo/client";
+import { useLoginMutation } from "../../network/loginMutation";
 
 import ExcelantLogo from "../../images/logo_excelant.png";
 import { loginSchema } from "../../yupSchema/Login";
@@ -24,6 +25,8 @@ const Login: React.FC = () => {
   const { loading, data, refetch } = useQuery(
     new GqlRequest("User").get("_id, email, password")
   );
+  // we import our loginMutation here
+  const [loginMutation] = useLoginMutation();
 
   const formik = useFormik({
     initialValues: {

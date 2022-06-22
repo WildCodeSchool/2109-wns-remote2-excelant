@@ -18,7 +18,7 @@ class UserService {
 
   // eslint-disable-next-line class-methods-use-this
   async findOneUser(input: FindOneUserInput) {
-    const user = await UserModel.findOne(input);
+    const user = await UserModel.find().findByEmail(input.email);
     return user;
   }
 
