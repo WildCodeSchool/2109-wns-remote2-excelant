@@ -13,7 +13,8 @@ const DeleteProjectModal: React.FC<{
   refetch: () => void;
   project: ProjectType;
 }> = ({ open, handleClose, refetch, project }) => {
-  const { projects } = useContext(ProjectContext);
+  const { projects, setProjects } = useContext(ProjectContext);
+  console.log(projects);
   const [loading, setLoading] = useState(false);
   const [notify, setNotify] = useState({ isOpen: false, message: "" ,type: "" });
 
@@ -25,18 +26,19 @@ const DeleteProjectModal: React.FC<{
       await deleteProject({
         variables: { input: { _id: project._id } },
       });
-      setNotify({isOpen: true, message: "Your project has been deleted successfully!", type: "info"});
+      setNotify({isOpen: true, message: `The project ${project.name} has been deleted successfully!`, type: "info"});
     } catch (err) {
       // eslint-disable-next-line
       console.log("Error", err);
     } finally {
+      refetch();
       handleClose();
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    refetch();
+    setProjects(projects);
   }, [projects]);
 
   return (
