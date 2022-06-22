@@ -17,6 +17,7 @@ import React, { useState } from "react";
 import GqlRequest from "../../_graphql/GqlRequest";
 import { ProjectType } from "../../_types/_projectTypes";
 import { taskModalStyle } from "../../_utils/modalStyle";
+import Notification from "../../_utils/Notification";
 
 const ProjectModal: React.FC<{
   open: boolean;
@@ -31,6 +32,7 @@ const ProjectModal: React.FC<{
     projectManager: project.projectManager,
     dueDate: project.dueDate,
   });
+  const [notify, setNotify] = useState({ isOpen: false, message: "" ,type: "" });
 
   const [updateProject] = useMutation(new GqlRequest("Project").update("name"));
 
@@ -49,6 +51,7 @@ const ProjectModal: React.FC<{
       updateProject({
         variables: { id: project._id, input: modifiedProject },
       });
+      setNotify({ isOpen: true, message: `Your project ${project.name} has been modified successfully!`, type: "info" });
     } catch (err) {
       // eslint-disable-next-line
       console.log("Error", err);
@@ -68,6 +71,7 @@ const ProjectModal: React.FC<{
   };
 
   return (
+  <>
     <Modal open={open} onClose={handleClose}>
       <Card sx={{ ...taskModalStyle, padding: "24px 32px" }}>
         <Grid container sx={{ height: "100%" }}>
@@ -271,6 +275,13 @@ const ProjectModal: React.FC<{
         </Grid>
       </Card>
     </Modal>
+      <Notification
+          isOpen={notify.isOpen}
+          message={notify.message}
+          type="info"
+          setNotify={setNotify}
+      />
+  </>
   );
 };
 

@@ -1,9 +1,11 @@
 import { Modal, Card, CardHeader, CardActions, Button } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useMutation } from "@apollo/client";
 import { modalStyle } from "../../_utils/modalStyle";
 import GqlRequest from "../../_graphql/GqlRequest";
 import { ProjectType } from "../../_types/_projectTypes";
+import Notification from "../../_utils/Notification";
+import ProjectContext from "../../context/ProjectContext";
 
 const DeleteProjectModal: React.FC<{
   open: boolean;
@@ -11,6 +13,7 @@ const DeleteProjectModal: React.FC<{
   refetch: () => void;
   project: ProjectType;
 }> = ({ open, handleClose, refetch, project }) => {
+  const { projects } = useContext(ProjectContext);
   const [loading, setLoading] = useState(false);
 
   const [deleteProject] = useMutation(new GqlRequest("Project").delete("name"));
@@ -25,11 +28,14 @@ const DeleteProjectModal: React.FC<{
       // eslint-disable-next-line
       console.log("Error", err);
     } finally {
-      refetch();
       handleClose();
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    refetch();
+  }, [projects]);
 
   return (
     <Modal open={open} onClose={handleClose}>
