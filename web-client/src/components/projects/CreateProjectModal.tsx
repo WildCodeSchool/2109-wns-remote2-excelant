@@ -11,6 +11,7 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
+  FormHelperText,
 } from "@mui/material";
 import { DatePicker } from "@mui/lab";
 import React, { useState } from "react";
@@ -47,31 +48,60 @@ const CreateProjectModal: React.FC<{
     message: "",
     type: "",
   });
+  const [errors, setErrors] = useState<string[]>([]);
   const [createProject] = useMutation(
     new GqlRequest("Project").create("name, status, projectManager, dueDate")
   );
 
+  const checkInputs = (values: CreateProjectInput) => {
+    const newErrors: string[] = [];
+    if (!values.name) {
+      newErrors.push("no_name");
+    }
+    if (
+      !values.status ||
+      !["ongoing", "done", "archived"].includes(values.status)
+    ) {
+      newErrors.push("no_status");
+    }
+    if (!values.projectManager) {
+      newErrors.push("no_project_manager");
+    }
+    setErrors(newErrors);
+    return newErrors;
+  };
+
   const onSubmit = (values: CreateProjectInput) => {
-    setLoading(true);
     try {
+      setLoading(true);
+      if (checkInputs(values).length > 0) {
+        throw new Error("invalid inputs");
+      }
       createProject({ variables: { input: values } });
       setNotify({
         isOpen: true,
         message: "Your project has been created successfully!",
         type: "success",
       });
+      setErrors([]);
+      handleClose();
     } catch (err) {
       // eslint-disable-next-line
       console.log("Error", err);
     } finally {
       setLoading(false);
-      handleClose();
     }
   };
 
   return (
     <>
-      <Modal open={open} onClose={handleClose}>
+      <Modal
+        open={open}
+        onClose={() => {
+          setErrors([]);
+          handleClose();
+        }}
+      >
         <Card sx={{ ...modalStyle, padding: "8px 24px" }}>
           <CardHeader
             title="Create a new project"
@@ -97,9 +127,16 @@ const CreateProjectModal: React.FC<{
                           onChange={handleChange}
                           label="Project name"
                           sx={{ flexGrow: 1 }}
+                          error={errors.includes("no_name")}
+                          helperText={
+                            errors.includes("no_name") && "Please enter a name"
+                          }
                         />
                         <FormControl sx={{ flexGrow: 1 }}>
-                          <InputLabel id="status-label">
+                          <InputLabel
+                            id="status-label"
+                            error={errors.includes("no_status")}
+                          >
                             Project status
                           </InputLabel>
                           <Select
@@ -108,11 +145,16 @@ const CreateProjectModal: React.FC<{
                             label="Project status"
                             onChange={handleChange}
                             value={values.status}
+                            error={errors.includes("no_status")}
                           >
                             <MenuItem value="ongoing">En cours</MenuItem>
                             <MenuItem value="done">Terminé</MenuItem>
                             <MenuItem value="archived">Archivé</MenuItem>
                           </Select>
+                          <FormHelperText error>
+                            {errors.includes("no_status") &&
+                              "Please select a valid status"}
+                          </FormHelperText>
                         </FormControl>
                       </Box>
                       <Box
@@ -126,6 +168,11 @@ const CreateProjectModal: React.FC<{
                           onChange={handleChange}
                           label="Project Manager"
                           sx={{ flexGrow: 1 }}
+                          error={errors.includes("no_project_manager")}
+                          helperText={
+                            errors.includes("no_project_manager") &&
+                            "Please enter a user name"
+                          }
                         />
                         <DatePicker
                           label="Due Date"
@@ -174,7 +221,10 @@ const CreateProjectModal: React.FC<{
                         <Button
                           variant="outlined"
                           disabled={loading}
-                          onClick={handleClose}
+                          onClick={() => {
+                            setErrors([]);
+                            handleClose();
+                          }}
                           color="error"
                           sx={{ width: "128px" }}
                         >
