@@ -78,11 +78,15 @@ const CreateTaskModal: React.FC<{
     }
     if (!values.project._id) {
       newErrors.push("no_project");
+    } else if (
+      !projects.filter((project) => project._id === values.project._id)
+    ) {
+      newErrors.push("no_project");
     }
     if (!values.status) {
       newErrors.push("no_status");
     } else if (!["ongoing", "done", "archived"].includes(values.status)) {
-      newErrors.push("invalid_status");
+      newErrors.push("no_status");
     }
     if (!values.assigne) {
       newErrors.push("no_assigne");
@@ -172,7 +176,7 @@ const CreateTaskModal: React.FC<{
                           </Select>
                           {errors.includes("no_project") && (
                             <FormHelperText error>
-                              Please select a project
+                              Please select a valid project
                             </FormHelperText>
                           )}
                         </FormControl>
@@ -197,7 +201,7 @@ const CreateTaskModal: React.FC<{
                           </Select>
                           {errors.includes("no_status") && (
                             <FormHelperText error>
-                              Please select a status
+                              Please select a valid status
                             </FormHelperText>
                           )}
                         </FormControl>
