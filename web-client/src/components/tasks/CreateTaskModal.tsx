@@ -11,6 +11,7 @@ import {
   Select,
   MenuItem,
   Box,
+  FormHelperText,
 } from "@mui/material";
 import { DatePicker } from "@mui/lab";
 import React, { useState } from "react";
@@ -44,7 +45,7 @@ const defaultValues: CreateTaskInput = {
 };
 
 const CreateTaskModal: React.FC<{
-  projects: Object[];
+  projects: { _id: string; _name: string }[];
   open: boolean;
   handleClose: () => void;
 }> = ({ projects, open, handleClose }) => {
@@ -53,6 +54,7 @@ const CreateTaskModal: React.FC<{
     message: "",
     type: "",
   });
+  const [errors, setErrors] = useState<string[]>([]);
   const CREATE_TASK = gql`
     mutation createTask($input: CreateTaskInput!) {
       createTask(input: $input) {
@@ -69,25 +71,56 @@ const CreateTaskModal: React.FC<{
   `;
   const [createTask, { loading }] = useMutation(CREATE_TASK);
 
-  const onSubmit = (values: CreateTaskInput) => {
+  const checkInput = (values: CreateTaskInput) => {
+    const newErrors: string[] = [];
+    if (!values.name) {
+      newErrors.push("no_name");
+    }
+    if (!values.project._id) {
+      newErrors.push("no_project");
+    }
+    if (!values.status) {
+      newErrors.push("no_status");
+    } else if (!["ongoing", "done", "archived"].includes(values.status)) {
+      newErrors.push("invalid_status");
+    }
+    if (!values.assigne) {
+      newErrors.push("no_assigne");
+    }
+    setErrors(newErrors);
+    return newErrors;
+  };
+
+  const onSubmit = async (values: CreateTaskInput) => {
     try {
-      createTask({ variables: { input: values } });
-      setNotify({
-        isOpen: true,
-        message: "Your task has been created successfully!",
-        type: "success",
-      });
+      if (checkInput(values).length > 0) {
+        throw new Error("Invalid Inputs");
+      }
+      const res = await createTask({ variables: { input: values } });
+      if (res) {
+        setNotify({
+          isOpen: true,
+          message: "Your task has been created successfully!",
+          type: "success",
+        });
+        setErrors([]);
+        handleClose();
+      }
     } catch (err) {
       // eslint-disable-next-line
       console.log("Error", err);
-    } finally {
-      handleClose();
     }
   };
 
   return (
     <>
-      <Modal open={open} onClose={handleClose}>
+      <Modal
+        open={open}
+        onClose={() => {
+          setErrors([]);
+          handleClose();
+        }}
+      >
         <Card sx={{ ...modalStyle, padding: "8px 24px" }}>
           <CardHeader title="Create a new task" sx={{ textAlign: "center" }} />
           <CardContent>
@@ -105,6 +138,10 @@ const CreateTaskModal: React.FC<{
                         onChange={handleChange}
                         label="Name"
                         size="small"
+                        error={errors.includes("no_name")}
+                        helperText={
+                          errors.includes("no_name") && "Please enter a name"
+                        }
                       />
                       <Box
                         display="flex"
@@ -112,7 +149,10 @@ const CreateTaskModal: React.FC<{
                         gap={1}
                       >
                         <FormControl sx={{ flexGrow: 1 }} size="small">
-                          <InputLabel id="projects-label">
+                          <InputLabel
+                            id="projects-label"
+                            error={errors.includes("no_project")}
+                          >
                             Select a project
                           </InputLabel>
                           <Select
@@ -121,6 +161,7 @@ const CreateTaskModal: React.FC<{
                             label="Select a project"
                             value={values.project._id ?? " "}
                             onChange={handleChange}
+                            error={errors.includes("no_project")}
                           >
                             {projects &&
                               projects.map((project: Partial<ProjectType>) => (
@@ -129,9 +170,17 @@ const CreateTaskModal: React.FC<{
                                 </MenuItem>
                               ))}
                           </Select>
+                          {errors.includes("no_project") && (
+                            <FormHelperText error>
+                              Please select a project
+                            </FormHelperText>
+                          )}
                         </FormControl>
                         <FormControl sx={{ flexGrow: 1 }} size="small">
-                          <InputLabel id="task-status-label">
+                          <InputLabel
+                            id="task-status-label"
+                            error={errors.includes("no_status")}
+                          >
                             Task status
                           </InputLabel>
                           <Select
@@ -140,11 +189,17 @@ const CreateTaskModal: React.FC<{
                             label="Task status"
                             onChange={handleChange}
                             value={values.status}
+                            error={errors.includes("no_status")}
                           >
                             <MenuItem value="ongoing">En cours</MenuItem>
                             <MenuItem value="done">Terminé</MenuItem>
                             <MenuItem value="archived">Archivé</MenuItem>
                           </Select>
+                          {errors.includes("no_status") && (
+                            <FormHelperText error>
+                              Please select a status
+                            </FormHelperText>
+                          )}
                         </FormControl>
                       </Box>
                       <Box
@@ -159,6 +214,11 @@ const CreateTaskModal: React.FC<{
                           label="Assigne"
                           size="small"
                           sx={{ flexGrow: 1 }}
+                          error={errors.includes("no_assigne")}
+                          helperText={
+                            errors.includes("no_assigne") &&
+                            "Please enter a assigned user"
+                          }
                         />
                         <DatePicker
                           label="Due Date"
@@ -209,7 +269,10 @@ const CreateTaskModal: React.FC<{
                         <Button
                           variant="outlined"
                           disabled={loading}
-                          onClick={handleClose}
+                          onClick={() => {
+                            setErrors([]);
+                            handleClose();
+                          }}
                           color="error"
                           sx={{ width: "128px" }}
                         >
