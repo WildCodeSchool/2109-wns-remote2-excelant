@@ -71,20 +71,22 @@ const CreateProjectModal: React.FC<{
     return newErrors;
   };
 
-  const onSubmit = (values: CreateProjectInput) => {
+  const onSubmit = async (values: CreateProjectInput) => {
     try {
       setLoading(true);
       if (checkInputs(values).length > 0) {
         throw new Error("invalid inputs");
       }
-      createProject({ variables: { input: values } });
-      setNotify({
-        isOpen: true,
-        message: "Your project has been created successfully!",
-        type: "success",
-      });
-      setErrors([]);
-      handleClose();
+      const res = await createProject({ variables: { input: values } });
+      if (res) {
+        setNotify({
+          isOpen: true,
+          message: "Your project has been created successfully!",
+          type: "success",
+        });
+        setErrors([]);
+        handleClose();
+      }
     } catch (err) {
       // eslint-disable-next-line
       console.log("Error", err);
