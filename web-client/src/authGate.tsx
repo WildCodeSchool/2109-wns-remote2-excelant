@@ -1,11 +1,10 @@
 import GqlRequest from "./_graphql/GqlRequest";
 import { useQuery } from "@apollo/client";
-// Import routes
-import { Link, Navigate } from "react-router-dom";
-// import { Login } from "./components/form/Login";
+import { useNavigate } from "react-router-dom";
 import { useAuthToken } from "./hooks/useAuthToken";
 
 export const AuthGate = () => {
+    const navigate = useNavigate();
 
     // Using our authToken. Can be undefined
     const [authToken] = useAuthToken();
@@ -14,10 +13,12 @@ export const AuthGate = () => {
     const userData = useQuery(new GqlRequest("User").getOne(
         "name, email"
     ));
-    console.log(authToken);
-    console.log(userData);
 
-    // if (userData.data && authToken) {
-    //     return <Link to="/" user={} />
-    // }
+    // If both are loaded, we serve our app
+    if (userData.data && authToken) {
+        // TODO: redirect user on private routes
+    }
+
+    // Otherwise, we diplay the login form
+    return navigate("/login");
 }

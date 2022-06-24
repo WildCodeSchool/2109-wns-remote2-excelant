@@ -1,5 +1,5 @@
-import { gql, useMutation } from "@apollo/client";
-import { useAuthToken } from "../hooks/useAuthToken";
+import {gql, MutationResult, useMutation} from "@apollo/client";
+import { useAuthToken } from "./useAuthToken";
 
 export const loginMutationGQL = gql`
         mutation login($email: String!, $password: String!) {
@@ -7,7 +7,7 @@ export const loginMutationGQL = gql`
         }
     `;
 
-export const useLoginMutation = () => {
+export const useLoginMutation: () => [(email: string, password: string) => Promise<any>, MutationResult<any>] = () => {
     const [_, setAuthToken] = useAuthToken();
 
     const [mutation, mutationResults] = useMutation(loginMutationGQL, {
@@ -18,13 +18,13 @@ export const useLoginMutation = () => {
     });
 
     // We have rewritten the function to have a cleaner interface
-    const login = (user: any, password: string) => {
+    const login = (email: string, password: string) => {
         return mutation({
             variables: {
-                login: user,
+                email,
                 password
             },
         });
     }
     return [login, mutationResults]
-}
+};
