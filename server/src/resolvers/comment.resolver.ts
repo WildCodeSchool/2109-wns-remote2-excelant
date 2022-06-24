@@ -1,5 +1,6 @@
 import { Mutation, Arg } from 'type-graphql';
 import CreateCommentInput from '../schema/Comment/comment.create';
+import UpdateCommentInput from '../schema/Comment/comment.update';
 import CommentInput from '../schema/Comment/comment.input';
 import Comment from '../schema/Comment/comment.schema';
 import CommentService from '../service/comment.service';
@@ -16,7 +17,7 @@ class CommentResolver {
   }
 
   @Mutation(() => Comment)
-  updateComment(@Arg('_id') id: string, @Arg('input') input: CreateCommentInput) {
+  updateComment(@Arg('_id') id: string, @Arg('input') input: UpdateCommentInput) {
     return this.commentService.updateComment(id, input);
   }
 
