@@ -48,7 +48,7 @@ class TaskService {
 
   // eslint-disable-next-line
   async updateTask(id: string, input: UpdateTaskInput) {
-    const task = await TaskModel.findByIdAndUpdate(id, input);
+    const task = await TaskModel.findByIdAndUpdate(id, input, {new: true});
     await task?.populate('project');
     await task?.populate({
       path: 'assigne',
