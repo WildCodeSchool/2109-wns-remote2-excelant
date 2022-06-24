@@ -7,23 +7,26 @@ import "./index.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import Theme from "./theme/Theme";
+import { CookiesProvider } from "react-cookie";
 
 const client = new ApolloClient({
-  uri: process.env.REACT_APP_BACK_URI,
-  cache: new InMemoryCache(),
+    uri: process.env.REACT_APP_BACK_URI,
+    cache: new InMemoryCache(),
 });
 
 ReactDOM.render(
-  <ApolloProvider client={client}>
-    <LocalizationProvider dateAdapter={DateAdapter}>
-      <React.StrictMode>
-        <Theme>
-          <App />
-        </Theme>
-      </React.StrictMode>
-    </LocalizationProvider>
-  </ApolloProvider>,
-  document.getElementById("root")
+    <React.StrictMode>
+        <ApolloProvider client={client}>
+            <LocalizationProvider dateAdapter={DateAdapter}>
+                <CookiesProvider>
+                    <Theme>
+                        <App/>
+                    </Theme>
+                </CookiesProvider>
+            </LocalizationProvider>
+        </ApolloProvider>
+    </React.StrictMode>,
+    document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function

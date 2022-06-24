@@ -20,10 +20,11 @@ const Register: React.FC = () => {
   const [toHome, setToHome] = useState(false);
   const [loading, setLoading] = useState(false);
   const [createUser] = useMutation(
-    new GqlRequest("User").create("email, password, confirmPassword")
+    new GqlRequest("User").create("name, email, password, confirmPassword")
   );
   const formik = useFormik({
     initialValues: {
+      name: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -60,6 +61,18 @@ const Register: React.FC = () => {
             Sign Up
           </Typography>
           <form onSubmit={formik.handleSubmit}>
+            <TextField
+                fullWidth
+                margin="normal"
+                id="name"
+                label="Name"
+                name="name"
+                type="text"
+                value={formik.values.name}
+                onChange={formik.handleChange}
+                error={formik.touched.name && Boolean(formik.errors.name)}
+                helperText={formik.touched.name && formik.errors.name}
+            />
             <TextField
               fullWidth
               margin="normal"

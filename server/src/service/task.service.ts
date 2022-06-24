@@ -8,7 +8,7 @@ import FindTaskByLimitAndPageInput from '../schema/Task/task.findpage';
 class TaskService {
   // eslint-disable-next-line
   async findTasks() {
-    const tasks = await TaskModel.find().populate('project').lean();
+    const tasks = await TaskModel.find().populate('project').populate('comments').lean();
     return tasks;
   }
 
@@ -21,6 +21,7 @@ class TaskService {
   async findOne(input: FindOneTaskById) {
     const task = await TaskModel.findById(input);
     await task?.populate('project');
+    await task?.populate('comments');
     return task;
   }
 
@@ -35,6 +36,7 @@ class TaskService {
   async updateTask(id: string, input: UpdateTaskInput) {
     const task = await TaskModel.findByIdAndUpdate(id, input);
     await task?.populate('project');
+    await task?.populate('comments');
     return task;
   }
 

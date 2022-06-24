@@ -13,7 +13,9 @@ const TasksPage: React.FC = () => {
     setOpen(false);
     setReload(reload + 1);
   };
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState<{ _id: string; _name: string }[]>(
+    []
+  );
 
   const { data } = useQuery(new GqlRequest("Project").get("_id, name"));
 
