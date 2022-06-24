@@ -8,7 +8,11 @@ import FindTaskByLimitAndPageInput from '../schema/Task/task.findpage';
 class TaskService {
   // eslint-disable-next-line
   async findTasks() {
-    const tasks = await TaskModel.find().populate('project').lean();
+    const tasks = await TaskModel.find().populate('project').populate({
+      path: 'assigne',
+      select:
+        '_id, name',
+    }).lean();
     return tasks;
   }
 
@@ -21,6 +25,11 @@ class TaskService {
   async findOne(input: FindOneTaskById) {
     const task = await TaskModel.findById(input);
     await task?.populate('project');
+    await task?.populate({
+      path: 'assigne',
+      select:
+        '_id, name',
+    });
     return task;
   }
 
@@ -28,6 +37,11 @@ class TaskService {
   async createTask(input: CreateTaskInput) {
     const task = await TaskModel.create(input);
     await task.populate('project');
+    await task.populate({
+      path: 'assigne',
+      select:
+        '_id, name',
+    });
     return task;
   }
 
@@ -35,6 +49,11 @@ class TaskService {
   async updateTask(id: string, input: UpdateTaskInput) {
     const task = await TaskModel.findByIdAndUpdate(id, input);
     await task?.populate('project');
+    await task?.populate({
+      path: 'assigne',
+      select:
+        '_id, name',
+    });
     return task;
   }
 
@@ -42,6 +61,11 @@ class TaskService {
   async deleteTask(input: DeleteTaskInput) {
     const task = await TaskModel.findByIdAndDelete(input._id);
     await task?.populate('project');
+    await task?.populate({
+      path: 'assigne',
+      select:
+        '_id, name',
+    });
     return task;
   }
 }

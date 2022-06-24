@@ -2,6 +2,7 @@ import { mongoose, plugin, prop, Ref } from '@typegoose/typegoose';
 import { Field, ID, ObjectType } from 'type-graphql';
 import mongoosePaginate from 'mongoose-paginate-v2';
 import Project from '../Project/project.schema';
+import User from '../User/user.schema';
 import PaginateMethod from '../../utils/PaginateMethodType';
 
 @ObjectType()
@@ -22,9 +23,9 @@ class Task {
   @prop({ required: true })
   status: string;
 
-  @Field(() => String)
-  @prop({ required: true })
-  assigne: string;
+  @Field(() => User)
+  @prop({ ref: () => User})
+  assigne: Ref<User>;
 
   @Field()
   @prop({ required: true })
