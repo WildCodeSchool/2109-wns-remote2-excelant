@@ -1,9 +1,9 @@
-import { Field, ID, InputType } from 'type-graphql';
+import { Field, InputType } from 'type-graphql';
 
 @InputType()
 class FindOneUserInput {
-  @Field(() => ID)
-  _id: string;
+  @Field(() => String)
+  email: string;
 }
 
 export default FindOneUserInput;
