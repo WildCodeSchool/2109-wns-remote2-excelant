@@ -21,7 +21,7 @@ interface LoginFormValues {
 }
 
 const Login: React.FC = () => {
-  const [toHome, _] = useState(false);
+  const [toHome, setHome] = useState(false);
   const navigate = useNavigate();
   const { data } = useQuery(
     new GqlRequest("User").get("_id, email, password")
