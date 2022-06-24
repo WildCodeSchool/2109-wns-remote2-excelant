@@ -1,4 +1,4 @@
-import {gql, MutationResult, useMutation} from "@apollo/client";
+import { gql, FetchResult, MutationResult, useMutation} from "@apollo/client";
 import { useAuthToken } from "./useAuthToken";
 
 export const loginMutationGQL = gql`
@@ -7,8 +7,8 @@ export const loginMutationGQL = gql`
         }
     `;
 
-export const useLoginMutation: () => [(email: string, password: string) => Promise<any>, MutationResult<any>] = () => {
-    const [_, setAuthToken, removeAuthToken] = useAuthToken();
+export const useLoginMutation: <TData>() => [(email: string, password: string) => Promise<FetchResult<TData>>, MutationResult<TData>] = () => {
+    const [authToken, setAuthToken, removeAuthToken] = useAuthToken();
 
     const [mutation, mutationResults] = useMutation(loginMutationGQL, {
         // If the mutation succeed, we save the token for later

@@ -37,8 +37,12 @@ const Login: React.FC = () => {
     },
     validationSchema: loginSchema,
     onSubmit: async (values: LoginFormValues) => {
-      await login(values.email, values.password);
-      navigate('/');
+      try {
+        await login(values.email, values.password);
+        navigate('/');
+      } catch (e: any) {
+        alert(`Error! ${e.message}`)
+      }
     },
   });
 
