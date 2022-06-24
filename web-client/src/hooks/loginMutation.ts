@@ -8,7 +8,7 @@ export const loginMutationGQL = gql`
     `;
 
 export const useLoginMutation: () => [(email: string, password: string) => Promise<any>, MutationResult<any>] = () => {
-    const [_, setAuthToken] = useAuthToken();
+    const [_, setAuthToken, removeAuthToken] = useAuthToken();
 
     const [mutation, mutationResults] = useMutation(loginMutationGQL, {
         // If the mutation succeed, we save the token for later
@@ -19,6 +19,7 @@ export const useLoginMutation: () => [(email: string, password: string) => Promi
 
     // We have rewritten the function to have a cleaner interface
     const login = (email: string, password: string) => {
+        removeAuthToken();
         return mutation({
             variables: {
                 email,
