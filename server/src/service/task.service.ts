@@ -12,7 +12,7 @@ class TaskService {
       path: 'assigne',
       select:
         '_id, name',
-    }).lean();
+    }).populate('comments').lean();
     return tasks;
   }
 
@@ -30,6 +30,7 @@ class TaskService {
       select:
         '_id, name',
     });
+    await task?.populate('comments');
     return task;
   }
 
@@ -54,6 +55,7 @@ class TaskService {
       select:
         '_id, name',
     });
+    await task?.populate('comments');
     return task;
   }
 

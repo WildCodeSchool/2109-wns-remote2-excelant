@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useFormik } from "formik";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -9,6 +9,7 @@ import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { useQuery } from "@apollo/client";
+import { useLoginMutation } from "../../hooks/loginMutation";
 
 import ExcelantLogo from "../../images/logo_excelant.png";
 import { loginSchema } from "../../yupSchema/Login";
@@ -20,10 +21,14 @@ interface LoginFormValues {
 }
 
 const Login: React.FC = () => {
-  const [toHome, setToHome] = useState(false);
-  const { loading, data, refetch } = useQuery(
+  const [toHome, setHome] = useState(false);
+  const navigate = useNavigate();
+  const { data } = useQuery(
     new GqlRequest("User").get("_id, email, password")
   );
+
+  // We import our loginMutation here
+  const [login] = useLoginMutation();
 
   const formik = useFormik({
     initialValues: {
@@ -31,8 +36,13 @@ const Login: React.FC = () => {
       password: "",
     },
     validationSchema: loginSchema,
-    onSubmit: () => {
-      // TODO: Check if user email exist
+    onSubmit: async (values: LoginFormValues) => {
+      try {
+        await login(values.email, values.password);
+        navigate('/');
+      } catch (e: any) {
+        alert(`Error! ${e.message}`)
+      }
     },
   });
 

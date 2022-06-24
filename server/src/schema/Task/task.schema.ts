@@ -3,6 +3,7 @@ import { Field, ID, ObjectType } from 'type-graphql';
 import mongoosePaginate from 'mongoose-paginate-v2';
 import Project from '../Project/project.schema';
 import User from '../User/user.schema';
+import Comment from '../Comment/comment.schema';
 import PaginateMethod from '../../utils/PaginateMethodType';
 
 @ObjectType()
@@ -34,6 +35,10 @@ class Task {
   @Field({ description: 'the description of the task', nullable: true })
   @prop({ required: false })
   description?: string;
+
+  @Field(() => [Comment], {nullable: true})
+  @prop({ ref: () => Comment, required: false, default: [] })
+  comments: Ref<Comment>[];
 
   static paginate: PaginateMethod<Task>;
 }
