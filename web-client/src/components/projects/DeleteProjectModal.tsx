@@ -4,7 +4,7 @@ import { useMutation } from "@apollo/client";
 import { modalStyle } from "../../_utils/modalStyle";
 import GqlRequest from "../../_graphql/GqlRequest";
 import { ProjectType } from "../../_types/_projectTypes";
-import { SnackbarProvider, useSnackbar } from "notistack";
+import { useSnackbar } from "notistack";
 
 const DeleteProjectModal: React.FC<{
   open: boolean;
@@ -23,7 +23,13 @@ const DeleteProjectModal: React.FC<{
       await deleteProject({
         variables: { input: { _id: project._id } },
       });
-      enqueueSnackbar("DELETE");
+      enqueueSnackbar(`The project ${project.name} has been deleted successfully!`, {
+        variant: "error",
+        anchorOrigin: {
+          vertical: 'top',
+          horizontal: 'right'
+        }
+      });
     } catch (err) {
       // eslint-disable-next-line
       console.log("Error", err);
