@@ -1,4 +1,5 @@
 import { Field, InputType } from 'type-graphql';
+import UserInput from '../User/user.input';
 
 @InputType()
 class UpdateCommentInput {
@@ -6,7 +7,7 @@ class UpdateCommentInput {
   @Field(() => String)
   content: string;
 
-  @Field(() => String)
+  @Field(() => UserInput, { nullable: true })
   user: string;
 
   @Field()
