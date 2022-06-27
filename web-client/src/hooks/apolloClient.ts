@@ -6,6 +6,7 @@ import {useAuthToken} from "./useAuthToken";
 
 const httpLink = new HttpLink({uri: "http://localhost:4040/graphql"});
 
+// Passing auth token in our queries
 const authMiddleware = (authToken: string) =>
     new ApolloLink((operation, forward) => {
 
