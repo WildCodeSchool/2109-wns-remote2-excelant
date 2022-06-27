@@ -10,9 +10,10 @@ import Theme from "./theme/Theme";
 import { CookiesProvider } from "react-cookie";
 import { SnackbarProvider } from "notistack";
 
+
 const client = new ApolloClient({
-    uri: process.env.REACT_APP_BACK_URI,
-    cache: new InMemoryCache(),
+  uri: process.env.REACT_APP_BACK_URI,
+  cache: new InMemoryCache(),
 });
 
 ReactDOM.render(

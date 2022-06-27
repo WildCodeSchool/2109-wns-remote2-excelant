@@ -1,5 +1,6 @@
-import { mongoose, prop } from '@typegoose/typegoose';
+import { mongoose, prop, Ref } from '@typegoose/typegoose';
 import { Field, ID, ObjectType } from 'type-graphql';
+import User from '../User/user.schema';
 
 @ObjectType()
 class Comment {
@@ -10,9 +11,9 @@ class Comment {
   @prop({ required: true })
   content: string;
 
-  @Field(() => String, { nullable: true })
-  @prop({ required: true })
-  user: string;
+  @Field(() => User, { nullable: true })
+  @prop({ ref: () => User, required: true })
+  user: Ref<User>;
 
   @Field()
   @prop({ required: true })
