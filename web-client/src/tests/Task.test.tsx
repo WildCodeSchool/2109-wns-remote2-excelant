@@ -5,6 +5,7 @@ import moment from "moment";
 
 import { TaskType } from "./../_types/_taskTypes";
 import TaskTableItem from "./../components/tasks/TaskTableItem";
+import { SnackbarProvider } from "notistack";
 
 let container: any = null;
 beforeEach(() => {
@@ -28,6 +29,7 @@ describe("<TaskTableItem />", () => {
         status: "InProgress",
         assigne: 'me',
         dueDate: '01 Jun 2016 14:31:46 -0700',
+        description: "Task description",
         project: {
             _id: 'projectTestId',
             name: 'ProjectName',
@@ -42,11 +44,13 @@ describe("<TaskTableItem />", () => {
         );
         await act(async () => {
             render(
-                <MockedProvider mocks={[]} addTypename={false}>
-                    <tbody>
-                        <TaskTableItem task={fakeTask} refetch={mockFn}/>
-                    </tbody>
-                </MockedProvider>
+                <SnackbarProvider>
+                    <MockedProvider mocks={[]} addTypename={false}>
+                        <tbody>
+                            <TaskTableItem task={fakeTask} refetch={mockFn}/>
+                        </tbody>
+                    </MockedProvider>
+                </SnackbarProvider>
             , container);
         });
         expect(container.querySelector(`[data-testid="name"]`).textContent).toBe(fakeTask.project.name);
