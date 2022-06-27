@@ -43,13 +43,8 @@ const CreateProjectModal: React.FC<{
   handleClose: () => void;
 }> = ({ open, handleClose }) => {
   const [loading, setLoading] = useState(false);
-  const [notify, setNotify] = useState({
-    isOpen: false,
-    message: "",
-    type: "",
-  });
   const [errors, setErrors] = useState<string[]>([]);
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
   const [createProject] = useMutation(
     new GqlRequest("Project").create("name, status, projectManager, dueDate")
   );

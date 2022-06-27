@@ -12,7 +12,7 @@ const DeleteProjectModal: React.FC<{
   refetch: () => void;
   project: ProjectType;
 }> = ({ open, handleClose, refetch, project }) => {
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
 
   const [deleteProject] = useMutation(new GqlRequest("Project").delete("name"));
