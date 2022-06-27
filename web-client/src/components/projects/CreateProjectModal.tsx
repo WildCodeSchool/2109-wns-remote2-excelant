@@ -21,6 +21,7 @@ import moment from "moment";
 import { modalStyle } from "../../_utils/modalStyle";
 import GqlRequest from "../../_graphql/GqlRequest";
 import Notification from "../../_utils/Notification";
+import { SnackbarProvider, useSnackbar } from "notistack";
 
 type Status = string;
 
@@ -49,6 +50,7 @@ const CreateProjectModal: React.FC<{
     type: "",
   });
   const [errors, setErrors] = useState<string[]>([]);
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [createProject] = useMutation(
     new GqlRequest("Project").create("name, status, projectManager, dueDate")
   );
@@ -79,12 +81,13 @@ const CreateProjectModal: React.FC<{
       }
       const res = await createProject({ variables: { input: values } });
       if (res) {
-        setNotify({
-          isOpen: true,
-          message: "Your project has been created successfully!",
-          type: "success",
-        });
+        // setNotify({
+        //   isOpen: true,
+        //   message: "Your project has been created successfully!",
+        //   type: "success",
+        // });
         setErrors([]);
+        enqueueSnackbar("HOOK");
         handleClose();
       }
     } catch (err) {

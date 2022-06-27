@@ -8,6 +8,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import Theme from "./theme/Theme";
 import { CookiesProvider } from "react-cookie";
+import { SnackbarProvider } from "notistack";
 
 const client = new ApolloClient({
     uri: process.env.REACT_APP_BACK_URI,
@@ -19,9 +20,11 @@ ReactDOM.render(
         <ApolloProvider client={client}>
             <LocalizationProvider dateAdapter={DateAdapter}>
                 <CookiesProvider>
-                    <Theme>
-                        <App/>
-                    </Theme>
+                    <SnackbarProvider>
+                        <Theme>
+                            <App/>
+                        </Theme>
+                    </SnackbarProvider>
                 </CookiesProvider>
             </LocalizationProvider>
         </ApolloProvider>
