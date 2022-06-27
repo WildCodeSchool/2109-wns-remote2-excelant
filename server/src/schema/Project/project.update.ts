@@ -1,4 +1,5 @@
 import { InputType, Field } from 'type-graphql';
+import UserInput from '../User/user.input';
 
 @InputType()
 class UpdateProjectInput {
@@ -8,7 +9,7 @@ class UpdateProjectInput {
     @Field(() => String)
     status: string;
 
-    @Field(() => String)
+    @Field(() => UserInput)
     projectManager: string;
 
     @Field()
