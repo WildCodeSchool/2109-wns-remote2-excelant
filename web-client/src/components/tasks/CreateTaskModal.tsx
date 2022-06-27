@@ -20,7 +20,7 @@ import { Formik, Form } from "formik";
 import { gql, useMutation } from "@apollo/client";
 import { modalStyle } from "../../_utils/modalStyle";
 import { ProjectType } from "../../_types/_projectTypes";
-import Notification from "../../_utils/Notification";
+import { useSnackbar } from "notistack";
 
 interface CreateTaskInput {
   name: string;
@@ -49,11 +49,7 @@ const CreateTaskModal: React.FC<{
   open: boolean;
   handleClose: () => void;
 }> = ({ projects, open, handleClose }) => {
-  const [notify, setNotify] = useState({
-    isOpen: false,
-    message: "",
-    type: "",
-  });
+  const { enqueueSnackbar } = useSnackbar();
   const [errors, setErrors] = useState<string[]>([]);
   const CREATE_TASK = gql`
     mutation createTask($input: CreateTaskInput!) {
@@ -102,10 +98,12 @@ const CreateTaskModal: React.FC<{
       }
       const res = await createTask({ variables: { input: values } });
       if (res) {
-        setNotify({
-          isOpen: true,
-          message: "Your task has been created successfully!",
-          type: "success",
+        enqueueSnackbar("Your task has been created successfully!", {
+          variant: "success",
+          anchorOrigin: {
+            vertical: 'top',
+            horizontal: 'right'
+          }
         });
         setErrors([]);
         handleClose();
@@ -117,7 +115,6 @@ const CreateTaskModal: React.FC<{
   };
 
   return (
-    <>
       <Modal
         open={open}
         onClose={() => {
@@ -291,13 +288,6 @@ const CreateTaskModal: React.FC<{
           </CardContent>
         </Card>
       </Modal>
-      <Notification
-        isOpen={notify.isOpen}
-        message={notify.message}
-        type="success"
-        setNotify={setNotify}
-      />
-    </>
   );
 };
 

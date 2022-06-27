@@ -17,6 +17,7 @@ import React, { useState } from "react";
 import GqlRequest from "../../_graphql/GqlRequest";
 import { ProjectType } from "../../_types/_projectTypes";
 import { taskModalStyle } from "../../_utils/modalStyle";
+import { useSnackbar } from "notistack";
 
 const ProjectModal: React.FC<{
   open: boolean;
@@ -24,6 +25,7 @@ const ProjectModal: React.FC<{
   project: ProjectType;
   refetch: () => void;
 }> = ({ open, handleClose, project, refetch }) => {
+  const { enqueueSnackbar } = useSnackbar();
   const [modify, setModify] = useState<boolean>(false);
   const [modifiedProject, setModifiedProject] = useState<Partial<ProjectType>>({
     name: project.name,
@@ -49,6 +51,13 @@ const ProjectModal: React.FC<{
       updateProject({
         variables: { id: project._id, input: modifiedProject },
       });
+        enqueueSnackbar(`The project ${project.name} has been modified successfully!`, {
+            variant: "info",
+            anchorOrigin: {
+                vertical: 'top',
+                horizontal: 'right'
+            }
+        });
     } catch (err) {
       // eslint-disable-next-line
       console.log("Error", err);
