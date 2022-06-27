@@ -18,18 +18,33 @@ class CommentService {
     } catch (e: any) {
       throw new ApolloError(e.message);
     }
+    await comment.populate({
+      path: 'user',
+      select:
+        '_id, name',
+    })
     return comment;
   }
 
   // eslint-disable-next-line
   async updateComment(id: string, input: UpdateCommentInput) {
     const comment = await CommentModel.findByIdAndUpdate(id, input, {new: true}).orFail(() => Error('Not found'));
+    await comment.populate({
+      path: 'user',
+      select:
+        '_id, name',
+    })
     return comment;
   }
   
   // eslint-disable-next-line
   async deleteComment(input: CommentInput) {
     const comment = await CommentModel.findByIdAndDelete(input._id).orFail(() => Error('Not found'));
+    await comment.populate({
+      path: 'user',
+      select:
+        '_id, name',
+    })
     return comment;
   }
 
