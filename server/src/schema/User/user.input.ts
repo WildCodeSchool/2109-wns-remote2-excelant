@@ -6,4 +6,4 @@ class UserInput {
   _id: string;
 }
 
-export default UserInput; 
+export default UserInput;
