@@ -2,7 +2,9 @@ import { ApolloError } from 'apollo-server-errors';
 import bcrypt from 'bcrypt';
 import { UserModel } from '../schema';
 import CreateUserInput from '../schema/User/user.create';
+import DeleteUserInput from '../schema/User/user.delete';
 import FindOneUserInput from '../schema/User/user.find';
+import FindUserByLimitAndPageInput from '../schema/User/user.findpage';
 import LoginInput from '../schema/User/user.login';
 import UpdateUserEmailInput from '../schema/User/user.updateEmail';
 import UpdateUserPasswordInput from '../schema/User/user.updatePassword';
@@ -14,6 +16,11 @@ class UserService {
   async findUsers() {
     const users = await UserModel.find().lean();
     return users;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async findUserByLimitAndPage(input: FindUserByLimitAndPageInput) {
+    return UserModel.paginate({}, input);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -63,8 +70,8 @@ class UserService {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  async deleteUser(id: string) {
-    return UserModel.findByIdAndDelete(id);
+  async deleteUser(input: DeleteUserInput) {
+    return UserModel.findByIdAndDelete(input._id);
   }
 }
 

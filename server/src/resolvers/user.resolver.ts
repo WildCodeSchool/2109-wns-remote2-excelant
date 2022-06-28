@@ -7,6 +7,9 @@ import UpdateUserEmailInput from '../schema/User/user.updateEmail';
 import UpdateUserPasswordInput from '../schema/User/user.updatePassword';
 import Context from '../types/context';
 import LoginInput from '../schema/User/user.login';
+import FindUserByLimitAndPageInput from '../schema/User/user.findpage';
+import UserPage from '../schema/User/user.page';
+import DeleteUserInput from '../schema/User/user.delete';
 
 @Resolver()
 class UserResolver {
@@ -17,6 +20,11 @@ class UserResolver {
   @Query(() => [User])
   findAllUsers() {
     return this.userService.findUsers();
+  }
+
+  @Query(() => UserPage)
+  findUserByLimitAndPage(@Arg('input') input: FindUserByLimitAndPageInput) {
+    return this.userService.findUserByLimitAndPage(input);
   }
 
   @Query(() => User)
@@ -51,8 +59,8 @@ class UserResolver {
   }
 
   @Mutation(() => User)
-  deleteUser(@Arg('_id') id: string) {
-    return this.userService.deleteUser(id);
+  deleteUser(@Arg('input') input: DeleteUserInput) {
+    return this.userService.deleteUser(input);
   }
 }
 
