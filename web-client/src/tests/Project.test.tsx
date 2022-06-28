@@ -5,6 +5,7 @@ import moment from "moment";
 
 import { ProjectType } from "./../_types/_projectTypes";
 import ProjectTableItem from "./../components/projects/ProjectTableItem";
+import { SnackbarProvider } from "notistack";
 
 let container: any = null;
 beforeEach(() => {
@@ -38,11 +39,13 @@ describe("<ProjectTableItem />", () => {
         );
         await act(async () => {
             render(
-                <MockedProvider mocks={[]} addTypename={false}>
-                    <tbody>
-                        <ProjectTableItem project={fakeProject} refetch={mockFn}/>
-                    </tbody>
-                </MockedProvider>
+                <SnackbarProvider>
+                    <MockedProvider mocks={[]} addTypename={false}>
+                        <tbody>
+                            <ProjectTableItem project={fakeProject} refetch={mockFn}/>
+                        </tbody>
+                    </MockedProvider>
+                </SnackbarProvider>
             , container);
         });
         expect(container.querySelector(`[data-testid="name"]`).textContent).toBe(fakeProject.name);
