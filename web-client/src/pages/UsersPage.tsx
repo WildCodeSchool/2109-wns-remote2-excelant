@@ -7,8 +7,9 @@ const UsersPage: React.FC = () => {
   return (
     <Container maxWidth="lg">
       <Typography variant="h1" sx={{ backgroundColor: "primary.light" }}>
-        <UserTable reload={reload} />
+        UsersPage
       </Typography>
+      <UserTable reload={reload} />
     </Container>
   );
 };
