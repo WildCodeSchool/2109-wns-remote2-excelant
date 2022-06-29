@@ -2,6 +2,7 @@ import React from "react";
 import { render, unmountComponentAtNode } from "react-dom";
 import { act } from "react-dom/test-utils";
 import { MockedProvider } from "@apollo/client/testing";
+import { SnackbarProvider } from "notistack";
 import moment from "moment";
 import { ProjectType } from "../_types/_projectTypes";
 import ProjectTableItem from "../components/projects/ProjectTableItem";
@@ -42,11 +43,13 @@ describe("<ProjectTableItem />", () => {
     );
     await act(async () => {
       render(
-        <MockedProvider mocks={[]} addTypename={false}>
-          <tbody>
-            <ProjectTableItem project={fakeProject} refetch={mockFn} />
-          </tbody>
-        </MockedProvider>,
+        <SnackbarProvider>
+          <MockedProvider mocks={[]} addTypename={false}>
+            <tbody>
+              <ProjectTableItem project={fakeProject} refetch={mockFn} />
+            </tbody>
+          </MockedProvider>
+        </SnackbarProvider>,
         container
       );
     });
