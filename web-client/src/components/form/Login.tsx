@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useFormik } from "formik";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -10,6 +10,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { useQuery } from "@apollo/client";
 import { useLoginMutation } from "../../hooks/loginMutation";
+import { AuthContext } from "../../contexts/AuthContext";
 
 import ExcelantLogo from "../../images/logo_excelant.png";
 import { loginSchema } from "../../yupSchema/Login";
@@ -21,6 +22,7 @@ interface LoginFormValues {
 }
 
 const Login: React.FC = () => {
+  const { loggedIn, authToken, setAuthToken }: any = useContext(AuthContext);
   const [toHome, setHome] = useState(false);
   const navigate = useNavigate();
   const { data } = useQuery(
@@ -37,8 +39,13 @@ const Login: React.FC = () => {
     },
     validationSchema: loginSchema,
     onSubmit: async (values: LoginFormValues) => {
+      // Update token
+      setAuthToken(authToken);
+      // Set JWT token to local
+      localStorage.setItem("token", authToken);
       try {
         await login(values.email, values.password);
+        loggedIn();
         navigate('/');
       } catch (e: any) {
         alert(`Error! ${e.message}`)
