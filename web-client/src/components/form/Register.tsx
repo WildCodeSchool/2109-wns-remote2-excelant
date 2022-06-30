@@ -129,7 +129,6 @@ const Register: React.FC = () => {
                 name="role"
                 type="password"
                 value={formik.values.roles}
-                onChange={formik.handleChange}
             />
             <Button
               disabled={loading}
