@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import { UserModel } from '../schema';
 import CreateUserInput from '../schema/User/user.create';
 import FindOneUserInput from '../schema/User/user.find';
-import LoginInput from '../schema/User/user.login';
+import LoginInput from '../schema/User/user.loginInput';
 import UpdateUserEmailInput from '../schema/User/user.updateEmail';
 import UpdateUserPasswordInput from '../schema/User/user.updatePassword';
 import Context from '../types/context';
@@ -49,7 +49,7 @@ class UserService {
       secure: process.env.NODE_ENV === 'production',
     });
 
-    return token;
+    return { user, accessToken: token };
   }
 
   // eslint-disable-next-line class-methods-use-this

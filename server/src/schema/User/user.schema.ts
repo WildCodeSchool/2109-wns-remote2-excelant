@@ -24,6 +24,7 @@ export interface QueryHelpers {
   findByEmail: AsQueryMethod<typeof findByEmail>;
 }
 
+// eslint-disable-next-line func-names
 @pre<User>('save', async function () {
   if (!this.isModified('password')) {
     return;
