@@ -19,10 +19,10 @@ export const useLoginMutation: <TData>() => [
   MutationResult<TData>
 ] = () => {
   const [mutation, mutationResults] = useMutation(loginMutationGQL, {
-    onCompleted: (data) => {
-      const { login } = data;
-      localStorage.setItem("accessToken", login.accessToken);
-    },
+    // onCompleted: (data) => {
+    //   const { login } = data;
+    //   localStorage.setItem("accessToken", login.accessToken);
+    // },
   });
 
   // We have rewritten the function to have a cleaner interface
