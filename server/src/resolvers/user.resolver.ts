@@ -6,7 +6,8 @@ import FindOneUserInput from '../schema/User/user.find';
 import UpdateUserEmailInput from '../schema/User/user.updateEmail';
 import UpdateUserPasswordInput from '../schema/User/user.updatePassword';
 import Context from '../types/context';
-import LoginInput from '../schema/User/user.login';
+import LoginInput from '../schema/User/user.loginInput';
+import Login from '../schema/User/user.loginSchema';
 
 @Resolver()
 class UserResolver {
@@ -29,7 +30,7 @@ class UserResolver {
     return this.userService.createUser(input);
   }
 
-  @Mutation(() => String) // Returns the JWT
+  @Mutation(() => Login) // Returns the JWT
   login(@Arg('input') input: LoginInput, @Ctx() context: Context) {
     return this.userService.login(input, context);
   }
