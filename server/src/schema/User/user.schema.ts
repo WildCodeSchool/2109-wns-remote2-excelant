@@ -9,6 +9,9 @@ import {
 import { AsQueryMethod } from '@typegoose/typegoose/lib/types';
 import bcrypt from 'bcrypt';
 import { Field, ID, ObjectType } from 'type-graphql';
+import { registerRoles, Roles } from '../../types/user';
+
+registerRoles();
 
 function findByEmail(
   this: ReturnModelType<typeof User, QueryHelpers>,
@@ -21,6 +24,7 @@ export interface QueryHelpers {
   findByEmail: AsQueryMethod<typeof findByEmail>;
 }
 
+// eslint-disable-next-line func-names
 @pre<User>('save', async function () {
   if (!this.isModified('password')) {
     return;
@@ -53,6 +57,10 @@ class User {
   @Field(() => String)
   @prop({ required: true })
   confirmPassword: string;
+
+  @Field(() => [Roles])
+  @prop({ required: true })
+  roles: Roles[];
 }
 
 export default User;

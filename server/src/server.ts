@@ -13,12 +13,14 @@ import connectToMongo from './utils/mongo';
 import Context from './types/context';
 import { verifyJwt } from './utils/jwt';
 import User from './schema/User/user.schema';
+import customAuthChecker from './utils/customAuthChecker';
 
 async function bootstrap() {
   // Build the schema
   const schema = await buildSchema({
     resolvers,
     dateScalarMode: 'isoDate',
+    authChecker: customAuthChecker,
   });
 
   // Init express
@@ -31,9 +33,10 @@ async function bootstrap() {
     schema,
     context: (ctx: Context) => {
       const context = ctx;
+      const { req } = context;
 
-      if (ctx.req.cookies.accessToken) {
-        const user = verifyJwt<User>(ctx.req.cookies.accessToken);
+      if (req.cookies.accessToken) {
+        const user = verifyJwt<User>(req.cookies.accessToken);
         context.user = user;
       }
 
@@ -47,8 +50,13 @@ async function bootstrap() {
   });
   await server.start();
 
+  const corsOptions = {
+    origin: ['http://localhost:8080', 'http://localhost:4040'],
+    credentials: true,
+  };
+
   // apply middleware to server
-  server.applyMiddleware({ app });
+  server.applyMiddleware({ app, cors: corsOptions });
 
   // app.listen on express server
   app.listen({ port }, () => {
