@@ -4,6 +4,7 @@ import { useMutation } from "@apollo/client";
 import { Avatar, Grid, Paper, IconButton, Box, TextField, Button } from "@mui/material";
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { useSnackbar } from "notistack";
 import GqlRequest from "../../_graphql/GqlRequest";
 import { CommentType } from "../../_types/_commentTypes";
 import UserAvatar from "../../images/person-circle.png";
@@ -12,6 +13,8 @@ const Comment: React.FC<{
     comment: CommentType;
     refetch: () => void;
   }> = ({ comment, refetch }) => {
+  const { enqueueSnackbar } = useSnackbar();
+
 
     /* TODO USE CONTEXT */
     const fakeUser = {
@@ -46,6 +49,13 @@ const Comment: React.FC<{
         } finally {
             refetch();
             setModify(false);
+            enqueueSnackbar("Your comment has been modified successfully!", {
+                variant: "success",
+                anchorOrigin: {
+                  vertical: 'top',
+                  horizontal: 'right'
+                }
+            });
         }
     };
 
@@ -61,6 +71,13 @@ const Comment: React.FC<{
             console.log("Error", err);
         } finally {
             refetch();
+            enqueueSnackbar(`Your comment has been deleted successfully!`, {
+                variant: "error",
+                anchorOrigin: {
+                  vertical: 'top',
+                  horizontal: 'right'
+                }
+            });
         };
     };
   

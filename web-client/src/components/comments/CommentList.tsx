@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { useMutation, useQuery } from "@apollo/client";
 import moment from "moment";
+import { useSnackbar } from "notistack";
 import GqlRequest from "../../_graphql/GqlRequest";
 import { TaskType } from "../../_types/_taskTypes";
 import { CommentType } from "../../_types/_commentTypes";
@@ -14,6 +15,8 @@ import UserAvatar from "../../images/person-circle.png";
 const CommentsList: React.FC<{
     task: TaskType;
   }> = ({ task }) => {
+  const { enqueueSnackbar } = useSnackbar();
+
 
     /* TODO USE CONTEXT */
     const fakeUser = {
@@ -61,6 +64,13 @@ const CommentsList: React.FC<{
       } finally {
         refetch();
         setCommentInput("");
+        enqueueSnackbar("Your comment has been added successfully!", {
+          variant: "success",
+          anchorOrigin: {
+            vertical: 'top',
+            horizontal: 'right'
+          }
+        });
       }
     };
 
