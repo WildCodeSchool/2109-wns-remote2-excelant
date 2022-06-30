@@ -43,6 +43,7 @@ const Login: React.FC = () => {
       setAuthToken(authToken);
       // Set JWT token to local
       localStorage.setItem("token", authToken);
+      console.log(localStorage);
       try {
         await login(values.email, values.password);
         loggedIn();
