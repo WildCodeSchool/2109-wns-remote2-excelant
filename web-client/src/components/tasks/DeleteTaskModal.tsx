@@ -1,10 +1,10 @@
 import { Modal, Card, CardHeader, CardActions, Button } from "@mui/material";
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
+import { useSnackbar } from "notistack";
 import { modalStyle } from "../../_utils/modalStyle";
 import GqlRequest from "../../_graphql/GqlRequest";
 import { TaskType } from "../../_types/_taskTypes";
-import { useSnackbar } from "notistack";
 
 const DeleteTaskModal: React.FC<{
   open: boolean;
@@ -26,9 +26,9 @@ const DeleteTaskModal: React.FC<{
       enqueueSnackbar(`The task ${task.name} has been deleted successfully!`, {
         variant: "error",
         anchorOrigin: {
-          vertical: 'top',
-          horizontal: 'right'
-        }
+          vertical: "top",
+          horizontal: "right",
+        },
       });
     } catch (err) {
       // eslint-disable-next-line

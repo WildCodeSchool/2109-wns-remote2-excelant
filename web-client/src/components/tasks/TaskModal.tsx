@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useMutation, useLazyQuery } from "@apollo/client";
+import React, { useEffect, useState } from "react";
+import { useMutation, useLazyQuery, useQuery } from "@apollo/client";
 import { DatePicker } from "@mui/lab";
 import {
   Box,
@@ -13,13 +13,13 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import moment from "moment";
+import { useSnackbar } from "notistack";
 import GqlRequest from "../../_graphql/GqlRequest";
 import { taskModalStyle } from "../../_utils/modalStyle";
 import "./TaskModal.scss";
 import { TaskType } from "../../_types/_taskTypes";
 import { ProjectType } from "../../_types/_projectTypes";
-import moment from "moment";
-import { useSnackbar } from "notistack";
 
 const TaskModal: React.FC<{
   open: boolean;
@@ -29,6 +29,7 @@ const TaskModal: React.FC<{
 }> = ({ open, task, handleClose, refetch }) => {
   const { enqueueSnackbar } = useSnackbar();
   const [allProjects, setAllProjects] = useState([]);
+  const [users, setUsers] = useState<{ _id: string; name: string }[]>([]);
   const [getAllProjects, { loading: areProjectsLoading }] = useLazyQuery(
     new GqlRequest("Project").get("_id, name"),
     {
@@ -42,7 +43,7 @@ const TaskModal: React.FC<{
   const [modifiedTask, setModifiedTask] = useState({
     name: task.name,
     status: task.status,
-    assigne: task.assigne,
+    assigne: { _id: task.assigne._id },
     dueDate: task.dueDate,
     project: {
       _id: task.project._id || "",
@@ -51,6 +52,7 @@ const TaskModal: React.FC<{
   });
 
   const [updateTask] = useMutation(new GqlRequest("Task").update("name"));
+  const { data } = useQuery(new GqlRequest("User").get("_id, name"));
 
   const handleModification = () => {
     getAllProjects();
@@ -65,9 +67,9 @@ const TaskModal: React.FC<{
       enqueueSnackbar(`The task ${task.name} has been modified successfully!`, {
         variant: "info",
         anchorOrigin: {
-            vertical: 'top',
-            horizontal: 'right'
-        }
+          vertical: "top",
+          horizontal: "right",
+        },
       });
     } catch (err) {
       // eslint-disable-next-line
@@ -87,6 +89,12 @@ const TaskModal: React.FC<{
       [key]: value,
     });
   };
+
+  useEffect(() => {
+    if (data?.findAllUsers) {
+      setUsers(data.findAllUsers);
+    }
+  }, [data]);
 
   return (
     <Modal open={open} onClose={handleClose}>
@@ -242,15 +250,21 @@ const TaskModal: React.FC<{
                 Assigne:
               </Typography>
               {modify ? (
-                <TextField
-                  type="text"
-                  variant="outlined"
-                  value={modifiedTask.assigne}
-                  onChange={(event) => {
-                    setFieldValue("assigne", event.target.value);
-                  }}
-                  sx={{ flexGrow: 1 }}
-                />
+                <FormControl sx={{ flexGrow: 1 }} size="small">
+                  <Select
+                    name="assigne['_id']"
+                    labelId="assigne-label"
+                    label="Assigne"
+                    onChange={(event) =>
+                      setFieldValue("assigne", event.target.value)
+                    }
+                    value={modifiedTask.assigne._id}
+                  >
+                    {users.map((user: { _id: string; name: string }) => (
+                      <MenuItem value={user._id}>{user.name}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               ) : (
                 <Typography variant="body1" sx={{ display: "inline" }}>
                   {task.assigne}
