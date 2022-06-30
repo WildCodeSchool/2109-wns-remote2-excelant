@@ -20,12 +20,13 @@ const Register: React.FC = () => {
   const [toHome, setToHome] = useState(false);
   const [loading, setLoading] = useState(false);
   const [createUser] = useMutation(
-    new GqlRequest("User").create("name, email, password, confirmPassword")
+    new GqlRequest("User").create("name, email, roles, password, confirmPassword")
   );
   const formik = useFormik({
     initialValues: {
       name: "",
       email: "",
+      roles: "USER",
       password: "",
       confirmPassword: "",
     },
