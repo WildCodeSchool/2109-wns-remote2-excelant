@@ -13,13 +13,14 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import moment from "moment";
+import { useSnackbar } from "notistack";
 import GqlRequest from "../../_graphql/GqlRequest";
+import CommentsList from "../comments/CommentList";
 import { taskModalStyle } from "../../_utils/modalStyle";
 import "./TaskModal.scss";
 import { TaskType } from "../../_types/_taskTypes";
 import { ProjectType } from "../../_types/_projectTypes";
-import moment from "moment";
-import { useSnackbar } from "notistack";
 
 const TaskModal: React.FC<{
   open: boolean;
@@ -80,7 +81,7 @@ const TaskModal: React.FC<{
 
   const setFieldValue = (
     key: "name" | "dueDate" | "status" | "assigne" | "project" | "description",
-    value: any
+    value: unknown
   ) => {
     setModifiedTask({
       ...modifiedTask,
@@ -338,9 +339,7 @@ const TaskModal: React.FC<{
               )}
             </Box>
           </Grid>
-          <Grid item xs={6}>
-            <h2 className="modal__task_second-title">Comments</h2>
-          </Grid>
+          <CommentsList task={task} />
         </Grid>
       </Card>
     </Modal>
