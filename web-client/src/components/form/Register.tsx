@@ -15,6 +15,7 @@ import Grid from "@mui/material/Grid";
 import { registerSchema } from "../../yupSchema/Register";
 import GqlRequest from "../../_graphql/GqlRequest";
 import ExcelantLogo from "../../images/logo_excelant.png";
+import { Roles } from "../../_types/_userTypes";
 
 const Register: React.FC = () => {
   const [toHome, setToHome] = useState(false);
@@ -26,7 +27,7 @@ const Register: React.FC = () => {
     initialValues: {
       name: "",
       email: "",
-      roles: "USER",
+      roles: [Roles.USER],
       password: "",
       confirmPassword: "",
     },
