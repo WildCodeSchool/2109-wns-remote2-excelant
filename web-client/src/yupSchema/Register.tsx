@@ -6,6 +6,7 @@ export const registerSchema = Yup.object().shape({
     email: Yup.string()
         .email("Email is invalid")
         .required("Please insert an email address"),
+    roles: Yup.string(),
     password: Yup.string()
         .min(6, "Password must contain at least 6 characters")
         .max(25, "Password must not exceed 25 characters")

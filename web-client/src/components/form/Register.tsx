@@ -20,12 +20,13 @@ const Register: React.FC = () => {
   const [toHome, setToHome] = useState(false);
   const [loading, setLoading] = useState(false);
   const [createUser] = useMutation(
-    new GqlRequest("User").create("name, email, password, confirmPassword")
+    new GqlRequest("User").create("name, email, roles, password, confirmPassword")
   );
   const formik = useFormik({
     initialValues: {
       name: "",
       email: "",
+      roles: "USER",
       password: "",
       confirmPassword: "",
     },
@@ -118,6 +119,17 @@ const Register: React.FC = () => {
               helperText={
                 formik.touched.confirmPassword && formik.errors.confirmPassword
               }
+            />
+            <TextField
+                fullWidth
+                sx={{ display: 'none' }}
+                margin="normal"
+                id="role"
+                label="User role"
+                name="role"
+                type="password"
+                value={formik.values.roles}
+                onChange={formik.handleChange}
             />
             <Button
               disabled={loading}
