@@ -47,7 +47,6 @@ describe("<BaseRoutes />", () => {
                 jest.spyOn(window.localStorage, "setItem").mockImplementation((): any => {
                     localStorage.setItem("token", fakeToken)
                 });
-                // localStorage.setItem("token", fakeToken);
             });
 
             // render(
@@ -59,6 +58,9 @@ describe("<BaseRoutes />", () => {
             // );
             // fireEvent.click(screen.getByTestId("Projects"));
             // expect(screen.getByText(/ProjectsPage/i)).toBeInTheDocument();
+            jest.spyOn(window.localStorage, "getItem").mockImplementation((): any => {
+                localStorage.getItem("token");
+            })
 
             render(
                 <CookiesProvider>
@@ -67,7 +69,6 @@ describe("<BaseRoutes />", () => {
                     </MockedProvider>
                 </CookiesProvider>
             );
-            localStorage.getItem("token");
             fireEvent.click(screen.getByTestId("Projects"));
             expect(screen.getByText(/ProjectsPage/i)).toBeInTheDocument();
         });
