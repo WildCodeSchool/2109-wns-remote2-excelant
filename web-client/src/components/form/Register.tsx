@@ -120,16 +120,6 @@ const Register: React.FC = () => {
                 formik.touched.confirmPassword && formik.errors.confirmPassword
               }
             />
-            <TextField
-                fullWidth
-                sx={{ display: 'none' }}
-                margin="normal"
-                id="role"
-                label="User role"
-                name="role"
-                type="password"
-                value={formik.values.roles}
-            />
             <Button
               disabled={loading}
               fullWidth
