@@ -12,6 +12,7 @@ import { useLoginMutation } from "../../hooks/loginMutation";
 
 import ExcelantLogo from "../../images/logo_excelant.png";
 import { loginSchema } from "../../yupSchema/Login";
+import useAuthToken from "../../hooks/useAuthToken";
 
 interface LoginFormValues {
   email: string;
@@ -20,6 +21,7 @@ interface LoginFormValues {
 
 const Login: React.FC = () => {
   const [toHome, setHome] = useState(false);
+  const [authToken, setAuthToken] = useAuthToken();
 
   // We import our loginMutation here
   const [login] = useLoginMutation();
@@ -32,7 +34,8 @@ const Login: React.FC = () => {
     validationSchema: loginSchema,
     onSubmit: async ({ email, password }: LoginFormValues) => {
       try {
-        await login(email, password);
+        const { data }: any = await login(email, password);
+        setAuthToken(data.login.accessToken);
         setHome(true);
       } catch (error) {
         // TO DO: Properly handle errors and display them on the front
