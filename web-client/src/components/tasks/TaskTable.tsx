@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import {
   Box,
@@ -9,6 +9,7 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Pagination,
 } from "@mui/material";
 import { tableCellClasses } from "@mui/material/TableCell";
 import { useQuery } from "@apollo/client";
@@ -27,17 +28,33 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const TaskTable: React.FC<{ reload: number }> = ({ reload }) => {
+  const limit = 12;
+  const [page, setPage] = useState<number>(1);
+  const [tasks, setTasks] = useState<TaskType[]>([]);
+  const [totalPages, setTotalPages] = useState<number>(0);
   const { data, loading, refetch } = useQuery(
-    new GqlRequest("Task").get(
-      "_id, name, status, project { _id, name }, assigne, dueDate"
-    )
+    new GqlRequest("Task").getByLimitAndPage(
+      "docs { _id, name, status, project { _id, name }, assigne {_id, name}, dueDate, description }, totalPages"
+    ),
+    { variables: { input: { limit, page } } }
   );
+
+  const onPageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
 
   useEffect(() => {
     if (reload > 0) {
       refetch();
     }
-  }, [reload]);
+  }, [reload, page]);
+
+  useEffect(() => {
+    if (data?.findTaskByLimitAndPage) {
+      setTasks(data.findTaskByLimitAndPage.docs);
+      setTotalPages(data.findTaskByLimitAndPage.totalPages);
+    }
+  }, [data]);
 
   return loading ? (
     <Box>Loading ... </Box>
@@ -56,13 +73,18 @@ const TaskTable: React.FC<{ reload: number }> = ({ reload }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data &&
-              data.findAllTasks.map((task: TaskType) => (
+            {tasks &&
+              tasks.map((task: TaskType) => (
                 <TaskTableItem task={task} refetch={refetch} key={task._id} />
               ))}
           </TableBody>
         </Table>
       </TableContainer>
+      <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+        {totalPages > 1 && (
+          <Pagination count={totalPages} page={page} onChange={onPageChange} />
+        )}
+      </Box>
     </>
   );
 };

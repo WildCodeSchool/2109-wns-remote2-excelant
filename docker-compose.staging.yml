@@ -1,11 +1,13 @@
 services:
   server:
     image: amanelgau/excelant-develop:server-latest
-    command: sh -c  "node ./build/src/server.js"
+    command: node ./build/src/server.js
     ports:
       - 4040:4000
     environment:
       - DB_URI=mongodb://mongodb:27017/excelant
+      - PUBLIC_KEY=${PUBLIC_KEY}
+      - PRIVATE_KEY=${PRIVATE_KEY}
     depends_on:
       - mongodb
   mongodb:

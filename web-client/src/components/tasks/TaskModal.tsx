@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useMutation, useLazyQuery } from "@apollo/client";
+import React, { useEffect, useState } from "react";
+import { useMutation, useLazyQuery, useQuery } from "@apollo/client";
 import { DatePicker } from "@mui/lab";
 import {
   Box,
@@ -13,12 +13,14 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import moment from "moment";
+import { useSnackbar } from "notistack";
 import GqlRequest from "../../_graphql/GqlRequest";
+import CommentsList from "../comments/CommentList";
 import { taskModalStyle } from "../../_utils/modalStyle";
 import "./TaskModal.scss";
 import { TaskType } from "../../_types/_taskTypes";
 import { ProjectType } from "../../_types/_projectTypes";
-import moment from "moment";
 
 const TaskModal: React.FC<{
   open: boolean;
@@ -26,7 +28,9 @@ const TaskModal: React.FC<{
   refetch: () => void;
   handleClose: () => void;
 }> = ({ open, task, handleClose, refetch }) => {
+  const { enqueueSnackbar } = useSnackbar();
   const [allProjects, setAllProjects] = useState([]);
+  const [users, setUsers] = useState<{ _id: string; name: string }[]>([]);
   const [getAllProjects, { loading: areProjectsLoading }] = useLazyQuery(
     new GqlRequest("Project").get("_id, name"),
     {
@@ -40,12 +44,16 @@ const TaskModal: React.FC<{
   const [modifiedTask, setModifiedTask] = useState({
     name: task.name,
     status: task.status,
-    assigne: task.assigne,
+    assigne: { _id: task.assigne._id },
     dueDate: task.dueDate,
-    project: task.project._id || "",
+    project: {
+      _id: task.project._id || "",
+    },
+    description: task.description,
   });
 
   const [updateTask] = useMutation(new GqlRequest("Task").update("name"));
+  const { data } = useQuery(new GqlRequest("User").get("_id, name"));
 
   const handleModification = () => {
     getAllProjects();
@@ -57,6 +65,13 @@ const TaskModal: React.FC<{
       updateTask({
         variables: { id: task._id, input: modifiedTask },
       });
+      enqueueSnackbar(`The task ${task.name} has been modified successfully!`, {
+        variant: "info",
+        anchorOrigin: {
+          vertical: "top",
+          horizontal: "right",
+        },
+      });
     } catch (err) {
       // eslint-disable-next-line
       console.log("Error", err);
@@ -67,14 +82,20 @@ const TaskModal: React.FC<{
   };
 
   const setFieldValue = (
-    key: "name" | "dueDate" | "status" | "assigne" | "project",
-    value: any
+    key: "name" | "dueDate" | "status" | "assigne" | "project" | "description",
+    value: unknown
   ) => {
     setModifiedTask({
       ...modifiedTask,
       [key]: value,
     });
   };
+
+  useEffect(() => {
+    if (data?.findAllUsers) {
+      setUsers(data.findAllUsers);
+    }
+  }, [data]);
 
   return (
     <Modal open={open} onClose={handleClose}>
@@ -103,12 +124,23 @@ const TaskModal: React.FC<{
                 {task.name}
               </Typography>
             )}
-            <Typography variant="body1" sx={{ mb: 4 }}>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab alias
-              architecto atque commodi corporis debitis deleniti deserunt
-              dolorem doloremque eaque impedit, inventore laudantium libero
-              magnam maxime nisi quo tempore voluptatibus.
-            </Typography>
+            {modify ? (
+              <TextField
+                type="text"
+                variant="outlined"
+                value={modifiedTask.description}
+                onChange={(event) => {
+                  setFieldValue("description", event.target.value);
+                }}
+                sx={{ flexGrow: 1 }}
+                multiline
+                minRows={5}
+              />
+            ) : (
+              <Typography variant="body1" sx={{ mb: 4 }}>
+                {task.description}
+              </Typography>
+            )}
             <Box
               sx={{
                 display: "flex",
@@ -136,9 +168,9 @@ const TaskModal: React.FC<{
                     name="project"
                     labelId="allProjects-label"
                     label="Project status"
-                    value={modifiedTask.project || " "}
+                    value={modifiedTask.project._id || " "}
                     onChange={(event) =>
-                      setFieldValue("project", event.target.value)
+                      setFieldValue("project", { _id: event.target.value })
                     }
                   >
                     {allProjects.map((project: Partial<ProjectType>) => (
@@ -219,18 +251,26 @@ const TaskModal: React.FC<{
                 Assigne:
               </Typography>
               {modify ? (
-                <TextField
-                  type="text"
-                  variant="outlined"
-                  value={modifiedTask.assigne}
-                  onChange={(event) => {
-                    setFieldValue("assigne", event.target.value);
-                  }}
-                  sx={{ flexGrow: 1 }}
-                />
+                <FormControl sx={{ flexGrow: 1 }} size="small">
+                  <Select
+                    name="assigne['_id']"
+                    labelId="assigne-label"
+                    label="Assigne"
+                    onChange={(event) =>
+                      setFieldValue("assigne", event.target.value)
+                    }
+                    value={modifiedTask.assigne._id}
+                  >
+                    {users.map((user: { _id: string; name: string }) => (
+                      <MenuItem key={user._id} value={user._id}>
+                        {user.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               ) : (
                 <Typography variant="body1" sx={{ display: "inline" }}>
-                  {task.assigne}
+                  {task.assigne.name}
                 </Typography>
               )}
             </Box>
@@ -315,9 +355,7 @@ const TaskModal: React.FC<{
               )}
             </Box>
           </Grid>
-          <Grid item xs={6}>
-            <h2 className="modal__task_second-title">Comments</h2>
-          </Grid>
+          <CommentsList task={task} />
         </Grid>
       </Card>
     </Modal>

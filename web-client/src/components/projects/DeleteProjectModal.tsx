@@ -1,6 +1,7 @@
 import { Modal, Card, CardHeader, CardActions, Button } from "@mui/material";
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
+import { useSnackbar } from "notistack";
 import { modalStyle } from "../../_utils/modalStyle";
 import GqlRequest from "../../_graphql/GqlRequest";
 import { ProjectType } from "../../_types/_projectTypes";
@@ -11,6 +12,7 @@ const DeleteProjectModal: React.FC<{
   refetch: () => void;
   project: ProjectType;
 }> = ({ open, handleClose, refetch, project }) => {
+  const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
 
   const [deleteProject] = useMutation(new GqlRequest("Project").delete("name"));
@@ -25,6 +27,13 @@ const DeleteProjectModal: React.FC<{
       // eslint-disable-next-line
       console.log("Error", err);
     } finally {
+      enqueueSnackbar(`The project has been deleted successfully!`, {
+        variant: "error",
+        anchorOrigin: {
+          vertical: 'top',
+          horizontal: 'right'
+        }
+      });
       refetch();
       handleClose();
       setLoading(false);
@@ -41,7 +50,7 @@ const DeleteProjectModal: React.FC<{
         }}
       >
         <CardHeader
-          title={`Are you sur you want to delete ${project.name}?`}
+          title={`Are you sure you want to delete ${project.name}?`}
           sx={{ textAlign: "center" }}
         />
         <CardActions sx={{ display: "flex", justifyContent: "center", gap: 5 }}>

@@ -11,42 +11,23 @@
 
 1.  Clone this repo
 
-    ```
-    git clone https://github.com/WildCodeSchool/2109-wns-remote2-excelant.git
-    cd <app-name>
-    ```
-
-2.  #### Start
-
-    - Back-end
-
-      ```shell
-      cd server
-
-      # switch to the projects nodejs version
-      nvm use
-      npm ci
-      npm run start:dev
-      ```
-
-    - Front-end
-
-      ```shell
-      cd web-client
-
-      # switch to the projects nodejs version
-      nvm use
-      npm ci
-      npm start
-      ```
-
-## Docker
-
 ```
-docker-compose -f docker-compose.dev.yml up --build
+git clone https://github.com/WildCodeSchool/2109-wns-remote2-excelant.git
+cd <app-name>
 ```
 
-## Launch with `make`
+2.  Install dependencies
+
+```shell
+cd server
+nvm use
+npm i
+
+cd ../client
+npm i
+```
+
+### Launch with `make`
 
 **Requirements**
 
@@ -54,14 +35,20 @@ docker-compose -f docker-compose.dev.yml up --build
 
 **Start development environment**
 
-```
-$ make start-dev
+```shell
+make start
 ```
 
 **Start production environment**
 
+```shell
+make start-prod
 ```
-$ make start
+
+**Stop docker**
+
+```
+make stop
 ```
 
 ## Project structure

@@ -5,6 +5,7 @@ export type TaskType = {
   name: string;
   status: "InProgress" | "Completed" | "ToDo";
   project: Partial<ProjectType>;
-  assigne: string;
+  assigne: { _id: string; name: string };
   dueDate: string;
+  description: string;
 };

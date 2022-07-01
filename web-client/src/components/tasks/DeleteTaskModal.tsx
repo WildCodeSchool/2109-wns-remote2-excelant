@@ -1,6 +1,7 @@
 import { Modal, Card, CardHeader, CardActions, Button } from "@mui/material";
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
+import { useSnackbar } from "notistack";
 import { modalStyle } from "../../_utils/modalStyle";
 import GqlRequest from "../../_graphql/GqlRequest";
 import { TaskType } from "../../_types/_taskTypes";
@@ -11,6 +12,7 @@ const DeleteTaskModal: React.FC<{
   refetch: () => void;
   task: TaskType;
 }> = ({ open, handleClose, refetch, task }) => {
+  const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
 
   const [deleteTask] = useMutation(new GqlRequest("Task").delete("name"));
@@ -25,6 +27,13 @@ const DeleteTaskModal: React.FC<{
       // eslint-disable-next-line
       console.log("Error", err);
     } finally {
+      enqueueSnackbar(`The task has been deleted successfully!`, {
+        variant: "error",
+        anchorOrigin: {
+          vertical: "top",
+          horizontal: "right",
+        },
+      });
       refetch();
       handleClose();
       setLoading(false);
@@ -41,7 +50,7 @@ const DeleteTaskModal: React.FC<{
         }}
       >
         <CardHeader
-          title={`Are you sur you want to delete ${task.name}?`}
+          title={`Are you sure you want to delete ${task.name}?`}
           sx={{ textAlign: "center" }}
         />
         <CardActions sx={{ display: "flex", justifyContent: "center", gap: 5 }}>

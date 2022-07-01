@@ -119,3 +119,5 @@ dist
 
 # Custom
 build/
+*.key
+*.key.*

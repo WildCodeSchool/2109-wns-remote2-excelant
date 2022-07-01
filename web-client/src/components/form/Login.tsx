@@ -8,11 +8,11 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import { useQuery } from "@apollo/client";
+import { useLoginMutation } from "../../hooks/loginMutation";
 
 import ExcelantLogo from "../../images/logo_excelant.png";
 import { loginSchema } from "../../yupSchema/Login";
-import GqlRequest from "../../_graphql/GqlRequest";
+import useAuthToken from "../../hooks/useAuthToken";
 
 interface LoginFormValues {
   email: string;
@@ -20,10 +20,11 @@ interface LoginFormValues {
 }
 
 const Login: React.FC = () => {
-  const [toHome, setToHome] = useState(false);
-  const { loading, data, refetch } = useQuery(
-    new GqlRequest("User").get("_id, email, password")
-  );
+  const [toHome, setHome] = useState(false);
+  const [authToken, setAuthToken] = useAuthToken();
+
+  // We import our loginMutation here
+  const [login] = useLoginMutation();
 
   const formik = useFormik({
     initialValues: {
@@ -31,8 +32,15 @@ const Login: React.FC = () => {
       password: "",
     },
     validationSchema: loginSchema,
-    onSubmit: () => {
-      // TODO: Check if user email exist
+    onSubmit: async ({ email, password }: LoginFormValues) => {
+      try {
+        const { data }: any = await login(email, password);
+        setAuthToken(data.login.accessToken);
+        setHome(true);
+      } catch (error) {
+        // TO DO: Properly handle errors and display them on the front
+        console.error(error);
+      }
     },
   });
 

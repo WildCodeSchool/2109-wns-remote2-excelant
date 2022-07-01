@@ -8,33 +8,65 @@ import FindProjectByLimitAndPageInput from '../schema/Project/project.findpage';
 class ProjectService {
   // eslint-disable-next-line
   async findProjects() {
-    return ProjectModel.find().lean();
+    return ProjectModel.find()
+      .populate({
+        path: 'projectManager',
+        select: '_id, name',
+      })
+      .lean();
   }
 
   // eslint-disable-next-line
   async findProjectByLimitAndPage(input: FindProjectByLimitAndPageInput) {
-    return ProjectModel.paginate({}, input);
+    const projects = await ProjectModel.paginate(
+      {},
+      {
+        ...input,
+        populate: {
+          path: 'projectManager',
+          select: '_id, name',
+        },
+      }
+    );
+    return projects;
   }
 
   // eslint-disable-next-line
   async findOneProject(input: FindOneProjectInput) {
-    return ProjectModel.findOne(input);
+    return ProjectModel.findOne(input).populate({
+      path: 'projectManager',
+      select: '_id, name',
+    });
   }
 
   // eslint-disable-next-line
   async createProject(input: CreateProjectInput) {
-    return ProjectModel.create(input);
+    const project = await ProjectModel.create(input);
+    await project.populate({
+      path: 'projectManager',
+      select: '_id, name',
+    });
+    return project;
   }
 
   // eslint-disable-next-line
   async updateProject(id: string, input: UpdateProjectInput) {
-    return ProjectModel.findByIdAndUpdate(id, input);
+    return ProjectModel.findByIdAndUpdate(id, input, { new: true }).populate({
+      path: 'projectManager',
+      select: '_id, name',
+    });
   }
 
   // eslint-disable-next-line
   async deleteProject(input: DeleteProjectInput) {
-    const project = await ProjectModel.findByIdAndDelete(input._id);
+    const project = await ProjectModel.findByIdAndDelete(input._id).orFail(() =>
+      Error('Not found')
+    );
     await TaskModel.deleteMany({ project: { _id: input._id } });
+    await project.populate({
+      path: 'projectManager',
+      select: '_id, name',
+    });
     return project;
   }
 }

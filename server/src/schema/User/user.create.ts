@@ -1,15 +1,24 @@
-import { Field, InputType } from "type-graphql";
+import { IsEmail, MinLength } from 'class-validator';
+import { Field, InputType } from 'type-graphql';
+import { registerRoles, Roles } from '../../types/user';
+
+registerRoles();
 
 @InputType()
 class CreateUserInput {
   @Field(() => String)
-  email: string
+  name: string;
 
+  @IsEmail()
   @Field(() => String)
-  password: string
+  email: string;
 
+  @MinLength(6, { message: 'password must be at least 6 characters long' })
   @Field(() => String)
-  confirmPassword: string
+  password: string;
+
+  @Field(() => [Roles])
+  roles: Roles[];
 }
 
-export default CreateUserInput
+export default CreateUserInput;
