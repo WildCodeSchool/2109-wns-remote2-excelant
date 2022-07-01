@@ -250,19 +250,6 @@ const CreateTaskModal: React.FC<{
                           </FormHelperText>
                         )}
                       </FormControl>
-                      {/* <TextField
-                        name="assigne"
-                        value={values.assigne}
-                        onChange={handleChange}
-                        label="Assigne"
-                        size="small"
-                        sx={{ flexGrow: 1 }}
-                        error={errors.includes("no_assigne")}
-                        helperText={
-                          errors.includes("no_assigne") &&
-                          "Please enter a assigned user"
-                        }
-                      /> */}
                       <DatePicker
                         label="Due Date"
                         inputFormat="DD/MM/YYYY"
