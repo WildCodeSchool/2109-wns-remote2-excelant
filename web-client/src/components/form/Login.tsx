@@ -21,6 +21,7 @@ interface LoginFormValues {
 
 const Login: React.FC = () => {
   const { loggedIn, authToken, setAuthToken }: any = useContext(AuthContext);
+  console.log(authToken);
   const [toHome, setHome] = useState(false);
 
   // We import our loginMutation here
