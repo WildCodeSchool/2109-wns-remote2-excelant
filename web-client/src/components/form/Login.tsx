@@ -10,6 +10,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { useLoginMutation } from "../../hooks/loginMutation";
 import { AuthContext } from "../../contexts/AuthContext";
+import useAuthToken from "../../hooks/useAuthToken";
 
 import ExcelantLogo from "../../images/logo_excelant.png";
 import { loginSchema } from "../../yupSchema/Login";
@@ -20,8 +21,9 @@ interface LoginFormValues {
 }
 
 const Login: React.FC = () => {
-  const { loggedIn, authToken, setAuthToken }: any = useContext(AuthContext);
-  console.log(authToken);
+  const [authToken, setAuthToken] = useAuthToken();
+  const { loggedIn }: any = useContext(AuthContext);
+  console.log(useContext(AuthContext));
   const [toHome, setHome] = useState(false);
 
   // We import our loginMutation here
@@ -35,7 +37,8 @@ const Login: React.FC = () => {
     validationSchema: loginSchema,
     onSubmit: async ({ email, password }: LoginFormValues) => {
       try {
-        await login(email, password);
+        const { data }: any = await login(email, password);
+        setAuthToken(data.login.accessToken);
         loggedIn();
         setHome(true);
       } catch (error) {

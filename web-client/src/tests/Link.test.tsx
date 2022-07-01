@@ -16,7 +16,7 @@ import { CookiesProvider, useCookies } from "react-cookie";
 const fakeToken: any = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmJkNzgyMzllN2M1MjNhMTY5ZGJiYzMiLCJuYW1lIjoiSm9obiBEb2UiLCJlbWFpbCI6InRlc3QzQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJE42aS5DSEtjZml5MTZCeXMvNHNpT3VPU3JLS2VaQTVVTkhxSUlYbUxNd2JqYWNaUU5sN3IuIiwiY29uZmlybVBhc3N3b3JkIjoiNkxqNWFuN1ZAIiwiX192IjowLCJpYXQiOjE2NTY1ODQyMzV9.etTx6ajCp0DDkE8dKpLd8C_VMxL9kol_7y_lHgfWY8Kq76bAeFRX2elC0BG6Ow6dW_uzXvQ5LNFijldrk6wbC9dKKEhDKYwKIpsO-HCYHI0jOlm9h35OcrHF7VVQfmYHPAM7okURQ372fuJATz8kOeOgm3_yLwuprxlzVoeItxm9Pr-mqDa1-xf-oAMnOAOWoYNrWjPjqK8aP30zKob2_ga7Hr3b_dHRP4FGzf6w_2-d-M1Ciy28R61AuFqQc3FlRWnGz5tixXnrL8sqKlYMkLzmqinmnbzTT9kdwdKg1cfGG6rSuLD3dPPQFPsTz5n-IzlFTZUclPk-vcEjIvsrdCGwJA9t0m1t8MiLarFSiJvEcOAJMYBubUGUOyGJxdfdaXtovKi-6JBvWMiwGHTX9kX38BDxY43h3jaNLbYDkxoRmCNhNzSVGGtl5617Vs9AL8_mzkorvS9PRqtfgzhDbVu_ggnx_BegPoLDuKBugtfdpSuJlqY180e88rj3yX-omFKeOoj6oyjBfMDxd95_lbTwbkH8Ev5tfPed8f1bt380a2YO7afc71xoIj-1PH1aBDO_mbvg2IEJ11ddvUd0RjbtcDa-zyXyidbnDw-YZDYAv9bYiAPoqlAsjhEXRo_bsSdwt227_P3QYlO8KDxcmCgQfYTOI9fDL3fcPreLKQk"
 
 beforeEach(() => {
-    jest.spyOn(window.localStorage, "setItem").mockImplementation((): any => {
+    jest.spyOn.mockImplementation((): any => {
         localStorage.setItem("token", fakeToken)
     });
 });

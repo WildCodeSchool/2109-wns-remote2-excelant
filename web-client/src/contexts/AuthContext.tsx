@@ -7,10 +7,8 @@ export const AuthProvider: React.FC<{ children: JSX.Element }> = ({ children }) 
     const [authToken, setAuthToken] = useAuthToken();
     const [authed, setAuthed] = useState<boolean>(false);
 
-    const loggedIn = () => {
-        const token = localStorage.getItem("accessToken");
-
-        if (token) {
+    const loggedIn: () => void = () => {
+        if (authToken) {
             setAuthed(true);
         }
     };
