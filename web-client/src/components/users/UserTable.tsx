@@ -13,9 +13,9 @@ import {
 } from "@mui/material";
 import { tableCellClasses } from "@mui/material/TableCell";
 import { useQuery } from "@apollo/client";
-import { TaskType } from "../../_types/_taskTypes";
+import { UserType } from "../../_types/_userTypes";
 import GqlRequest from "../../_graphql/GqlRequest";
-import TaskTableItem from "./TaskTableItem";
+import UserTableItem from "./UserTableItem";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -27,14 +27,14 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-const TaskTable: React.FC<{ reload: number }> = ({ reload }) => {
+const UserTable: React.FC<{ reload: number }> = ({ reload }) => {
   const limit = 12;
   const [page, setPage] = useState<number>(1);
-  const [tasks, setTasks] = useState<TaskType[]>([]);
+  const [users, setUsers] = useState<(UserType & { _id: string })[]>([]);
   const [totalPages, setTotalPages] = useState<number>(0);
   const { data, loading, refetch } = useQuery(
-    new GqlRequest("Task").getByLimitAndPage(
-      "docs { _id, name, status, project { _id, name }, assigne {_id, name}, dueDate, description }, totalPages"
+    new GqlRequest("User").getByLimitAndPage(
+      "docs {_id, name, email}, totalPages"
     ),
     { variables: { input: { limit, page } } }
   );
@@ -44,15 +44,13 @@ const TaskTable: React.FC<{ reload: number }> = ({ reload }) => {
   };
 
   useEffect(() => {
-    if (reload > 0) {
-      refetch();
-    }
+    refetch();
   }, [reload, page]);
 
   useEffect(() => {
-    if (data?.findTaskByLimitAndPage) {
-      setTasks(data.findTaskByLimitAndPage.docs);
-      setTotalPages(data.findTaskByLimitAndPage.totalPages);
+    if (data?.findUserByLimitAndPage) {
+      setUsers(data.findUserByLimitAndPage.docs);
+      setTotalPages(data.findUserByLimitAndPage.totalPages);
     }
   }, [data]);
 
@@ -64,18 +62,15 @@ const TaskTable: React.FC<{ reload: number }> = ({ reload }) => {
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
-              <StyledTableCell>Subject</StyledTableCell>
-              <StyledTableCell align="right">Project</StyledTableCell>
-              <StyledTableCell align="right">Status</StyledTableCell>
-              <StyledTableCell align="right">Assignee</StyledTableCell>
-              <StyledTableCell align="right">Due date</StyledTableCell>
+              <StyledTableCell>name</StyledTableCell>
+              <StyledTableCell align="right">email</StyledTableCell>
               <StyledTableCell align="right">Actions</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {tasks &&
-              tasks.map((task: TaskType) => (
-                <TaskTableItem task={task} refetch={refetch} key={task._id} />
+            {users &&
+              users.map((user: UserType & { _id: string }) => (
+                <UserTableItem user={user} refetch={refetch} key={user._id} />
               ))}
           </TableBody>
         </Table>
@@ -89,4 +84,4 @@ const TaskTable: React.FC<{ reload: number }> = ({ reload }) => {
   );
 };
 
-export default TaskTable;
+export default UserTable;

@@ -1,5 +1,6 @@
 import { Field, InputType } from 'type-graphql';
 import UserInput from '../User/user.input';
+import TaskInput from '../Task/task.input';
 
 @InputType()
 class CreateCommentInput {
@@ -8,7 +9,10 @@ class CreateCommentInput {
   content: string;
 
   @Field(() => UserInput)
-  user: string;
+  author: string;
+
+  @Field(() => TaskInput)
+  task: object;
 
   @Field()
   date: Date;

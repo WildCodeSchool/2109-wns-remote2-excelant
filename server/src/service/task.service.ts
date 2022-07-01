@@ -12,13 +12,20 @@ class TaskService {
       path: 'assigne',
       select:
         '_id, name',
-    }).populate('comments').lean();
+    }).lean();
     return tasks;
   }
 
   // eslint-disable-next-line
   async findTaskByLimitAndPage(input: FindTaskByLimitAndPageInput) {
-    return TaskModel.paginate({}, input);
+    return TaskModel.paginate({}, {
+      ...input,
+      populate: 
+        { 
+          path: 'project',
+          select: '_id, name',
+        }
+    });
   }
 
   // eslint-disable-next-line
@@ -30,7 +37,6 @@ class TaskService {
       select:
         '_id, name',
     });
-    await task?.populate('comments');
     return task;
   }
 
@@ -55,7 +61,6 @@ class TaskService {
       select:
         '_id, name',
     });
-    await task?.populate('comments');
     return task;
   }
 

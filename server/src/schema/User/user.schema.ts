@@ -5,10 +5,13 @@ import {
   ReturnModelType,
   queryMethod,
   index,
+  plugin,
 } from '@typegoose/typegoose';
 import { AsQueryMethod } from '@typegoose/typegoose/lib/types';
+import mongoosePaginate from 'mongoose-paginate-v2';
 import bcrypt from 'bcrypt';
 import { Field, ID, ObjectType } from 'type-graphql';
+import PaginateMethod from '../../utils/PaginateMethodType';
 import { registerRoles, Roles } from '../../types/user';
 
 registerRoles();
@@ -38,6 +41,7 @@ export interface QueryHelpers {
 @index({ email: 1 })
 @queryMethod(findByEmail)
 @ObjectType()
+@plugin(mongoosePaginate)
 class User {
   @Field(() => ID)
   readonly _id: mongoose.Schema.Types.ObjectId;
@@ -54,13 +58,11 @@ class User {
   @prop({ required: true })
   password: string;
 
-  @Field(() => String)
-  @prop({ required: true })
-  confirmPassword: string;
-
   @Field(() => [Roles])
   @prop({ required: true })
   roles: Roles[];
+
+  static paginate: PaginateMethod<User>;
 }
 
 export default User;

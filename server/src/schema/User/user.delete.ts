@@ -1,9 +1,9 @@
 import { Field, InputType } from 'type-graphql';
 
 @InputType()
-class FindOneTaskInput {
+class DeleteUserInput {
   @Field(() => String)
   _id: string;
 }
 
-export default FindOneTaskInput;
+export default DeleteUserInput;
