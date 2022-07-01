@@ -1,14 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Outlet, Navigate } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
 
-const useAuth: () => boolean = () => {
-    const user = { loggedIn: false }
-    return user && user.loggedIn;
-}
-
-const ProtectedRoutes: React.FC<{user: any}> = ({ user }) => {
-    const isAuth = useAuth();
-    return isAuth ? <Outlet /> : <Navigate to="/register" />;
+const ProtectedRoutes: React.FC = () => {
+    const { authToken }: any  = useContext(AuthContext);
+    return authToken ? <Outlet /> : <Navigate to="/login" />;
 }
 
 export default ProtectedRoutes;

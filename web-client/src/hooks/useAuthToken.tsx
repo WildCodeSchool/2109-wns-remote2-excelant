@@ -3,7 +3,7 @@ import { useCookies } from "react-cookie";
 const TOKEN_NAME = "accessToken";
 
 // Custom hook to handle authToken - we use compositon to decouple the auth system and it's storage
-const useAuthToken = () => {
+export const useAuthToken = () => {
   // We use react-cookies to access our cookies
   const [cookies, setCookie, removeCookie] = useCookies([TOKEN_NAME]);
 

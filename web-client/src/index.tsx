@@ -5,12 +5,15 @@ import { CookiesProvider } from "react-cookie";
 import { SnackbarProvider } from "notistack";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { AuthProvider } from "./contexts/AuthContext";
 
 ReactDOM.render(
   <React.StrictMode>
     <CookiesProvider>
       <SnackbarProvider>
-        <App />
+          <AuthProvider>
+                <App />
+          </AuthProvider>
       </SnackbarProvider>
     </CookiesProvider>
   </React.StrictMode>,

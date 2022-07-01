@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useFormik } from "formik";
 import { Link, Navigate } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -9,10 +9,11 @@ import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { useLoginMutation } from "../../hooks/loginMutation";
+import { AuthContext } from "../../contexts/AuthContext";
+import useAuthToken from "../../hooks/useAuthToken";
 
 import ExcelantLogo from "../../images/logo_excelant.png";
 import { loginSchema } from "../../yupSchema/Login";
-import useAuthToken from "../../hooks/useAuthToken";
 
 interface LoginFormValues {
   email: string;
@@ -20,8 +21,9 @@ interface LoginFormValues {
 }
 
 const Login: React.FC = () => {
-  const [toHome, setHome] = useState(false);
   const [authToken, setAuthToken] = useAuthToken();
+  const { loggedIn }: any = useContext(AuthContext);
+  const [toHome, setHome] = useState(false);
 
   // We import our loginMutation here
   const [login] = useLoginMutation();
@@ -36,6 +38,7 @@ const Login: React.FC = () => {
       try {
         const { data }: any = await login(email, password);
         setAuthToken(data.login.accessToken);
+        loggedIn();
         setHome(true);
       } catch (error) {
         // TO DO: Properly handle errors and display them on the front
