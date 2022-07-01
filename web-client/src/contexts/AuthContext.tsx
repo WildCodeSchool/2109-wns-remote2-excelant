@@ -4,7 +4,7 @@ import { useAuthToken } from "../hooks/useAuthToken";
 export const AuthContext = createContext({});
 
 export const AuthProvider: React.FC<{ children: JSX.Element }> = ({ children }) => {
-    const [authToken, setAuthToken] = useAuthToken();
+    const [authToken] = useAuthToken();
     const [authed, setAuthed] = useState<boolean>(false);
 
     const loggedIn: () => void = () => {
@@ -17,7 +17,6 @@ export const AuthProvider: React.FC<{ children: JSX.Element }> = ({ children }) 
         authed,
         setAuthed,
         authToken,
-        setAuthToken,
         loggedIn
     };
 
