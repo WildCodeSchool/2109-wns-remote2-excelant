@@ -8,24 +8,34 @@ import FindTaskByLimitAndPageInput from '../schema/Task/task.findpage';
 class TaskService {
   // eslint-disable-next-line
   async findTasks() {
-    const tasks = await TaskModel.find().populate('project').populate({
-      path: 'assigne',
-      select:
-        '_id, name',
-    }).lean();
+    const tasks = await TaskModel.find()
+      .populate('project')
+      .populate({
+        path: 'assigne',
+        select: '_id, name',
+      })
+      .lean();
     return tasks;
   }
 
   // eslint-disable-next-line
   async findTaskByLimitAndPage(input: FindTaskByLimitAndPageInput) {
-    return TaskModel.paginate({}, {
-      ...input,
-      populate: 
-        { 
-          path: 'project',
-          select: '_id, name',
-        }
-    });
+    return TaskModel.paginate(
+      {},
+      {
+        ...input,
+        populate: [
+          {
+            path: 'project',
+            select: '_id, name',
+          },
+          {
+            path: 'assigne',
+            select: '_id, name',
+          },
+        ],
+      }
+    );
   }
 
   // eslint-disable-next-line
@@ -34,8 +44,7 @@ class TaskService {
     await task?.populate('project');
     await task?.populate({
       path: 'assigne',
-      select:
-        '_id, name',
+      select: '_id, name',
     });
     return task;
   }
@@ -46,20 +55,18 @@ class TaskService {
     await task.populate('project');
     await task.populate({
       path: 'assigne',
-      select:
-        '_id, name',
+      select: '_id, name',
     });
     return task;
   }
 
   // eslint-disable-next-line
   async updateTask(id: string, input: UpdateTaskInput) {
-    const task = await TaskModel.findByIdAndUpdate(id, input, {new: true});
+    const task = await TaskModel.findByIdAndUpdate(id, input, { new: true });
     await task?.populate('project');
     await task?.populate({
       path: 'assigne',
-      select:
-        '_id, name',
+      select: '_id, name',
     });
     return task;
   }
@@ -70,8 +77,7 @@ class TaskService {
     await task?.populate('project');
     await task?.populate({
       path: 'assigne',
-      select:
-        '_id, name',
+      select: '_id, name',
     });
     return task;
   }
