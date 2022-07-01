@@ -41,7 +41,7 @@ const DeleteUserModal: React.FC<{
         }}
       >
         <CardHeader
-          title={`Are you sur you want to delete ${user.name}?`}
+          title={`Are you sure you want to delete ${user.name}?`}
           sx={{ textAlign: "center" }}
         />
         <CardActions sx={{ display: "flex", justifyContent: "center", gap: 5 }}>
