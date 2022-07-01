@@ -19,6 +19,7 @@ import "./TaskModal.scss";
 import { TaskType } from "../../_types/_taskTypes";
 import { ProjectType } from "../../_types/_projectTypes";
 import moment from "moment";
+import { useSnackbar } from "notistack";
 
 const TaskModal: React.FC<{
   open: boolean;
@@ -26,6 +27,7 @@ const TaskModal: React.FC<{
   refetch: () => void;
   handleClose: () => void;
 }> = ({ open, task, handleClose, refetch }) => {
+  const { enqueueSnackbar } = useSnackbar();
   const [allProjects, setAllProjects] = useState([]);
   const [getAllProjects, { loading: areProjectsLoading }] = useLazyQuery(
     new GqlRequest("Project").get("_id, name"),
@@ -59,6 +61,13 @@ const TaskModal: React.FC<{
     try {
       updateTask({
         variables: { id: task._id, input: modifiedTask },
+      });
+      enqueueSnackbar(`The task ${task.name} has been modified successfully!`, {
+        variant: "info",
+        anchorOrigin: {
+            vertical: 'top',
+            horizontal: 'right'
+        }
       });
     } catch (err) {
       // eslint-disable-next-line

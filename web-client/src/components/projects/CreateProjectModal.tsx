@@ -14,27 +14,27 @@ import {
   FormHelperText,
 } from "@mui/material";
 import { DatePicker } from "@mui/lab";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form } from "formik";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import moment from "moment";
 import { modalStyle } from "../../_utils/modalStyle";
 import GqlRequest from "../../_graphql/GqlRequest";
-import Notification from "../../_utils/Notification";
+import { useSnackbar } from "notistack";
 
 type Status = string;
 
 interface CreateProjectInput {
   name: string;
   status: Status;
-  projectManager: string;
+  projectManager: { _id: string };
   dueDate: moment.Moment;
 }
 
 const defaultValues: CreateProjectInput = {
   name: "",
   status: "",
-  projectManager: "",
+  projectManager: { _id: "" },
   dueDate: moment(),
 };
 
@@ -43,14 +43,16 @@ const CreateProjectModal: React.FC<{
   handleClose: () => void;
 }> = ({ open, handleClose }) => {
   const [loading, setLoading] = useState(false);
-  const [notify, setNotify] = useState({
-    isOpen: false,
-    message: "",
-    type: "",
-  });
   const [errors, setErrors] = useState<string[]>([]);
+  const [users, setUsers] = useState<{ _id: string; name: string }[]>([]);
+  const { enqueueSnackbar } = useSnackbar();
   const [createProject] = useMutation(
-    new GqlRequest("Project").create("name, status, projectManager, dueDate")
+    new GqlRequest("Project").create(
+      "name, status, projectManager {_id}, dueDate"
+    )
+  );
+  const { data, loading: userLoading } = useQuery(
+    new GqlRequest("User").get("_id, name")
   );
 
   const checkInputs = (values: CreateProjectInput) => {
@@ -79,12 +81,14 @@ const CreateProjectModal: React.FC<{
       }
       const res = await createProject({ variables: { input: values } });
       if (res) {
-        setNotify({
-          isOpen: true,
-          message: "Your project has been created successfully!",
-          type: "success",
-        });
         setErrors([]);
+        enqueueSnackbar("Your project has been created successfully!", {
+          variant: "success",
+          anchorOrigin: {
+            vertical: 'top',
+            horizontal: 'right'
+          }
+        });
         handleClose();
       }
     } catch (err) {
@@ -95,8 +99,13 @@ const CreateProjectModal: React.FC<{
     }
   };
 
+  useEffect(() => {
+    if (data?.findAllUsers) {
+      setUsers(data.findAllUsers);
+    }
+  }, [data]);
+
   return (
-    <>
       <Modal
         open={open}
         onClose={() => {
@@ -164,18 +173,35 @@ const CreateProjectModal: React.FC<{
                         sx={{ flexDirection: { xs: "column", md: "row" } }}
                         gap={1}
                       >
-                        <TextField
-                          name="projectManager"
-                          value={values.projectManager}
-                          onChange={handleChange}
-                          label="Project Manager"
-                          sx={{ flexGrow: 1 }}
-                          error={errors.includes("no_project_manager")}
-                          helperText={
-                            errors.includes("no_project_manager") &&
-                            "Please enter a user name"
-                          }
-                        />
+                        <FormControl sx={{ flexGrow: 1 }}>
+                          <InputLabel
+                            id="projectManager-label"
+                            error={errors.includes("no_project_manager")}
+                          >
+                            Project Manager
+                          </InputLabel>
+                          <Select
+                            name="projectManager['_id']"
+                            labelId="projectManager-label"
+                            label="Project Manager"
+                            onChange={handleChange}
+                            value={values.projectManager._id ?? " "}
+                            error={errors.includes("no_project_manager")}
+                          >
+                            {!userLoading &&
+                              users.map(
+                                (user: { _id: string; name: string }) => (
+                                  <MenuItem key={user._id} value={user._id}>
+                                    {user.name}
+                                  </MenuItem>
+                                )
+                              )}
+                          </Select>
+                          <FormHelperText error>
+                            {errors.includes("no_project_manager") &&
+                              "Please select a valid project manager"}
+                          </FormHelperText>
+                        </FormControl>
                         <DatePicker
                           label="Due Date"
                           inputFormat="DD/MM/YYYY"
@@ -241,13 +267,6 @@ const CreateProjectModal: React.FC<{
           </CardContent>
         </Card>
       </Modal>
-      <Notification
-        isOpen={notify.isOpen}
-        message={notify.message}
-        type="success"
-        setNotify={setNotify}
-      />
-    </>
   );
 };
 

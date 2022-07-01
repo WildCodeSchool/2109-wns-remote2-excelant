@@ -4,6 +4,7 @@ import { useMutation } from "@apollo/client";
 import { modalStyle } from "../../_utils/modalStyle";
 import GqlRequest from "../../_graphql/GqlRequest";
 import { TaskType } from "../../_types/_taskTypes";
+import { useSnackbar } from "notistack";
 
 const DeleteTaskModal: React.FC<{
   open: boolean;
@@ -11,6 +12,7 @@ const DeleteTaskModal: React.FC<{
   refetch: () => void;
   task: TaskType;
 }> = ({ open, handleClose, refetch, task }) => {
+  const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
 
   const [deleteTask] = useMutation(new GqlRequest("Task").delete("name"));
@@ -20,6 +22,13 @@ const DeleteTaskModal: React.FC<{
     try {
       await deleteTask({
         variables: { input: { _id: task._id } },
+      });
+      enqueueSnackbar(`The task ${task.name} has been deleted successfully!`, {
+        variant: "error",
+        anchorOrigin: {
+          vertical: 'top',
+          horizontal: 'right'
+        }
       });
     } catch (err) {
       // eslint-disable-next-line

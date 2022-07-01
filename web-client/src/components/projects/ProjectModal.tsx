@@ -1,4 +1,4 @@
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { DatePicker } from "@mui/lab";
 import {
   Box,
@@ -13,10 +13,11 @@ import {
   Typography,
 } from "@mui/material";
 import moment from "moment";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import GqlRequest from "../../_graphql/GqlRequest";
 import { ProjectType } from "../../_types/_projectTypes";
 import { taskModalStyle } from "../../_utils/modalStyle";
+import { useSnackbar } from "notistack";
 
 const ProjectModal: React.FC<{
   open: boolean;
@@ -24,21 +25,25 @@ const ProjectModal: React.FC<{
   project: ProjectType;
   refetch: () => void;
 }> = ({ open, handleClose, project, refetch }) => {
+  const { enqueueSnackbar } = useSnackbar();
   const [modify, setModify] = useState<boolean>(false);
+  const [users, setUsers] = useState<{ _id: string; name: string }[]>([]);
   const [modifiedProject, setModifiedProject] = useState<Partial<ProjectType>>({
     name: project.name,
     status: project.status,
-    projectManager: project.projectManager,
+    projectManager: { _id: project.projectManager._id },
     dueDate: project.dueDate,
   });
 
   const [updateProject] = useMutation(new GqlRequest("Project").update("name"));
 
+  const { data } = useQuery(new GqlRequest("User").get("_id, name"));
+
   const handleModification = () => {
     setModifiedProject({
       name: project.name,
       status: project.status,
-      projectManager: project.projectManager,
+      projectManager: { _id: project.projectManager._id },
       dueDate: project.dueDate,
     });
     setModify(true);
@@ -49,6 +54,13 @@ const ProjectModal: React.FC<{
       updateProject({
         variables: { id: project._id, input: modifiedProject },
       });
+        enqueueSnackbar(`The project ${project.name} has been modified successfully!`, {
+            variant: "info",
+            anchorOrigin: {
+                vertical: 'top',
+                horizontal: 'right'
+            }
+        });
     } catch (err) {
       // eslint-disable-next-line
       console.log("Error", err);
@@ -66,6 +78,12 @@ const ProjectModal: React.FC<{
     newProject[key] = value;
     setModifiedProject(newProject);
   };
+
+  useEffect(() => {
+    if (data?.findAllUsers) {
+      setUsers(data.findAllUsers);
+    }
+  }, [data]);
 
   return (
     <Modal open={open} onClose={handleClose}>
@@ -164,18 +182,24 @@ const ProjectModal: React.FC<{
                 Project manager :
               </Typography>
               {modify ? (
-                <TextField
-                  type="text"
-                  variant="outlined"
-                  value={modifiedProject.projectManager}
-                  onChange={(event) => {
-                    setFieldValue("projectManager", event.target.value);
-                  }}
-                  sx={{ flexGrow: 1 }}
-                />
+                <FormControl sx={{ flexGrow: 1 }}>
+                  <Select
+                    name="projectManager['_id']"
+                    labelId="projectManager-label"
+                    label="Project Manager"
+                    onChange={handleModification}
+                    value={modifiedProject?.projectManager?._id ?? " "}
+                  >
+                    {users.map((user: { _id: string; name: string }) => (
+                      <MenuItem key={user._id} value={user._id}>
+                        {user.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               ) : (
                 <Typography variant="body1" sx={{ display: "inline" }}>
-                  {project.projectManager}
+                  {project.projectManager.name}
                 </Typography>
               )}
             </Box>
