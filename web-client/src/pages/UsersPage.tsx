@@ -6,7 +6,7 @@ const UsersPage: React.FC = () => {
   const [reload, setReload] = useState<number>(0);
   return (
     <Container maxWidth="lg">
-      <Typography variant="h1" sx={{ backgroundColor: "primary.light" }}>
+      <Typography variant="h4" sx={{ textAlign: "center", mb: "16px" }}>
         UsersPage
       </Typography>
       <UserTable reload={reload} />
