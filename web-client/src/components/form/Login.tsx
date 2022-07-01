@@ -35,6 +35,7 @@ const Login: React.FC = () => {
     onSubmit: async ({ email, password }: LoginFormValues) => {
       try {
         await login(email, password);
+        loggedIn();
         setHome(true);
       } catch (error) {
         // TO DO: Properly handle errors and display them on the front
