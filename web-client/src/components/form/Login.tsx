@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { useFormik } from "formik";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -8,13 +8,11 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import { useQuery } from "@apollo/client";
 import { useLoginMutation } from "../../hooks/loginMutation";
 import { AuthContext } from "../../contexts/AuthContext";
 
 import ExcelantLogo from "../../images/logo_excelant.png";
 import { loginSchema } from "../../yupSchema/Login";
-import GqlRequest from "../../_graphql/GqlRequest";
 
 interface LoginFormValues {
   email: string;
@@ -24,10 +22,6 @@ interface LoginFormValues {
 const Login: React.FC = () => {
   const { loggedIn, authToken, setAuthToken }: any = useContext(AuthContext);
   const [toHome, setHome] = useState(false);
-  const navigate = useNavigate();
-  const { data } = useQuery(
-    new GqlRequest("User").get("_id, email, password")
-  );
 
   // We import our loginMutation here
   const [login] = useLoginMutation();
@@ -38,18 +32,13 @@ const Login: React.FC = () => {
       password: "",
     },
     validationSchema: loginSchema,
-    onSubmit: async (values: LoginFormValues) => {
-      // Update token
-      setAuthToken(authToken);
-      // Set JWT token to local
-      localStorage.setItem("token", authToken);
-      console.log(localStorage);
+    onSubmit: async ({ email, password }: LoginFormValues) => {
       try {
-        await login(values.email, values.password);
-        loggedIn();
-        navigate('/');
-      } catch (e: any) {
-        alert(`Error! ${e.message}`)
+        await login(email, password);
+        setHome(true);
+      } catch (error) {
+        // TO DO: Properly handle errors and display them on the front
+        console.error(error);
       }
     },
   });

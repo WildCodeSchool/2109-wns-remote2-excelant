@@ -1,5 +1,7 @@
 import { InputType, Field } from 'type-graphql';
 import ProjectInput from '../Project/project.input';
+import UserInput from '../User/user.input';
+
 
 @InputType()
 class UpdateTaskInput {
@@ -12,7 +14,7 @@ class UpdateTaskInput {
   @Field(() => String)
   status: string;
 
-  @Field(() => String)
+  @Field(() => UserInput)
   assigne: string;
 
   @Field()

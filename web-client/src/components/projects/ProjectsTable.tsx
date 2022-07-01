@@ -34,7 +34,7 @@ const ProjectTable: React.FC<{ reload: number }> = ({ reload }) => {
   const [totalPages, setTotalPages] = useState<number>(0);
   const { loading, data, refetch } = useQuery(
     new GqlRequest("Project").getByLimitAndPage(
-      "docs {_id, name, status, projectManager, dueDate}, totalPages"
+      "docs {_id, name, status, projectManager {_id, name}, dueDate}, totalPages"
     ),
     { variables: { input: { limit, page } } }
   );
