@@ -15,26 +15,39 @@ import Grid from "@mui/material/Grid";
 import { registerSchema } from "../../yupSchema/Register";
 import GqlRequest from "../../_graphql/GqlRequest";
 import ExcelantLogo from "../../images/logo_excelant.png";
+import { Roles } from "../../_types/_userTypes";
 
 const Register: React.FC = () => {
   const [toHome, setToHome] = useState(false);
   const [loading, setLoading] = useState(false);
   const [createUser] = useMutation(
-    new GqlRequest("User").create("name, email, roles, password, confirmPassword")
+    new GqlRequest("User").create("name, email, roles, password")
   );
   const formik = useFormik({
     initialValues: {
       name: "",
       email: "",
-      roles: "USER",
+      roles: [Roles.USER],
       password: "",
       confirmPassword: "",
     },
     validationSchema: registerSchema,
     onSubmit: async (values) => {
       setLoading(true);
+      const { name, email, roles, password, confirmPassword } = values;
       try {
-        await createUser({ variables: { input: values } });
+        if (password === confirmPassword) {
+          await createUser({
+            variables: {
+              input: {
+                name,
+                email,
+                roles,
+                password,
+              },
+            },
+          });
+        }
       } catch (err) {
         return console.log(`${err}`);
       } finally {
@@ -63,16 +76,16 @@ const Register: React.FC = () => {
           </Typography>
           <form onSubmit={formik.handleSubmit}>
             <TextField
-                fullWidth
-                margin="normal"
-                id="name"
-                label="Name"
-                name="name"
-                type="text"
-                value={formik.values.name}
-                onChange={formik.handleChange}
-                error={formik.touched.name && Boolean(formik.errors.name)}
-                helperText={formik.touched.name && formik.errors.name}
+              fullWidth
+              margin="normal"
+              id="name"
+              label="Name"
+              name="name"
+              type="text"
+              value={formik.values.name}
+              onChange={formik.handleChange}
+              error={formik.touched.name && Boolean(formik.errors.name)}
+              helperText={formik.touched.name && formik.errors.name}
             />
             <TextField
               fullWidth

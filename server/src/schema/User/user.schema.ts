@@ -54,10 +54,6 @@ class User {
   @prop({ required: true })
   password: string;
 
-  @Field(() => String)
-  @prop({ required: true })
-  confirmPassword: string;
-
   @Field(() => [Roles])
   @prop({ required: true })
   roles: Roles[];
