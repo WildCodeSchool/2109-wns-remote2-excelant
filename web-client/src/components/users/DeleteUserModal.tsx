@@ -4,30 +4,31 @@ import { useMutation } from "@apollo/client";
 import { useSnackbar } from "notistack";
 import { modalStyle } from "../../_utils/modalStyle";
 import GqlRequest from "../../_graphql/GqlRequest";
-import { ProjectType } from "../../_types/_projectTypes";
+import { UserType } from "../../_types/_userTypes";
 
-const DeleteProjectModal: React.FC<{
+const DeleteUserModal: React.FC<{
   open: boolean;
   handleClose: () => void;
   refetch: () => void;
-  project: ProjectType;
-}> = ({ open, handleClose, refetch, project }) => {
+  user: UserType & { _id: string };
+}> = ({ open, handleClose, refetch, user }) => {
   const { enqueueSnackbar } = useSnackbar();
+
   const [loading, setLoading] = useState(false);
 
-  const [deleteProject] = useMutation(new GqlRequest("Project").delete("name"));
+  const [deleteUser] = useMutation(new GqlRequest("User").delete("name"));
 
   const handleDelete = async () => {
     setLoading(true);
     try {
-      await deleteProject({
-        variables: { input: { _id: project._id } },
+      await deleteUser({
+        variables: { input: { _id: user._id } },
       });
     } catch (err) {
       // eslint-disable-next-line
       console.log("Error", err);
     } finally {
-      enqueueSnackbar(`The project has been deleted successfully!`, {
+      enqueueSnackbar(`The user has been deleted successfully!`, {
         variant: "error",
         anchorOrigin: {
           vertical: 'top',
@@ -50,7 +51,7 @@ const DeleteProjectModal: React.FC<{
         }}
       >
         <CardHeader
-          title={`Are you sure you want to delete ${project.name}?`}
+          title={`Are you sure you want to delete ${user.name}?`}
           sx={{ textAlign: "center" }}
         />
         <CardActions sx={{ display: "flex", justifyContent: "center", gap: 5 }}>
@@ -71,4 +72,4 @@ const DeleteProjectModal: React.FC<{
   );
 };
 
-export default DeleteProjectModal;
+export default DeleteUserModal;
