@@ -27,23 +27,29 @@ const TaskTableItem: React.FC<{
   return (
     <>
       <StyledTableRow key={task._id}>
-          <TableCell component="th" scope="row">
-            {task.name}
-          </TableCell>
-          <TableCell data-testid="name" align="right">{task.project.name}</TableCell>
-          <TableCell data-testid="status" align="right">{task.status}</TableCell>
-          <TableCell data-testid="assigne" align="right">{task.assigne}</TableCell>
-          <TableCell data-testid="dueDate" align="right">
-            {moment(task.dueDate).format("DD/MM/YYYY")}
-          </TableCell>
-          <TableCell align="right">
-            <IconButton color="primary" onClick={() => setOpen(true)}>
-              <ArticleIcon />
-            </IconButton>
-            <IconButton color="error" onClick={() => setOpenDelete(true)}>
-              <DeleteForeverIcon />
-            </IconButton>
-          </TableCell>
+        <TableCell component="th" scope="row">
+          {task.name}
+        </TableCell>
+        <TableCell data-testid="name" align="right">
+          {task.project.name}
+        </TableCell>
+        <TableCell data-testid="status" align="right">
+          {task.status}
+        </TableCell>
+        <TableCell data-testid="assigne" align="right">
+          {task.assigne.name}
+        </TableCell>
+        <TableCell data-testid="dueDate" align="right">
+          {moment(task.dueDate).format("DD/MM/YYYY")}
+        </TableCell>
+        <TableCell align="right">
+          <IconButton color="primary" onClick={() => setOpen(true)}>
+            <ArticleIcon />
+          </IconButton>
+          <IconButton color="error" onClick={() => setOpenDelete(true)}>
+            <DeleteForeverIcon />
+          </IconButton>
+        </TableCell>
       </StyledTableRow>
 
       <DeleteTaskModal

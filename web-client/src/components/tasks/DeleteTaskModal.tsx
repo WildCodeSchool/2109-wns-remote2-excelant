@@ -30,9 +30,9 @@ const DeleteTaskModal: React.FC<{
       enqueueSnackbar(`The task has been deleted successfully!`, {
         variant: "error",
         anchorOrigin: {
-          vertical: 'top',
-          horizontal: 'right'
-        }
+          vertical: "top",
+          horizontal: "right",
+        },
       });
       refetch();
       handleClose();
