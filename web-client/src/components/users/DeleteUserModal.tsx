@@ -1,6 +1,7 @@
 import { Modal, Card, CardHeader, CardActions, Button } from "@mui/material";
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
+import { useSnackbar } from "notistack";
 import { modalStyle } from "../../_utils/modalStyle";
 import GqlRequest from "../../_graphql/GqlRequest";
 import { UserType } from "../../_types/_userTypes";
@@ -11,6 +12,8 @@ const DeleteUserModal: React.FC<{
   refetch: () => void;
   user: UserType & { _id: string };
 }> = ({ open, handleClose, refetch, user }) => {
+  const { enqueueSnackbar } = useSnackbar();
+
   const [loading, setLoading] = useState(false);
 
   const [deleteUser] = useMutation(new GqlRequest("User").delete("name"));
@@ -25,6 +28,13 @@ const DeleteUserModal: React.FC<{
       // eslint-disable-next-line
       console.log("Error", err);
     } finally {
+      enqueueSnackbar(`The user has been deleted successfully!`, {
+        variant: "error",
+        anchorOrigin: {
+          vertical: 'top',
+          horizontal: 'right'
+        }
+      });
       refetch();
       handleClose();
       setLoading(false);
@@ -41,7 +51,7 @@ const DeleteUserModal: React.FC<{
         }}
       >
         <CardHeader
-          title={`Are you sur you want to delete ${user.name}?`}
+          title={`Are you sure you want to delete ${user.name}?`}
           sx={{ textAlign: "center" }}
         />
         <CardActions sx={{ display: "flex", justifyContent: "center", gap: 5 }}>
