@@ -3,8 +3,11 @@ import { gql } from "@apollo/client";
 export default class GqlRequest {
   schema: string;
 
-  constructor(public schemaName: string) {
+  secondSchema: string;
+
+  constructor(public schemaName: string, public secondSchemaName: string = '') {
     this.schema = schemaName;
+    this.secondSchema = secondSchemaName;
   }
 
   get(returnType: string) {
@@ -25,9 +28,18 @@ export default class GqlRequest {
       }`;
   }
 
+  getAllBy(returnType: string) {
+    return gql`
+    query findAll${this.schema}sBy${this.secondSchema}($id: String!) {
+      findAll${this.schema}sBy${this.secondSchema}(_id: $id) {
+        ${returnType}
+      }
+    }`;
+  }
+
   getOne(returnType: string) {
     return gql`
-      query findOne${this.schema}($input: FindOne${this.schema}Input) { 
+      query findOne${this.schema}($input: FindOne${this.schema}Input!) { 
           findOne${this.schema}(input: $input) {
               ${returnType}
           }

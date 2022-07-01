@@ -1,9 +1,9 @@
 import { Field, InputType } from 'type-graphql';
 
 @InputType()
-class FindOneTaskById {
+class FindOneTaskInput {
   @Field(() => String)
   _id: string;
 }
 
-export default FindOneTaskById;
+export default FindOneTaskInput;
