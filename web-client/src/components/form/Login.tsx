@@ -14,6 +14,7 @@ import useAuthToken from "../../hooks/useAuthToken";
 
 import ExcelantLogo from "../../images/logo_excelant.png";
 import { loginSchema } from "../../yupSchema/Login";
+import useAuthToken from "../../hooks/useAuthToken";
 
 interface LoginFormValues {
   email: string;
@@ -24,6 +25,7 @@ const Login: React.FC = () => {
   const [authToken, setAuthToken] = useAuthToken();
   const { loggedIn }: any = useContext(AuthContext);
   const [toHome, setHome] = useState(false);
+  const [authToken, setAuthToken] = useAuthToken();
 
   // We import our loginMutation here
   const [login] = useLoginMutation();
