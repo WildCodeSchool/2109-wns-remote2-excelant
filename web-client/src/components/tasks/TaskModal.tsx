@@ -261,13 +261,15 @@ const TaskModal: React.FC<{
                     value={modifiedTask.assigne._id}
                   >
                     {users.map((user: { _id: string; name: string }) => (
-                      <MenuItem value={user._id}>{user.name}</MenuItem>
+                      <MenuItem key={user._id} value={user._id}>
+                        {user.name}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
               ) : (
                 <Typography variant="body1" sx={{ display: "inline" }}>
-                  {task.assigne}
+                  {task.assigne.name}
                 </Typography>
               )}
             </Box>

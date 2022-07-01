@@ -234,12 +234,14 @@ const CreateTaskModal: React.FC<{
                           labelId="assigne-label"
                           label="Assigne"
                           onChange={handleChange}
-                          value={values.assigne._id}
+                          value={values.assigne._id ?? " "}
                           error={errors.includes("no_status")}
                         >
-                          {userLoading &&
+                          {!userLoading &&
                             users.map((user: { _id: string; name: string }) => (
-                              <MenuItem value={user._id}>{user.name}</MenuItem>
+                              <MenuItem key={user._id} value={user._id}>
+                                {user.name}
+                              </MenuItem>
                             ))}
                         </Select>
                         {errors.includes("no_status") && (
